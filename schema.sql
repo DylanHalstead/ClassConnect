@@ -23,9 +23,9 @@ CREATE TABLE IF NOT EXISTS sections (
 
 DO $$
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'section_member_type') THEN
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'section_member_type') THEN
 		CREATE TYPE section_member_type AS ENUM ('instructor', 'ta', 'student');
-    END IF;
+	END IF;
 END
 $$;
 
