@@ -5,7 +5,7 @@ import { OAuth2Client } from 'google-auth-library';
 import { PUBLIC_URI } from '$env/static/public';
 import { SECRET_OAUTH_CLIENT_ID, SECRET_OAUTH_SECRET } from '$env/static/private';
 
-export const actions = {
+export const actions: Actions = {
 	OAuth2: async () => {
   const redirect_uri = new URL('/oauth', PUBLIC_URI).href;
 	console.log('redirect_uri', redirect_uri);
@@ -17,4 +17,4 @@ export const actions = {
 		});
 		throw redirect(302, authorizeUrl);
 	}
-} satisfies Actions;
+} 
