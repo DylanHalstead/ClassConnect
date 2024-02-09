@@ -1,15 +1,30 @@
-import { hydrateAuth, generateAuthUrl, isSignedIn } from 'svelte-google-auth/server';
+import { hydrateAuth, isSignedIn } from 'svelte-google-auth/server';
+import { signOut } from 'svelte-google-auth/client';
+import { doesUserExist, getUserByEmail, createUser } from '../lib/db/users';
+import { User } from '../lib/types';
 import type { LayoutServerLoad } from './$types';
-import { redirect } from '@sveltejs/kit';
 
-const SCOPES = ['openid', 'profile', 'email'];
+export const load: LayoutServerLoad = async ({ locals }) => {
+	const db: {
+		user?: User;
+	} = {};
+  console.log("hello world")
+	if (isSignedIn(locals)) {
+    console.log('User is signed in');
+		if (await doesUserExist(locals.user.email)) {
+      console.log('User exists');
+      db.user = await getUserByEmail(locals.user.email);
+    } else {
+      console.log('User does not exist');
+      if (!locals.user.email.endsWith('@uncc.edu') && !locals.user.email.endsWith('@charlotte.edu')) {
+        console.log('User does not have a valid email');
+        return { status: 302, redirect: '/_auth/signout' };
+      }
+      // create user in db
+      console.log('Creating user');
+      db.user = await createUser(locals.user.email, locals.user.given_name, locals.user.family_name);
+    }
+	}
 
-export const load: LayoutServerLoad = ({ locals, url }) => {
-	// This snippet makes it so you MUST be logged in to be on the website at all. Can be moved to a different layout (so like every /calendar or anything not the homescreen needs to be logged in to access it)
-	// if (!isSignedIn(locals)) {
-	// 	throw redirect(302, generateAuthUrl(locals, url, SCOPES, url.pathname));
-	// }
-	// By calling hydateAuth, certain variables from locals are parsed to the client
-	// allowing the client to access the user information and the client_id for login
-	return { ...hydrateAuth(locals) };
+	return { ...hydrateAuth(locals), db };
 };

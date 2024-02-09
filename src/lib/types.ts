@@ -1,28 +1,24 @@
-import { v4 } from 'uuid'
-
-type UUID = typeof v4;
-
 type Char<N extends number> = string & { length: N };
 
 interface Course {
-  id: UUID;
-  department_code: Char<4>;
-  course_code: Char<4>;
-  course_name: string;
+  id: string;
+  departmentCode: Char<4>;
+  courseCode: Char<4>;
+  courseName: string;
 }
 
 interface User {
-  id: UUID;
+  id: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
 }
 
 interface Section {
-  id: UUID;
-  course_id: UUID;
-  section_number: number;
-  max_daily_bookable_hours: number;
+  id: string;
+  courseId: string;
+  sectionNumber: number;
+  maxDailyBookableHours: number;
 }
 
 enum SectionMemberType {
@@ -32,11 +28,11 @@ enum SectionMemberType {
 }
 
 interface SectionMember {
-  id: UUID;
-  section_id: UUID;
-  user_id: UUID;
-  member_type: SectionMemberType;
-  is_restricted: boolean;
+  id: string;
+  sectionId: string;
+  userId: string;
+  memberType: SectionMemberType;
+  isRestricted: boolean;
 }
 
 enum WeekDay {
@@ -50,25 +46,24 @@ enum WeekDay {
 }
 
 interface AppointmentBlock {
-  id: UUID;
-  instructional_member_id: UUID;
-  week_day: WeekDay;
+  id: string;
+  instructionalMemberId: string;
+  weekDay: WeekDay;
   // May want to make Time class/type which limits Date to remove epoch date
-  start_time: Date;
+  startTime: Date;
   duration: string;
 }
 
 interface Appointment {
-  id: UUID;
-  appointment_day: Date;
-  appointment_block: UUID;
-  student_id: UUID;
+  id: string;
+  appointmentDay: Date;
+  appointmentBlock: string;
+  studentId: string;
   cancelled: boolean;
   link: string;
 }
 
 export type {
-  UUID,
   Char,
   Course,
   User,

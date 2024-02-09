@@ -16,5 +16,6 @@
 {:else}
 	<p>Welcome, {data.auth.user.name}</p>
 	<p>{data.auth.user.email}</p>
+	<p>{data.db.user.id}</p>
 	<GoogleSignOut />
 {/if}
