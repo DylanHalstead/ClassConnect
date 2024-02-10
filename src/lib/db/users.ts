@@ -75,13 +75,13 @@ export async function createUser(email: string, firstName: string, lastName: str
   const newUser: User = {
     id: uuidv4(),
     email: email,
-    firstName: firstName,
-    lastName: lastName
+    first_name: firstName,
+    last_name: lastName
   }
 
   const query: QueryConfig = {
     text: 'INSERT INTO users (id, email, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING *',
-    values: [newUser.id, newUser.email, newUser.firstName, newUser.lastName],
+    values: [newUser.id, newUser.email, newUser.first_name, newUser.last_name],
   }
 
   const promise = client.query(query)
