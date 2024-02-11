@@ -1,9 +1,17 @@
 <script>
+	import { invalidateAll } from '$app/navigation';
 	import { signIn } from 'svelte-google-auth/client';
 </script>
 
 <!-- https://developers.google.com/identity/branding-guidelines -->
-<button class="gsi-material-button" on:click={() => signIn()}>
+<button
+	class="gsi-material-button"
+	on:click={() => {
+		signIn().then(() => {
+			invalidateAll();
+		});
+	}}
+>
 	<div class="gsi-material-button-state"></div>
 	<div class="gsi-material-button-content-wrapper">
 		<div class="gsi-material-button-icon">
