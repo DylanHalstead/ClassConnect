@@ -1,6 +1,8 @@
 <script>
 	import { invalidateAll } from '$app/navigation';
 	import { signIn } from 'svelte-google-auth/client';
+	import { updateFlash } from 'sveltekit-flash-message';
+	import { page } from '$app/stores';
 </script>
 
 <!-- https://developers.google.com/identity/branding-guidelines -->
@@ -9,6 +11,7 @@
 	on:click={() => {
 		signIn().then(() => {
 			invalidateAll();
+			updateFlash(page);
 		});
 	}}
 >
