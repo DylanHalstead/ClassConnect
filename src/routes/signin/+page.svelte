@@ -11,7 +11,6 @@
 </script>
 
 <!-- if not user, show login button, otherwise show details -->
-{JSON.stringify(data)}
 {#if !data.db}
 	<GoogleSignIn />
 {:else}

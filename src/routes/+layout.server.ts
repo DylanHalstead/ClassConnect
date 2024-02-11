@@ -8,7 +8,7 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
 	let db: {
 		user: User;
 	} | null = null;
-  // If the user is signing in
+  // If the user has signed in with google but hasn't grabbed their data from the database
 	if (!locals.db && isSignedIn(locals)) {
 		if (await doesUserExist(locals.user.email)) {
       db = {user: await getUserByEmail(locals.user.email)};
@@ -19,7 +19,6 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
       setFlash(message, cookies)
     } else {
       if (!locals.user.email.endsWith('@uncc.edu') && !locals.user.email.endsWith('@charlotte.edu')) {
-        // log user out
         await fetch('/_auth/signout');
         const message = {
           type: 'error',

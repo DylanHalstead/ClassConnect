@@ -33,7 +33,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@types/uuid": "^9.0.8",
 		"pg": "^8.11.3",
 		"svelte-google-auth": "^0.7.2",
 		"uuid": "^9.0.1"
