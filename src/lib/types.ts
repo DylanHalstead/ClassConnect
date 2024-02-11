@@ -2,9 +2,9 @@ type Char<N extends number> = string & { length: N };
 
 interface Course {
   id: string;
-  departmentCode: Char<4>;
-  courseCode: Char<4>;
-  courseName: string;
+  department_code: Char<4>;
+  course_code: Char<4>;
+  course_name: string;
 }
 
 interface User {
@@ -16,9 +16,9 @@ interface User {
 
 interface Section {
   id: string;
-  courseId: string;
-  sectionNumber: number;
-  maxDailyBookableHours: number;
+  course_id: string;
+  section_number: number;
+  max_daily_bookable_hours: number;
 }
 
 enum SectionMemberType {
@@ -29,10 +29,10 @@ enum SectionMemberType {
 
 interface SectionMember {
   id: string;
-  sectionId: string;
-  userId: string;
-  memberType: SectionMemberType;
-  isRestricted: boolean;
+  section_id: string;
+  user_id: string;
+  member_type: SectionMemberType;
+  is_restricted: boolean;
 }
 
 enum WeekDay {
@@ -47,18 +47,18 @@ enum WeekDay {
 
 interface AppointmentBlock {
   id: string;
-  instructionalMemberId: string;
-  weekDay: WeekDay;
+  instructional_member_id: string;
+  week_day: WeekDay;
   // May want to make Time class/type which limits Date to remove epoch date
-  startTime: Date;
+  start_time: Date;
   duration: string;
 }
 
 interface Appointment {
   id: string;
-  appointmentDay: Date;
-  appointmentBlock: string;
-  studentId: string;
+  appointment_day: Date;
+  appointment_block: string;
+  student_id: string;
   cancelled: boolean;
   link: string;
 }
