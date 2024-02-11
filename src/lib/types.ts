@@ -1,9 +1,7 @@
-type Char<N extends number> = string & { length: N };
-
 interface Course {
   id: string;
-  department_code: Char<4>;
-  course_code: Char<4>;
+  department_code: string;
+  course_code: string;
   course_name: string;
 }
 
@@ -64,7 +62,6 @@ interface Appointment {
 }
 
 export type {
-  Char,
   Course,
   User,
   Section,
