@@ -1,10 +1,10 @@
-import { redirect } from '@sveltejs/kit';
 import { hydrateAuth, isSignedIn } from 'svelte-google-auth/server';
+import { loadFlash, setFlash } from 'sveltekit-flash-message/server';
 import { doesUserExist, getUserByEmail, createUser } from '../lib/db/users';
 import type { User } from '../lib/types';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals }) => {
+export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch }) => {
 	let db: {
 		user: User;
 	} | null = null;
@@ -13,7 +13,13 @@ export const load: LayoutServerLoad = async ({ locals }) => {
       db = {user: await getUserByEmail(locals.user.email)};
     } else {
       if (!locals.user.email.endsWith('@uncc.edu') && !locals.user.email.endsWith('@charlotte.edu')) {
-        redirect(307, '_auth/signout')
+        // log user out
+        await fetch('/_auth/signout');
+        const message = {
+          type: 'error',
+          message: 'You must use a UNC Charlotte email address to sign in.'
+        } as const;
+        setFlash(message, cookies)
       } else {
         db = {user: await createUser(locals.user.email, locals.user.given_name, locals.user.family_name)};
       }
@@ -21,4 +27,4 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	}
 
 	return { ...hydrateAuth(locals), db };
-};
+});

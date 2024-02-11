@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import { initialize, signOut } from 'svelte-google-auth/client';
+	import { initialize } from 'svelte-google-auth/client';
 	import type { PageData } from './$types.js';
 
 	import GoogleSignIn from '$lib/components/GoogleSignIn.svelte';
