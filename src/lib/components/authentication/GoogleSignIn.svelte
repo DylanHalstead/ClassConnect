@@ -1,9 +1,19 @@
-<script>
-	import { signOut } from 'svelte-google-auth/client';
+<script lang="ts">
+	import { invalidateAll } from '$app/navigation';
+	import { signIn } from 'svelte-google-auth/client';
+	import { updateFlash } from 'sveltekit-flash-message';
+	import { page } from '$app/stores';
 </script>
 
 <!-- https://developers.google.com/identity/branding-guidelines -->
-<button class="gsi-material-button" on:click={() => signOut()}>
+<button
+	class="gsi-material-button"
+	on:click={async () => {
+		await signIn();
+		invalidateAll();
+		updateFlash(page);
+	}}
+>
 	<div class="gsi-material-button-state"></div>
 	<div class="gsi-material-button-content-wrapper">
 		<div class="gsi-material-button-icon">
@@ -33,8 +43,8 @@
 				<path fill="none" d="M0 0h48v48H0z"></path>
 			</svg>
 		</div>
-		<span class="gsi-material-button-contents">Sign Out</span>
-		<span style="display: none;">Sign Out</span>
+		<span class="gsi-material-button-contents">Sign in with Google</span>
+		<span style="display: none;">Sign in with Google</span>
 	</div>
 </button>
 

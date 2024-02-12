@@ -2,6 +2,24 @@ import daisyui from "daisyui";
 
 export default {
 	content: ["src/**/*.{html,svelte,ts}"],
+	daisyui: {
+		themes: [
+			{
+				classConnect: {
+					"primary": "#f8942a",
+					"secondary": "#4c9cc8",
+					"accent": "#28546c",
+					"neutral": "#bfbfbf",
+					"base-100": "#f4f8fb",
+					"info": "#9ac3db",
+					"success": "#33c95d",
+					"error": "#c02626"
+				}
+			}
+		]
+	},
+
+	plugins: [daisyui],
 	theme: {
 		extend: {
 			colors: {
