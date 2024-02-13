@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* This removes the vscode warning for @tailwind but makes buildtime longer
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+Alternatively you can reconfigure vscode settings here:
+https://byby.dev/at-rule-tailwind */
