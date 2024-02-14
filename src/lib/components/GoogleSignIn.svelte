@@ -8,11 +8,10 @@
 <!-- https://developers.google.com/identity/branding-guidelines -->
 <button
 	class="gsi-material-button"
-	on:click={() => {
-		signIn().then(() => {
-			invalidateAll();
-			updateFlash(page);
-		});
+	on:click={async () => {
+		await signIn();
+		invalidateAll();
+		updateFlash(page);
 	}}
 >
 	<div class="gsi-material-button-state"></div>
