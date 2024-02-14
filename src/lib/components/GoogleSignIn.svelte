@@ -1,9 +1,19 @@
 <script>
+	import { invalidateAll } from '$app/navigation';
 	import { signIn } from 'svelte-google-auth/client';
+	import { updateFlash } from 'sveltekit-flash-message';
+	import { page } from '$app/stores';
 </script>
 
 <!-- https://developers.google.com/identity/branding-guidelines -->
-<button class="gsi-material-button" on:click={() => signIn()}>
+<button
+	class="gsi-material-button"
+	on:click={async () => {
+		await signIn();
+		invalidateAll();
+		updateFlash(page);
+	}}
+>
 	<div class="gsi-material-button-state"></div>
 	<div class="gsi-material-button-content-wrapper">
 		<div class="gsi-material-button-icon">
