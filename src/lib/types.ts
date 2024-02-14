@@ -1,18 +1,18 @@
-interface Course {
+export interface Course {
   id: string;
   department_code: string;
   course_code: string;
   course_name: string;
 }
 
-interface User {
+export interface User {
   id: string;
   email: string;
   first_name: string;
   last_name: string;
 }
 
-interface Section {
+export interface Section {
   id: string;
   course_id: string;
   section_number: number;
@@ -25,7 +25,7 @@ enum SectionMemberType {
   Student = 'student',
 }
 
-interface SectionMember {
+export interface SectionMember {
   id: string;
   section_id: string;
   user_id: string;
@@ -43,7 +43,7 @@ enum WeekDay {
   Sunday = 'sunday',
 }
 
-interface AppointmentBlock {
+export interface AppointmentBlock {
   id: string;
   instructional_member_id: string;
   week_day: WeekDay;
@@ -52,7 +52,7 @@ interface AppointmentBlock {
   duration: string;
 }
 
-interface Appointment {
+export interface Appointment {
   id: string;
   appointment_day: Date;
   appointment_block: string;
@@ -60,14 +60,3 @@ interface Appointment {
   cancelled: boolean;
   link: string;
 }
-
-export type {
-  Course,
-  User,
-  Section,
-  SectionMemberType,
-  SectionMember,
-  WeekDay,
-  AppointmentBlock,
-  Appointment,
-};
