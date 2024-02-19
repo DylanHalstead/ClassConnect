@@ -1,6 +1,6 @@
 <h1>Calendar Lives Here</h1>
 
-<a href="/">Dashboard</a>
+<a href="/dashboard">Dashboard</a>
 <a href="/profile/[id]">Profile</a>
 <a href="/courses/[id]/sections/[id]/members/[id]/appointments/book">Book</a>
 
