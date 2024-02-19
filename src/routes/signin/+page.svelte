@@ -3,8 +3,8 @@
 	import { initialize } from 'svelte-google-auth/client';
 	import type { PageData } from './$types.js';
 
-	import GoogleSignIn from '$lib/components/GoogleSignIn.svelte';
-	import GoogleSignOut from '$lib/components/GoogleSignOut.svelte';
+	import GoogleSignIn from '$lib/components/authentication/GoogleSignIn.svelte';
+	import GoogleSignOut from '$lib/components/authentication/GoogleSignOut.svelte';
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
