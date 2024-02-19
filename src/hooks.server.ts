@@ -1,8 +1,8 @@
-import { SvelteGoogleAuthHook } from 'svelte-google-auth/server';
-import type { Handle } from '@sveltejs/kit';
+import { SvelteGoogleAuthHook } from "svelte-google-auth/server";
+import type { Handle } from "@sveltejs/kit";
 
 // Import client credentials from json file
-import client_secret from '../client_secret.json';
+import client_secret from "../client_secret.json";
 
 const auth = new SvelteGoogleAuthHook(client_secret.web);
 
