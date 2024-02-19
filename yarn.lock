@@ -201,6 +201,11 @@
   resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.9.5.tgz"
   integrity sha512-ezyFUOwldYpj7AbkwyW9AJ203peub81CaAIVvckdkyH8EvhEIoKzaMFJj0G4qYJ5sw3BpqhFrsCc30t54HV8vg==
 
+"@steeze-ui/heroicons@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/@steeze-ui/heroicons/-/heroicons-2.3.0.tgz"
+  integrity sha512-tVOamjAd9ZzXgDwVKwbA3K+o86Z1ks/IMvqdgoCf9hKeGINVUIlAlGhM3wdpSmt7brIoBLgR70wlnsXGytZk9g==
+
 "@sveltejs/adapter-node@^4.0.1":
   version "4.0.1"
   resolved "https://registry.npmjs.org/@sveltejs/adapter-node/-/adapter-node-4.0.1.tgz"
@@ -2373,6 +2378,13 @@ svelte-google-auth@^0.7.2:
     googleapis "^110.0.0"
     jsonwebtoken "^9.0.0"
 
+svelte-hero-icons@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.npmjs.org/svelte-hero-icons/-/svelte-hero-icons-5.1.0.tgz"
+  integrity sha512-8Z5+jpwFktz5aO325EAGo7nf4ailOKO8w+8Se1aHPVw/DiILuLMbxV6/xOfqpWPux2u7apMsBnMh4cWLbBN/xw==
+  dependencies:
+    "@steeze-ui/heroicons" "^2.3.0"
+
 svelte-hmr@^0.15.3:
   version "0.15.3"
   resolved "https://registry.npmjs.org/svelte-hmr/-/svelte-hmr-0.15.3.tgz"
@@ -2389,7 +2401,7 @@ svelte-preprocess@^5.1.0:
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
 
-"svelte@^3.19.0 || ^4.0.0", "svelte@^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0", "svelte@^3.23.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0", "svelte@^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0", "svelte@^4.0.0 || ^5.0.0-next.0", svelte@^4.2.7, "svelte@3.x || 4.x":
+"svelte@^3.0.0 || ^4.0.0 || ^5.0.0", "svelte@^3.19.0 || ^4.0.0", "svelte@^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0", "svelte@^3.23.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0", "svelte@^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0", "svelte@^4.0.0 || ^5.0.0-next.0", svelte@^4.2.7, "svelte@3.x || 4.x":
   version "4.2.8"
   resolved "https://registry.npmjs.org/svelte/-/svelte-4.2.8.tgz"
   integrity sha512-hU6dh1MPl8gh6klQZwK/n73GiAHiR95IkFsesLPbMeEZi36ydaXL/ZAb4g9sayT0MXzpxyZjR28yderJHxcmYA==

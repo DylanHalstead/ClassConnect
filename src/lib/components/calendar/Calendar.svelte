@@ -1,18 +1,57 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/components/calendar";
 
+	/**
+	 * The date whose week the calendar will be focused on. Note that if the date's day is one other
+	 * than the start of the week, its day will be set to the start of the week so the calendar
+	 * doesn't display two weeks at once.
+	 */
+	export let week: Date;
+
+	/**
+	 * The minimum time to display on a given day.
+	 */
 	export let startTime: Date;
+
+	/**
+	 * The maximum time to display on a given day.
+	 */
 	export let endTime: Date;
+
+	/**
+	 * The length of time, in milliseconds, that a cell on the calendar measures.
+	 */
 	export let timeIncrement: number;
 
 	const rowCount = (endTime.getTime() - startTime.getTime()) / timeIncrement;
-	const today = new Date();
+	const today = normalizeDateByDay(new Date());
 	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+	let columnDates: Date[];
+
+	$: {
+		columnDates = [];
+
+		const current = normalizeDateByWeek(week);
+
+		for (let i = 0; i < 7; i++) {
+			columnDates.push(new Date(current));
+			current.setTime(current.getTime() + 24 * 60 * 60 * 1000);
+		}
+	}
 
 	let container: HTMLDivElement;
 	let gutter: HTMLDivElement;
 	let firstGutterCellVisible = 0;
 	let lastGutterCellVisible = rowCount - 1;
+
+	function formatColumnDate(date: Date): string {
+		return date.toLocaleString("en-US", {
+			day: "2-digit",
+			month: "2-digit"
+		});
+	}
 
 	function getRowTime(i: number): string {
 		const result = new Date(startTime);
@@ -21,17 +60,6 @@
 
 		return result.toLocaleString("en-US", {
 			timeStyle: "short"
-		});
-	}
-
-	function getColumnDate(i: number): string {
-		const result = new Date(today);
-
-		result.setTime(result.getTime() + (i - result.getDay()) * 24 * 60 * 60 * 1000);
-
-		return result.toLocaleString("en-US", {
-			day: "2-digit",
-			month: "2-digit"
 		});
 	}
 
@@ -94,19 +122,21 @@
 		<table class="border-separate border-spacing-0 table-fixed w-full">
 			<thead>
 				<tr>
-					{#each { length: 7 } as _, i}
+					{#each columnDates as date, i}
 						<th
 							class="cell bg-base-100 border-neutral border-b border-s sticky top-0 {i == 6
 								? 'border-e'
 								: ''}">
 							<h2
-								class="cell-header-weekday text-2xl {i == today.getDay()
+								class="cell-header-weekday text-2xl {date.getTime() == today.getTime()
 									? 'text-primary underline'
 									: ''}">
 								{weekdays[i]}
 							</h2>
 
-							<span class="text-base-content/50 text-sm">{getColumnDate(i)}</span>
+							<span class="text-base-content/50 text-sm">
+								{formatColumnDate(date)}
+							</span>
 						</th>
 					{/each}
 				</tr>
