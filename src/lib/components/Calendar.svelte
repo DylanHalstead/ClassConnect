@@ -96,7 +96,7 @@
 				<tr>
 					{#each { length: 7 } as _, i}
 						<th
-							class="cell bg-base-100 border-neutral border-b border-s py-4 sticky top-0 {i == 6
+							class="cell bg-base-100 border-neutral border-b border-s sticky top-0 {i == 6
 								? 'border-e'
 								: ''}">
 							<h2
@@ -139,6 +139,7 @@
 <style>
 	* {
 		--cell-height: 8rem;
+		--gutter-top-margin: 6rem;
 		--gutter-width: 8rem;
 	}
 
@@ -147,7 +148,7 @@
 	}
 
 	th.cell {
-		height: auto;
+		height: var(--gutter-top-margin);
 	}
 
 	.cell-header-weekday {
@@ -155,6 +156,7 @@
 	}
 
 	.gutter {
+		margin-top: calc(var(--gutter-top-margin) - var(--cell-height) / 2 - 1px);
 		width: var(--gutter-width);
 	}
 
