@@ -78,56 +78,14 @@
 	onMount(() => handleScroll());
 </script>
 
-<style>
-	* {
-		--cell-height: 8rem;
-		--gutter-width: 8rem;
-	}
-
-	.cell {
-		height: var(--cell-height);
-	}
-
-	th.cell {
-		height: auto;
-	}
-
-	.cell-header-weekday {
-		font-family: 'Kaisei HarunoUmi', serif;
-	}
-
-	.gutter {
-		width: var(--gutter-width);
-	}
-
-	.gutter-cell {
-		font-family: 'Kaisei HarunoUmi', serif;
-		height: var(--cell-height);
-	}
-
-	.gutter-cell::before {
-		visibility: hidden;
-	}
-
-	.gutter-cell::after, .gutter-terminating-divider::before, .gutter-terminating-divider::after {
-		background-color: oklch(var(--n));
-		height: 1px;
-	}
-
-	.gutter-terminating-cell {
-		width: var(--gutter-width);
-		height: 0;
-	}
-</style>
-
 <div class="flex flex-col h-full">
-	<div
-		class="flex grow overflow-y-scroll relative"
-		bind:this={container}
-		on:scroll={handleScroll}>
+	<div class="flex grow overflow-y-scroll relative" bind:this={container} on:scroll={handleScroll}>
 		<div class="gutter" bind:this={gutter}>
-			{#each {length: rowCount} as _, i}
-				<div class="gutter-cell divider m-0 {i >= firstGutterCellVisible && i <= lastGutterCellVisible ? "" : "invisible"}">
+			{#each { length: rowCount } as _, i}
+				<div
+					class="gutter-cell divider m-0 {i >= firstGutterCellVisible && i <= lastGutterCellVisible
+						? ''
+						: 'invisible'}">
 					<span class="gutter-cell-text">{getRowTime(i)}</span>
 				</div>
 			{/each}
@@ -136,9 +94,15 @@
 		<table class="border-separate border-spacing-0 table-fixed w-full">
 			<thead>
 				<tr>
-					{#each {length: 7} as _, i}
-						<th class="cell bg-base-100 border-neutral border-b border-s py-4 sticky top-0 {i == 6 ? "border-e" : ""}">
-							<h2 class="cell-header-weekday text-2xl {i == today.getDay() ? "text-primary underline" : ""}">
+					{#each { length: 7 } as _, i}
+						<th
+							class="cell bg-base-100 border-neutral border-b border-s py-4 sticky top-0 {i == 6
+								? 'border-e'
+								: ''}">
+							<h2
+								class="cell-header-weekday text-2xl {i == today.getDay()
+									? 'text-primary underline'
+									: ''}">
 								{weekdays[i]}
 							</h2>
 
@@ -149,10 +113,13 @@
 			</thead>
 
 			<tbody>
-				{#each {length: rowCount} as _, i}
+				{#each { length: rowCount } as _, i}
 					<tr>
-						{#each {length: 7} as _, j}
-							<td class="cell border-neutral border-s {i < rowCount - 1 ? "border-b" : ""} {j == 6 ? "border-e" : ""}"></td>
+						{#each { length: 7 } as _, j}
+							<td
+								class="cell border-neutral border-s {i < rowCount - 1 ? 'border-b' : ''} {j == 6
+									? 'border-e'
+									: ''}"></td>
 						{/each}
 					</tr>
 				{/each}
@@ -168,3 +135,47 @@
 		<div class="gutter-terminating-divider divider m-0 w-full h-0"></div>
 	</div>
 </div>
+
+<style>
+	* {
+		--cell-height: 8rem;
+		--gutter-width: 8rem;
+	}
+
+	.cell {
+		height: var(--cell-height);
+	}
+
+	th.cell {
+		height: auto;
+	}
+
+	.cell-header-weekday {
+		font-family: "Kaisei HarunoUmi", serif;
+	}
+
+	.gutter {
+		width: var(--gutter-width);
+	}
+
+	.gutter-cell {
+		font-family: "Kaisei HarunoUmi", serif;
+		height: var(--cell-height);
+	}
+
+	.gutter-cell::before {
+		visibility: hidden;
+	}
+
+	.gutter-cell::after,
+	.gutter-terminating-divider::before,
+	.gutter-terminating-divider::after {
+		background-color: oklch(var(--n));
+		height: 1px;
+	}
+
+	.gutter-terminating-cell {
+		width: var(--gutter-width);
+		height: 0;
+	}
+</style>

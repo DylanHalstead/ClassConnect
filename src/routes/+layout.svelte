@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { getFlash } from 'sveltekit-flash-message';
-	import { page } from '$app/stores';
+	import { getFlash } from "sveltekit-flash-message";
+	import { page } from "$app/stores";
 	import "../app.css";
 
 	const flash = getFlash(page, {
