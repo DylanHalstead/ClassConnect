@@ -1,7 +1,15 @@
-<h1>ClassConnect Landing Page / Dashboard :D</h1>
+<script lang="ts">
+	import Nav from "$lib/components/Nav.svelte";
+</script>
 
-<p>I think I did the routing correctly pt.2</p>
+<div class="flex">
 
-<a href="/calendar">Calendar</a>
-<a href="/profile">Profile</a>
-<a href="/courses/[id]/sections/[id]/members/[id]/appointments/book">Book</a>
+    <div>
+        <Nav/>
+    </div>
+
+    <div>
+        <h1>ClassConnect Landing Page / Dashboard :D</h1>
+    </div>
+
+</div>

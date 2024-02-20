@@ -1,5 +1,14 @@
-<h1>Book Appointment</h1>
+<script lang="ts">
+	import Nav from "$lib/components/Nav.svelte";
+</script>
+<div class="flex">
 
-<a href="/">Dashboard</a>
-<a href="/calendar">Calendar</a>
-<a href="/profile/[id]">Profile</a>
+    <div>
+        <Nav/>
+    </div>
+
+    <div>
+        <h1>Book Appointment</h1>
+    </div>
+
+</div>
