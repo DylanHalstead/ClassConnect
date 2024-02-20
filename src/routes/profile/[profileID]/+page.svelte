@@ -3,13 +3,11 @@
 </script>
 
 <div class="flex">
+	<div>
+		<Nav />
+	</div>
 
-    <div>
-        <Nav/>
-    </div>
-
-    <div>
-        <h1>Profile</h1>
-    </div>
-
+	<div>
+		<h1>Profile</h1>
+	</div>
 </div>

@@ -26,9 +26,8 @@
 </script>
 
 <div class="flex">
-
 	<div>
-		<Nav/>
+		<Nav />
 	</div>
 
 	<div>
@@ -37,11 +36,11 @@
 				<h1 class="heading">
 					<span>{month}</span> <span class="text-primary">{year}</span>
 				</h1>
-		
+
 				<h2 class="subheading text-primary">{subheading}</h2>
 				<div class="divider divider-neutral my-2"></div>
 			</div>
-		
+
 			<div class="grow min-h-0 p-4">
 				<Calendar
 					startTime={calendarStartTime}
@@ -49,22 +48,21 @@
 					timeIncrement={1000 * 60 * 30} />
 			</div>
 		</div>
-		
+
 		<style>
 			.heading,
 			.subheading {
 				font-family: "Kaisei HarunoUmi", serif;
 				font-weight: bold;
 			}
-		
+
 			.heading {
 				font-size: 2.5rem;
 			}
-		
+
 			.subheading {
 				font-size: 1.25rem;
 			}
 		</style>
 	</div>
-
 </div>
