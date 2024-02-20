@@ -1,16 +1,10 @@
 <script lang="ts">
 	import Calendar from "$lib/components/Calendar.svelte";
 
-<<<<<<< HEAD
-<a href="/dashboard">Dashboard</a>
-<a href="/profile/[id]">Profile</a>
-<a href="/courses/[id]/sections/[id]/members/[id]/appointments/book">Book</a>
-=======
 	const today = new Date();
 	const month = today.toLocaleString("en-US", {
 		month: "long"
 	});
->>>>>>> main
 
 	const year = today.toLocaleString("en-US", {
 		year: "numeric"
