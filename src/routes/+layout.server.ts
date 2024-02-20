@@ -12,6 +12,7 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
 	if (!locals.db && isSignedIn(locals)) {
 		if (await doesUserExist(locals.user.email)) {
       db = {user: await getUserByEmail(locals.user.email)};
+      cookies.set('userID', db.user.id, {path: '/'});
       const message = {
         type: 'success',
         message: 'Logged in successfully!'
@@ -27,6 +28,7 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
         setFlash(message, cookies)
       } else {
         db = {user: await createUser(locals.user.email, locals.user.given_name, locals.user.family_name)};
+        cookies.set('userID', db.user.id, {path: '/'});
         const message = {
           type: 'success',
           message: 'Created account successfully!'
