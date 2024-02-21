@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Calendar from "$lib/components/Calendar.svelte";
-	import Nav from "$lib/components/Nav.svelte";
 
 	const today = new Date();
 	const month = today.toLocaleString("en-US", {
@@ -25,12 +24,7 @@
 	calendarEndTime.setHours(17, 0, 0, 0);
 </script>
 
-<div class="flex">
-
-	<div>
-		<Nav/>
-	</div>
-
+	<!-- This div aligns page content next to the nav and should not be removed -->
 	<div>
 		<div class="flex flex-col h-screen">
 			<div class="px-6 py-2">
@@ -66,5 +60,3 @@
 			}
 		</style>
 	</div>
-
-</div>

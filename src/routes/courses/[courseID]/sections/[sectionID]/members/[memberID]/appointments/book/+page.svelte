@@ -1,14 +1,4 @@
-<script lang="ts">
-	import Nav from "$lib/components/Nav.svelte";
-</script>
-<div class="flex">
-
-    <div>
-        <Nav/>
-    </div>
-
-    <div>
-        <h1>Book Appointment</h1>
-    </div>
-
+<!-- This div aligns page content next to the nav and should not be removed -->
+<div>
+    <h1>Book Appointment</h1>
 </div>
