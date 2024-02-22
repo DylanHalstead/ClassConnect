@@ -26,14 +26,14 @@ export const actions: Actions = {
     }
     // Validate the input
     const data = await request.formData();
-    const dayofWeek = data.get('day-of-week');
+    const dayOfWeek = data.get('day-of-week');
     const startTime = data.get('start-time');
     const endTime = data.get('end-time');
-    if (!dayofWeek || !startTime || !endTime ) {
+    if (!dayOfWeek || !startTime || !endTime ) {
       error(400,{ message: 'Invalid input: missing input' })
     }
 
-    if (!Object.values(WeekDay).includes(dayofWeek)) {
+    if (!Object.values(WeekDay).includes(dayOfWeek)) {
       error(400,{ message: 'Invalid input: Invalid day of week' })
     }
 
@@ -59,15 +59,16 @@ export const actions: Actions = {
     // Validate that the start-time and end-time aren't conflicting with existing appointment blocks
     const membersBlocks = await getMembersAppointmentBlocks(params.memberID);
     membersBlocks.forEach(block => {
-      if (block.week_day === dayofWeek) {
+      if (block.week_day === dayOfWeek) {
         const blockStart = block.start_time;
         const blockEnd = intervalToDate(block.duration);
-        if (start.getTime() > blockStart.getTime() || end.getTime() < blockEnd.getTime()) {
-          error(400,{ message: 'Conflicting appointment block' })
+        // check if new block conflicts with existing blocks
+        if (start.getTime() <= blockStart.getTime() && end.getTime() >= blockEnd.getTime()) {
+          error(400,{ message: 'Invalid input: Start time conflicts with existing block' })
         }
       }
     });
-    const newBlock = await createAppointmentBlock(params.memberID, dayofWeek, start, durationInterval);
+    const newBlock = await createAppointmentBlock(params.memberID, dayOfWeek, start, durationInterval);
     // redirect to the courses page
     redirect(303, `/courses/${params.courseID}/sections/${params.sectionID}`);
 	}

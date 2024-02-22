@@ -5,8 +5,8 @@ export function intervalToDate(intervalString: Interval): Date {
   const minutes = intervalString.minutes || 0;
 
   const date = new Date(0);
-  date.setUTCHours(hours);
-  date.setUTCMinutes(minutes);
+  date.setHours(hours);
+  date.setMinutes(minutes);
 
   return date;
 }
