@@ -1,30 +1,26 @@
 import type { Actions } from './$types';
-import { Interval, WeekDay } from '../../../../../../../../../lib/types';
-import { getSectionsSectionMembers, getUsersSectionMembers } from '../../../../../../../../../lib/db/sectionMembers';
-import { getMembersAppointmentBlocks, createAppointmentBlock } from '../../../../../../../../../lib/db/appointmentBlocks';
-import { intervalToDate } from '../../../../../../../../../lib/utils';
+import { Interval, WeekDay, AppointmentBlock, SectionMember } from '../../../../../../../../../../lib/types';
+import { getSectionsSectionMembers, getUsersSectionMembers } from '../../../../../../../../../../lib/db/sectionMembers';
+import { getMembersAppointmentBlocks, createAppointmentBlock } from '../../../../../../../../../../lib/db/appointmentBlocks';
+import { intervalToDate } from '../../../../../../../../../../lib/utils';
 import { isSignedIn } from 'svelte-google-auth/server';
 import { redirect, error } from '@sveltejs/kit';
-
 
 export const actions: Actions = {
 	default: async ({ locals, request, params, cookies }) => {
     // Validate user is logged in
-    if (!isSignedIn(locals)) {
+    const userID: string | undefined = cookies.get('userID');
+    if (!isSignedIn(locals) || !userID) {
       error(401,{ message: 'Unauthorized: not logged in' })
     }
     // Validate user owns the memberID
-    const userID = cookies.get('userID');
-    const usersMembers = await getUsersSectionMembers(userID);
-    if (!usersMembers.some(member => member.id === params.memberID)) {
-      error(403,{ message: 'Forbidden: Cannot make block for other members' })
-    }
-    // Validate the user is part of instructional team for the section
-    const sectionMembers = await getSectionsSectionMembers(params.sectionID);
-    if (!sectionMembers.some(member => member.user_id === userID && (member.member_type === 'ta' || member.member_type === 'instructor'))) {
+    const usersMembers: SectionMember[] = await getUsersSectionMembers(userID);
+    const member = usersMembers.find(member => member.id === params.memberID);
+    if (!member || (member.member_type !== 'ta' && member.member_type !== 'instructor')) {
       error(403,{ message: 'Forbidden: Not a part of the instructional team' })
     }
     // Validate the input
+    // const data: FormData = await request.formData();
     const data = await request.formData();
     const dayOfWeek = data.get('day-of-week');
     const startTime = data.get('start-time');
@@ -57,7 +53,7 @@ export const actions: Actions = {
       minutes: duration % 60
     }
     // Validate that the start-time and end-time aren't conflicting with existing appointment blocks
-    const membersBlocks = await getMembersAppointmentBlocks(params.memberID);
+    const membersBlocks: AppointmentBlock[] = await getMembersAppointmentBlocks(params.memberID);
     membersBlocks.forEach(block => {
       if (block.week_day === dayOfWeek) {
         const blockStart = block.start_time;
