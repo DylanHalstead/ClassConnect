@@ -24,21 +24,6 @@
 	calendarEndTime.setHours(17, 0, 0, 0);
 </script>
 
-<style>
-	.heading, .subheading {
-		font-family: 'Kaisei HarunoUmi', serif;
-		font-weight: bold;
-	}
-
-	.heading {
-		font-size: 2.5rem;
-	}
-
-	.subheading {
-		font-size: 1.25rem;
-	}
-</style>
-
 <div class="flex flex-col h-screen">
 	<div class="px-6 py-2">
 		<h1 class="heading">
@@ -53,6 +38,22 @@
 		<Calendar
 			startTime={calendarStartTime}
 			endTime={calendarEndTime}
-			timeIncrement={1000 * 60 * 30}/>
+			timeIncrement={1000 * 60 * 30} />
 	</div>
 </div>
+
+<style>
+	.heading,
+	.subheading {
+		font-family: "Kaisei HarunoUmi", serif;
+		font-weight: bold;
+	}
+
+	.heading {
+		font-size: 2.5rem;
+	}
+
+	.subheading {
+		font-size: 1.25rem;
+	}
+</style>

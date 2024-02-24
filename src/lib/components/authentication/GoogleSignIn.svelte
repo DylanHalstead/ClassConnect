@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
-	import { signIn } from 'svelte-google-auth/client';
-	import { updateFlash } from 'sveltekit-flash-message';
-	import { page } from '$app/stores';
+	import { invalidateAll } from "$app/navigation";
+	import { signIn } from "svelte-google-auth/client";
+	import { updateFlash } from "sveltekit-flash-message";
+	import { page } from "$app/stores";
 </script>
 
 <!-- https://developers.google.com/identity/branding-guidelines -->
@@ -12,8 +12,7 @@
 		await signIn();
 		invalidateAll();
 		updateFlash(page);
-	}}
->
+	}}>
 	<div class="gsi-material-button-state"></div>
 	<div class="gsi-material-button-content-wrapper">
 		<div class="gsi-material-button-icon">
@@ -22,8 +21,7 @@
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 48 48"
 				xmlns:xlink="http://www.w3.org/1999/xlink"
-				style="display: block;"
-			>
+				style="display: block;">
 				<path
 					fill="#EA4335"
 					d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
@@ -63,7 +61,7 @@
 		box-sizing: border-box;
 		color: #1f1f1f;
 		cursor: pointer;
-		font-family: 'Roboto', arial, sans-serif;
+		font-family: "Roboto", arial, sans-serif;
 		font-size: 14px;
 		height: 40px;
 		letter-spacing: 0.25px;
@@ -111,7 +109,7 @@
 	.gsi-material-button .gsi-material-button-contents {
 		-webkit-flex-grow: 1;
 		flex-grow: 1;
-		font-family: 'Roboto', arial, sans-serif;
+		font-family: "Roboto", arial, sans-serif;
 		font-weight: 500;
 		overflow: hidden;
 		text-overflow: ellipsis;

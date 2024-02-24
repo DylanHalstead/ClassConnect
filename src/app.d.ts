@@ -1,4 +1,4 @@
-import type { User } from './lib/types';
+import type { User } from "./lib/types";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -7,14 +7,14 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			db?: {
-				user: User
-			}
+				user: User;
+			};
 		}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
 		interface PageData {
-			flash?: { type: 'success' | 'error'; message: string };
+			flash?: { type: "success" | "error"; message: string };
 		}
 	}
 }

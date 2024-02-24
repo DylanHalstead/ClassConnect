@@ -1,36 +1,36 @@
 export interface Course {
-  id: string;
-  department_code: string;
-  course_code: string;
-  course_name: string;
+	id: string;
+	department_code: string;
+	course_code: string;
+	course_name: string;
 }
 
 export interface User {
-  id: string;
-  email: string;
-  first_name: string;
-  last_name: string;
+	id: string;
+	email: string;
+	first_name: string;
+	last_name: string;
 }
 
 export interface Section {
-  id: string;
-  course_id: string;
-  section_number: number;
-  max_daily_bookable_hours: number;
+	id: string;
+	course_id: string;
+	section_number: number;
+	max_daily_bookable_hours: number;
 }
 
-export enum SectionMemberType {
-  Instructor = 'instructor',
-  TA = 'ta',
-  Student = 'student',
+enum SectionMemberType {
+	Instructor = "instructor",
+	TA = "ta",
+	Student = "student"
 }
 
 export interface SectionMember {
-  id: string;
-  section_id: string;
-  user_id: string;
-  member_type: SectionMemberType;
-  is_restricted: boolean;
+	id: string;
+	section_id: string;
+	user_id: string;
+	member_type: SectionMemberType;
+	is_restricted: boolean;
 }
 
 export enum WeekDay {
@@ -66,10 +66,10 @@ export interface AppointmentBlock {
 }
 
 export interface Appointment {
-  id: string;
-  appointment_day: Date;
-  appointment_block: string;
-  student_id: string;
-  cancelled: boolean;
-  link: string;
+	id: string;
+	appointment_day: Date;
+	appointment_block: string;
+	student_id: string;
+	cancelled: boolean;
+	link: string;
 }
