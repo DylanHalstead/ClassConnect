@@ -60,9 +60,9 @@ export interface AppointmentBlock {
   id: string;
   instructional_member_id: string;
   week_day: WeekDay;
-  // May want to make Time class/type which limits Date to remove epoch date
   start_time: Date;
-  duration: Interval;
+  // millisecond difference from start_time to end_time
+  duration: number;
 }
 
 export interface Appointment {

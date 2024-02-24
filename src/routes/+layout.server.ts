@@ -1,7 +1,7 @@
 import { hydrateAuth, isSignedIn } from 'svelte-google-auth/server';
 import { loadFlash, setFlash } from 'sveltekit-flash-message/server';
-import { doesUserExist, getUserByEmail, createUser } from '../lib/db/users';
-import type { User } from '../lib/types';
+import { doesUserExist, getUserByEmail, createUser } from '$lib/db/users';
+import type { User } from '$lib/types';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch }) => {
