@@ -19,7 +19,7 @@ export interface Section {
 	max_daily_bookable_hours: number;
 }
 
-enum SectionMemberType {
+export enum SectionMemberType {
 	Instructor = "instructor",
 	TA = "ta",
 	Student = "student"

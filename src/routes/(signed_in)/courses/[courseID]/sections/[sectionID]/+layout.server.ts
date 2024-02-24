@@ -4,11 +4,11 @@ import { error } from '@sveltejs/kit';
 import { getUsersSectionMembers } from '$lib/db/sectionMembers';
 
 export const load: LayoutServerLoad = loadFlash(async ({ cookies, params, parent }) => {
-  const { userID } = await parent();
-  // if they are not apart of this section, throw 403
+  const parentVals = await parent();
+  const userID: string = parentVals.userID;
   const sectionID = params.sectionID;
-  const usersSectionMembers = await getUsersSectionMembers(userID);
-  const isUserInThisSection = usersSectionMembers.some(member => member.section_id === sectionID);
+  const usersMembers = await getUsersSectionMembers(userID);
+  const isUserInThisSection = usersMembers.some(member => member.section_id === sectionID);
   if(!isUserInThisSection){
     const errorMessage = 'You are not a member of this section.';
     const message = {
@@ -19,5 +19,5 @@ export const load: LayoutServerLoad = loadFlash(async ({ cookies, params, parent
     error(403, errorMessage)
   }
 
-  return { userID };
+  return { userID, usersMembers };
 });
