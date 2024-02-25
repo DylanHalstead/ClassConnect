@@ -2,6 +2,7 @@
 	import Sparkles from "$lib/components/landing/Sparkles.svelte";
 	import BackgroundBeams from "$lib/components/landing/BackgroundBeams.svelte";
 	import Tabs from "$lib/components/landing/Tabs.svelte";
+	import grid from "$lib/assets/grid.svg";
 	import linear from "$lib/assets/linear.webp";
 	import {
 		Icon,
@@ -105,14 +106,20 @@
 	];
 </script>
 
-<section class="flex h-[50rem] w-full flex-col items-center justify-center bg-black rounded-b-md">
-	<h1 class="relative z-20 text-center text-zxl font-bold text-base-100 md:text-7xl lg:text-9xl">
+<section
+	class="flex h-[50rem] w-full flex-col items-center justify-center bg-neutral-950 rounded-b-md">
+	<h1 class="relative z-30 text-center text-5xl font-bold text-base-100 md:text-7xl lg:text-9xl">
 		Class Connect
 	</h1>
-	<h2 class="relative z-20 text-center text-md text-neutral-400 md:text-xl lg:text-3xl mb-4">
+	<h2 class="relative z-30 text-center text-md text-neutral-400 md:text-xl lg:text-3xl mb-4">
 		Making <span class="text-primary">Office Hours</span> Fast, Functional, and
 		<span class="text-primary">Seamless</span>
 	</h2>
+	<!-- grid effect -->
+	<div
+		class="absolute z-20 h-full w-full [background-position:calc(100%+5px)_calc(100%+5px)] bg-fixed"
+		style="background-image: url({grid})">
+	</div>
 	<div class="relative h-40 w-[40rem]">
 		<!-- Glow Gradients -->
 		<div
@@ -128,12 +135,12 @@
 			minSize={0.8}
 			maxSize={2}
 			particleDensity={300}
-			className="w-full h-full"
+			className="w-full h-full z-30"
 			particleColor="#f4f8fb" />
 
 		<!-- Blur our sparkles -->
 		<div
-			class="absolute inset-0 h-full w-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]">
+			class="absolute inset-0 h-full w-full z-0 bg-neutral-950 [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]">
 		</div>
 	</div>
 </section>
