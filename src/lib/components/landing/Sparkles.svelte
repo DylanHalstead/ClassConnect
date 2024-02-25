@@ -1,19 +1,19 @@
 <script lang="ts">
-	import { cn } from '$lib/utils/cn';
-	import { Motion } from 'svelte-motion';
+	import { cn } from "$lib/utils/cn";
+	import { Motion } from "svelte-motion";
 	let randomMove = () => Math.random() * 4 - 2;
 	export let minSize = 0.6;
 	export let maxSize = 1.5;
 	export let speed = 3;
-	export let particleColor = '#ffffff';
+	export let particleColor = "#ffffff";
 	export let particleDensity = 200;
-	export let className = '';
+	export let className = "";
 	function getRandomValue() {
 		return minSize + Math.random() * (maxSize - minSize);
 	}
 </script>
 
-<div class={cn('relative h-48', className)}>
+<div class={cn("relative h-48", className)}>
 	<div class="absolute inset-0">
 		{#each [...Array(particleDensity)] as _, i (`star-${i}`)}
 			<Motion
@@ -27,9 +27,8 @@
 				transition={{
 					duration: Math.random() * 10 + speed,
 					repeat: Infinity,
-					ease: 'linear'
-				}}
-			>
+					ease: "linear"
+				}}>
 				<span
 					use:motion
 					class="inline-block"
