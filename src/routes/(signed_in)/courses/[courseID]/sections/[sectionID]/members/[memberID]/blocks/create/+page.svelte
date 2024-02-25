@@ -1,23 +1,23 @@
 <script lang="ts">
-	import { WeekDay } from '$lib/types';
-	import { invalidateAll } from '$app/navigation';
-	import { initialize } from 'svelte-google-auth/client';
-	import type { PageData } from './$types.js';
+	import { WeekDay } from "$lib/types";
+	import { invalidateAll } from "$app/navigation";
+	import { initialize } from "svelte-google-auth/client";
+	import type { PageData } from "./$types.js";
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
 
 	let selectedWeekday: WeekDay | null = null;
-	let startTime: string = '';
-	let endTime: string = '';
+	let startTime: string = "";
+	let endTime: string = "";
 	let isValid: boolean = false;
 	let areDatesValid: boolean = false;
 
 	function validateDates() {
-		const startHour = parseInt(startTime.split(':')[0]);
-		const startMinute = parseInt(startTime.split(':')[1]);
-		const endHour = parseInt(endTime.split(':')[0]);
-		const endMinute = parseInt(endTime.split(':')[1]);
+		const startHour = parseInt(startTime.split(":")[0]);
+		const startMinute = parseInt(startTime.split(":")[1]);
+		const endHour = parseInt(endTime.split(":")[0]);
+		const endMinute = parseInt(endTime.split(":")[1]);
 
 		areDatesValid = startHour < endHour || (startHour === endHour && startMinute < endMinute);
 	}
@@ -38,8 +38,7 @@
 				name="day-of-week"
 				id="day-of-week"
 				bind:value={selectedWeekday}
-				required
-			>
+				required>
 				{#each Object.values(WeekDay) as weekday}
 					<option value={weekday}>{weekday}</option>
 				{/each}
@@ -55,8 +54,7 @@
 					name="start-time"
 					id="start-time"
 					bind:value={startTime}
-					required
-				/>
+					required />
 			</div>
 			<div class="inline-block">
 				<label for="end-time">End Time</label>
@@ -66,16 +64,14 @@
 					name="end-time"
 					id="end-time"
 					bind:value={endTime}
-					required
-				/>
+					required />
 			</div>
-			{#if startTime !== '' && endTime !== '' && !areDatesValid}
+			{#if startTime !== "" && endTime !== "" && !areDatesValid}
 				<p class="text-red-500">End time must be after start time</p>
 			{/if}
 		</div>
 
 		<button class="btn btn-outline btn-primary" type="submit" disabled={!isValid}
-			>Create Block</button
-		>
+			>Create Block</button>
 	</form>
 </div>
