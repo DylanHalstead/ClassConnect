@@ -119,7 +119,9 @@
 	<div class="max-w-screen-xl mx-auto px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
 		<div class="grid grid-cols-1 gap-y-8 lg:grid-cols-2 lg:items-center lg:gap-x-16">
 			<div class="mx-auto max-w-lg lg:mx-0 ltr:lg:text-left rtl:lg:text-right">
-				<h2 class="text-3xl font-bold sm:text-4xl">Why Class Connect?</h2>
+				<h2 class="text-3xl font-bold sm:text-4xl">
+					Why <span class="text-primary font-semibold">Class Connect</span>
+				</h2>
 
 				<p class="mt-4 text-gray-600">
 					An independant study project under UNC Charlote's College of Computing and Informatics,
@@ -139,7 +141,7 @@
 					<h3 class="mt-2 font-bold">Interactive Calendar</h3>
 
 					<p class="sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
-						Stay organized with an interactive calendar displaying all your courses office hours.
+						Stay organized with our interactive calendar, displaying all your courses office hours.
 					</p>
 				</div>
 
@@ -153,7 +155,7 @@
 					<h3 class="mt-2 font-bold">Zoom Integration</h3>
 
 					<p class="sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
-						Connect with instructors and classmates from anywhere, with automatic zoom links and
+						Connect with instructors and classmates from anywhere with automatic zoom links and
 						personal calendar invites.
 					</p>
 				</div>
@@ -168,8 +170,8 @@
 					<h3 class="mt-2 font-bold">Reputation System</h3>
 
 					<p class="sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
-						Promote accountability and fairness in scheduling with flexible tooling to fine tune for
-						any courses needs.
+						Promote accountability and fairness in scheduling utilizing our flexible tooling to fine
+						tune your courses.
 					</p>
 				</div>
 
@@ -197,8 +199,9 @@
 	<Tabs
 		propTabs={tabs}
 		contentClassName="rounded-2xl bg-gradient-to-br from-accent to-info p-10 text-xl font-bold md:text-4xl mt-12"
-		tabClassName="btn btn-ghost mr-2"
-		activeTabClassName="btn btn-active btn-ghost text-white" />
+		tabClassName="btn btn-ghost mr-2 border border-neutral"
+		activeTabClassName="btn btn-active btn-secondary"
+		activeTabTextClassName="text-white" />
 </div>
 
 <section class="max-w-screen-xl mx-auto my-16">
@@ -209,7 +212,7 @@
 				<div class="flex flex-col items-center">
 					<div class="avatar">
 						<div
-							class="w-24 rounded-full group-hover:ring group-hover:ring-primary group-hover:ring-offset-base-100 group-hover:ring-offset-2 group-hover:brightness-75 transition-all ease-in duration-100">
+							class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 group-hover:brightness-75 transition-all ease-in duration-100">
 							<img src={teamMember.image} alt="{teamMember.name} Image" />
 						</div>
 					</div>
@@ -228,12 +231,11 @@
 	</div>
 </section>
 
-<!-- Contact us -->
 <div
 	class="relative flex h-[40rem] w-full flex-col items-center justify-center rounded-t-md bg-neutral-950 px-32 antialiased">
 	<div class="mx-auto max-w-2xl p-4">
 		<h1
-			class="relative z-10 bg-neutral-400 bg-clip-text text-center font-sans text-lg font-bold text-transparent md:text-7xl">
+			class="relative z-10 bg-neutral-300 bg-clip-text text-center font-sans text-lg font-bold text-transparent md:text-7xl">
 			Interested?
 		</h1>
 		<p class="relative z-10 mx-auto my-2 max-w-lg text-center text-sm text-neutral-500">

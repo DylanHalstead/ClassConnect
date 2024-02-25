@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { cn } from "$lib/utils/cn";
 	import { Motion } from "svelte-motion";
-	export let className = void 0;
-	export let tabs;
-	export let hovering;
-	const isActive = tab => {
+	export let className = "";
+	export let tabs: {
+		title: string;
+		value: string;
+		content: string;
+	}[];
+	export let hovering: boolean = false;
+	const isActive = (tab: { title: string; value: string; content: string }) => {
 		return tab.value === tabs[0].value;
 	};
 </script>

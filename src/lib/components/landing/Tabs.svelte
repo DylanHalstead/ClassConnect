@@ -1,15 +1,20 @@
 <script lang="ts">
 	import { cn } from "$lib/utils/cn";
-	import { AnimatePresence, Motion } from "svelte-motion";
+	import { Motion } from "svelte-motion";
 	import FadeInDiv from "./FadeInDiv.svelte";
-	export let propTabs;
-	export let containerClassName = void 0;
-	export let activeTabClassName = void 0;
-	export let tabClassName = void 0;
-	export let contentClassName = void 0;
+	export let propTabs: {
+		title: string;
+		value: string;
+		content: string;
+	}[] = [];
+	export let containerClassName = "";
+	export let activeTabClassName = "";
+	export let tabClassName = "";
+	export let contentClassName = "";
+	export let activeTabTextClassName = "";
 	let active = propTabs[0];
 	let tabs = propTabs;
-	const moveSelectedTabToTop = idx => {
+	const moveSelectedTabToTop = (idx: number) => {
 		const newTabs = [...propTabs];
 		const selectedTab = newTabs.splice(idx, 1);
 		newTabs.unshift(selectedTab[0]);
@@ -40,11 +45,14 @@
 					transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}>
 					<div use:motion class={cn("absolute inset-0", activeTabClassName)} />
 				</Motion>
+				<span class={cn("relative block", activeTabTextClassName)}>
+					{tab.title}
+				</span>
+			{:else}
+				<span class="relative block">
+					{tab.title}
+				</span>
 			{/if}
-
-			<span class="relative block text-black">
-				{tab.title}
-			</span>
 		</button>
 	{/each}
 </div>
