@@ -54,6 +54,33 @@
 		}
 	];
 
+	const cards = [
+		{
+			title: "Interactive Calendar",
+			content:
+				"Stay organized with our interactive calendar, displaying all your courses office hours.",
+			icon: CalendarDays
+		},
+		{
+			title: "Zoom Integration",
+			content:
+				"Connect with instructors and classmates from anywhere with automatic zoom links and personal calendar invites.",
+			icon: VideoCamera
+		},
+		{
+			title: "Reputation System",
+			content:
+				"Promote accountability and fairness in scheduling utilizing our flexible tooling to fine tune your courses.",
+			icon: Flag
+		},
+		{
+			title: "By Students, for Students",
+			content:
+				"We built an app WE would want to use. As a student or as an instructional team member.",
+			icon: AcademicCap
+		}
+	];
+
 	const tabs = [
 		{
 			title: "Calendar",
@@ -78,20 +105,16 @@
 	];
 </script>
 
-<a href="/calendar">Calendar</a>
-<a href="/profile">Profile</a>
-<a href="/courses/[id]/sections/[id]/members/[id]/appointments/book">Book</a>
-
-<section class="flex h-[40rem] w-full flex-col items-center justify-center bg-black rounded-b-md">
-	<h1 class="relative z-20 text-center text-3xl font-bold text-base-100 md:text-7xl lg:text-9xl">
+<section class="flex h-[50rem] w-full flex-col items-center justify-center bg-black rounded-b-md">
+	<h1 class="relative z-20 text-center text-zxl font-bold text-base-100 md:text-7xl lg:text-9xl">
 		Class Connect
 	</h1>
-	<h2 class="relative z-20 text-center text-md text-neutral-500 md:text-xl lg:text-3xl mb-4">
+	<h2 class="relative z-20 text-center text-md text-neutral-400 md:text-xl lg:text-3xl mb-4">
 		Making <span class="text-primary">Office Hours</span> Fast, Functional, and
 		<span class="text-primary">Seamless</span>
 	</h2>
 	<div class="relative h-40 w-[40rem]">
-		<!-- Gradients -->
+		<!-- Glow Gradients -->
 		<div
 			class="absolute inset-x-20 top-0 h-[2px] w-3/4 bg-gradient-to-r from-transparent via-white to-transparent blur-sm" />
 		<div
@@ -108,93 +131,49 @@
 			className="w-full h-full"
 			particleColor="#f4f8fb" />
 
-		<!-- Radial Gradient to prevent sharp edges -->
+		<!-- Blur our sparkles -->
 		<div
 			class="absolute inset-0 h-full w-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]">
 		</div>
 	</div>
 </section>
 
-<section>
-	<div class="max-w-screen-xl mx-auto px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
-		<div class="grid grid-cols-1 gap-y-8 lg:grid-cols-2 lg:items-center lg:gap-x-16">
-			<div class="mx-auto max-w-lg lg:mx-0 ltr:lg:text-left rtl:lg:text-right">
-				<h2 class="text-3xl font-bold sm:text-4xl">
-					Why <span class="text-primary font-semibold">Class Connect</span>
-				</h2>
+<section class="max-w-screen-xl mx-auto px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
+	<div class="grid grid-cols-1 gap-y-8 lg:grid-cols-2 lg:items-center lg:gap-x-16">
+		<div class="mx-auto max-w-lg lg:mx-0 ltr:lg:text-left rtl:lg:text-right">
+			<h2 class="text-3xl font-bold sm:text-4xl">
+				Why <span class="text-primary font-semibold">Class Connect</span>
+			</h2>
 
-				<p class="mt-4 text-gray-600">
-					An independant study project under UNC Charlote's College of Computing and Informatics,
-					Class Connect is designed to facilitate efficient scheduling of office hours for students
-					with their courses instructional teams.
-				</p>
-			</div>
+			<p class="mt-4 text-gray-600">
+				An independant study project under UNC Charlote's College of Computing and Informatics,
+				Class Connect is designed to facilitate efficient scheduling of office hours for students
+				with their courses instructional teams.
+			</p>
+		</div>
 
-			<div class="grid grid-cols-2 gap-4">
+		<div class="grid grid-cols-2 gap-4">
+			{#each cards as card}
 				<div
 					class="group block rounded-xl border border-gray-200 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring cursor-default">
 					<span
 						class="inline-block rounded-lg bg-gray-50 p-3 group-hover:bg-primary border border-gray-200 transition-colors duration-150 ease-in-out">
-						<Icon src={CalendarDays} class="h-6 w-6 stroke-2 group-hover:stroke-base-100" />
+						<Icon src={card.icon} class="h-6 w-6 stroke-2 group-hover:stroke-base-100" />
 					</span>
 
-					<h3 class="mt-2 font-bold">Interactive Calendar</h3>
+					<h3 class="mt-1 sm:mt-2 font-bold">{card.title}</h3>
 
-					<p class="sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
-						Stay organized with our interactive calendar, displaying all your courses office hours.
+					<p class="sm:mt-1 block text-sm text-neutral-500">
+						{card.content}
 					</p>
 				</div>
-
-				<div
-					class="group block rounded-xl border border-gray-200 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring cursor-default">
-					<span
-						class="inline-block rounded-lg bg-gray-50 p-3 group-hover:bg-primary border border-gray-200 transition-colors duration-150 ease-in-out">
-						<Icon src={VideoCamera} class="h-6 w-6 stroke-2 group-hover:stroke-base-100" />
-					</span>
-
-					<h3 class="mt-2 font-bold">Zoom Integration</h3>
-
-					<p class="sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
-						Connect with instructors and classmates from anywhere with automatic zoom links and
-						personal calendar invites.
-					</p>
-				</div>
-
-				<div
-					class="group block rounded-xl border border-gray-200 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring cursor-default">
-					<span
-						class="inline-block rounded-lg bg-gray-50 p-3 group-hover:bg-primary border border-gray-200 transition-colors duration-150 ease-in-out">
-						<Icon src={Flag} class="h-6 w-6 stroke-2 group-hover:stroke-base-100" />
-					</span>
-
-					<h3 class="mt-2 font-bold">Reputation System</h3>
-
-					<p class="sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
-						Promote accountability and fairness in scheduling utilizing our flexible tooling to fine
-						tune your courses.
-					</p>
-				</div>
-
-				<div
-					class="group block rounded-xl border border-gray-200 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring cursor-default">
-					<span
-						class="inline-block rounded-lg bg-gray-50 p-3 group-hover:bg-primary border border-gray-200 transition-colors duration-150 ease-in-out">
-						<Icon src={AcademicCap} class="h-6 w-6 stroke-2 group-hover:stroke-base-100" />
-					</span>
-
-					<h3 class="mt-2 font-bold">By Students, for Students</h3>
-
-					<p class="sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
-						We built an app WE would want to use. As a student or as an instructional team member.
-					</p>
-				</div>
-			</div>
+			{/each}
 		</div>
 	</div>
 </section>
 
 <!-- Visuals/Screenshots of what the app looks like -->
-<div
+<section
 	class="relative mx-auto mb-40 flex h-[20rem] w-[80vw] max-w-5xl flex-col items-start justify-start [perspective:1000px] md:h-[40rem] lg:w-[60vw]">
 	<Tabs
 		propTabs={tabs}
@@ -202,7 +181,7 @@
 		tabClassName="btn btn-ghost mr-2 border border-neutral"
 		activeTabClassName="btn btn-active btn-secondary"
 		activeTabTextClassName="text-white" />
-</div>
+</section>
 
 <section class="max-w-screen-xl mx-auto my-16">
 	<h2 class="text-3xl font-bold sm:text-4xl mb-6 text-center">Meet the Team</h2>
@@ -231,7 +210,7 @@
 	</div>
 </section>
 
-<div
+<section
 	class="relative flex h-[40rem] w-full flex-col items-center justify-center rounded-t-md bg-neutral-950 px-32 antialiased">
 	<div class="mx-auto max-w-2xl p-4">
 		<h1
@@ -259,4 +238,4 @@
 		</form>
 	</div>
 	<BackgroundBeams />
-</div>
+</section>
