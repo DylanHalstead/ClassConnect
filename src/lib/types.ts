@@ -61,7 +61,7 @@ export interface AppointmentBlock {
   instructional_member_id: string;
   week_day: WeekDay;
   start_time: Date;
-  // millisecond difference from start_time to end_time
+  // millisecond difference from start_time to "end_time"
   duration: number;
 }
 

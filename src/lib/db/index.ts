@@ -8,8 +8,6 @@ import {
 	SECRET_DB_PASSWORD
 } from "$env/static/private";
 
-pg.defaults.parseInputDatesAsUTC = true;
-
 export const pool = new pg.Pool({
 	host: SECRET_DB_HOST,
 	port: parseInt(SECRET_DB_PORT),

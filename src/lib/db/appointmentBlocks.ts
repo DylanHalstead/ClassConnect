@@ -92,24 +92,13 @@ export async function createAppointmentBlock(instructionalMemberId: string, week
   });
 }
 
-export async function editAppointmentBlock(id: string, weekDay: WeekDay, startTime: Date, duration: number): Promise<AppointmentBlock>{
+export async function deleteAppointmentBlocks(ids: string[]): Promise<void>{
   return withConnection(async (client: PoolClient) => {
     const query: QueryConfig = {
-      text: 'UPDATE appointment_blocks SET week_day = $1, start_time = $2, duration = $3 WHERE id = $4 RETURNING id, instructional_member_id, week_day, start_time, duration',
-      values: [weekDay, dateToPostgresTimeWithTimeZone(startTime), millisecondsToIntervalString(duration), id],
+      text: 'DELETE FROM appointment_blocks WHERE id = ANY($1)',
+      values: [ids],
     }
 
-    const res: QueryResult<PostgresAppointmentBlock> = await client.query(query);
-    const appointmentBlock = res.rows.map((row) => {
-      const appointmentBlock: AppointmentBlock = {
-          id: row.id,
-          instructional_member_id: row.instructional_member_id,
-          week_day: row.week_day,
-          start_time: postgresTimeWithTimeZoneToDate(row.start_time),
-          duration: intervalToMilliseconds(row.duration)
-        };
-      return appointmentBlock;
-    })[0];
-    return appointmentBlock;
+    await client.query(query);
   });
 }
