@@ -24,9 +24,10 @@
 	let hovering = false;
 </script>
 
+<FadeInDiv {tabs} {hovering} className={cn("", contentClassName)} />
 <div
 	class={cn(
-		"no-visible-scrollbar relative flex w-full max-w-full flex-row items-center justify-start overflow-auto [perspective:1000px] sm:overflow-visible",
+		"no-visible-scrollbar mt-12 relative flex w-full max-w-full flex-row items-center justify-start overflow-auto [perspective:1000px] sm:overflow-visible",
 		containerClassName
 	)}>
 	{#each propTabs as tab, idx (tab.title)}
@@ -56,4 +57,3 @@
 		</button>
 	{/each}
 </div>
-<FadeInDiv {tabs} {hovering} className={cn("", contentClassName)} />

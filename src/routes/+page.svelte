@@ -84,24 +84,24 @@
 
 	const tabs = [
 		{
-			title: "Calendar",
+			title: "Interactive Calendar",
 			value: "calendar",
-			content: `<div className="w-full overflow-relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-accent to-info"> <p class="text-white">Calendar Tab</p> <img src="${linear}" alt="dummy image" width="1000" height="1000" class="object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto" /> </div>`
+			content: `<div className="w-full overflow-relative h-full rounded-2xl p-10 font-bold text-white bg-gradient-to-br from-accent to-info"> <h2 class="text-white text-xl font-black md:text-xl lg:font-bold lg:text-2xl xl:text-3xl">Easily Book Available Appointments</h2> <img src="${linear}" alt="dummy image" width="1000" height="1000" class="object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto" /> </div>`
 		},
 		{
-			title: "Limit Office Hours",
-			value: "limit-office-hours",
-			content: `<div className="w-full overflow-relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-accent to-info"> <p class="text-white">Limit Office Hours tab</p> <img src="${linear}" alt="dummy image" width="1000" height="1000" class="object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto" /> </div>`
+			title: "Settings",
+			value: "settings",
+			content: `<div className="w-full overflow-relative h-full rounded-2xl p-10font-bold text-white bg-gradient-to-br from-accent to-info"> <h2 class="text-white text-xl font-black md:text-xl lg:font-bold lg:text-2xl xl:text-3xl">Fine Tune To Your Courses Needs</h2> <img src="${linear}" alt="dummy image" width="1000" height="1000" class="object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto" /> </div>`
 		},
 		{
-			title: "Reputation",
+			title: "Reputation System",
 			value: "reputation",
-			content: `<div className="w-full overflow-relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-accent to-info"> <p class="text-white">Reputation tab</p> <img src="${linear}" alt="dummy image" width="1000" height="1000" class="object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto" /> </div>`
+			content: `<div className="w-full overflow-relative h-full rounded-2xl p-10 font-bold text-white bg-gradient-to-br from-accent to-info"> <h2 class="text-white text-xl font-black md:text-xl lg:font-bold lg:text-2xl xl:text-3xl">Enforce Consistent Bookings</h2> <img src="${linear}" alt="dummy image" width="1000" height="1000" class="object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto" /> </div>`
 		},
 		{
 			title: "Dashboard",
 			value: "dashboard",
-			content: `<div className="w-full overflow-relative h-full rounded-2xl p-10 text-xl md:text-4xl font-bold text-white bg-gradient-to-br from-accent to-info"> <p class="text-white">Dashboard tab</p> <img src="${linear}" alt="dummy image" width="1000" height="1000" class="object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto" /> </div>`
+			content: `<div className="w-full overflow-relative h-full rounded-2xl p-10 font-bold text-white bg-gradient-to-br from-accent to-info"> <h2 class="text-white text-xl font-black md:text-xl lg:font-bold lg:text-2xl" xl:text-3xl>See Upcoming Booked Office Hours</h2> <img src="${linear}" alt="dummy image" width="1000" height="1000" class="object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto" /> </div>`
 		}
 	];
 </script>
@@ -180,15 +180,17 @@
 </section>
 
 <!-- Visuals/Screenshots of what the app looks like -->
-<section
-	class="relative mx-auto mb-40 flex h-[20rem] w-[80vw] max-w-5xl flex-col items-start justify-start [perspective:1000px] md:h-[40rem] lg:w-[60vw]">
-	<Tabs
-		propTabs={tabs}
-		contentClassName="rounded-2xl bg-gradient-to-br from-accent to-info p-10 text-xl font-bold md:text-4xl mt-12"
-		tabClassName="btn btn-ghost mr-2 border border-neutral"
-		activeTabClassName="btn btn-active btn-secondary"
-		activeTabTextClassName="text-white" />
-</section>
+<div class="bg-neutral-200 py-24">
+	<section
+		class="relative mx-auto flex h-[20rem] w-[80vw] max-w-5xl flex-col items-start justify-start [perspective:1000px] md:h-[40rem] lg:w-[60vw]">
+		<Tabs
+			propTabs={tabs}
+			contentClassName="rounded-2xl bg-gradient-to-br from-accent to-info p-10 text-xl font-bold md:text-4xl"
+			tabClassName="btn btn-ghost mr-2 border border-neutral"
+			activeTabClassName="btn btn-active btn-secondary"
+			activeTabTextClassName="text-white" />
+	</section>
+</div>
 
 <section class="max-w-screen-xl mx-auto my-16">
 	<h2 class="text-3xl font-bold sm:text-4xl mb-6 text-center">Meet the Team</h2>
