@@ -17,6 +17,5 @@
 	<p>Welcome, {data.db.user.first_name} {data.db.user.last_name}</p>
 	<p>{data.db.user.email}</p>
 	<p>{data.db.user.id}</p>
-	<p>{data.auth.user?.picture}</p>
 	<GoogleSignOut />
 {/if}
