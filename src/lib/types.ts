@@ -34,35 +34,35 @@ export interface SectionMember {
 }
 
 export enum WeekDay {
-  Monday = 'monday',
-  Tuesday = 'tuesday',
-  Wednesday = 'wednesday',
-  Thursday = 'thursday',
-  Friday = 'friday',
-  Saturday = 'saturday',
-  Sunday = 'sunday',
+	Monday = "monday",
+	Tuesday = "tuesday",
+	Wednesday = "wednesday",
+	Thursday = "thursday",
+	Friday = "friday",
+	Saturday = "saturday",
+	Sunday = "sunday"
 }
 
 export interface Interval {
-  hours?: number,
-  minutes?: number,
+	hours?: number;
+	minutes?: number;
 }
 
 export interface PostgresAppointmentBlock {
-  id: string;
-  instructional_member_id: string;
-  week_day: WeekDay;
-  start_time: string;
-  duration: Interval;
+	id: string;
+	instructional_member_id: string;
+	week_day: WeekDay;
+	start_time: string;
+	duration: Interval;
 }
 
 export interface AppointmentBlock {
-  id: string;
-  instructional_member_id: string;
-  week_day: WeekDay;
-  start_time: Date;
-  // millisecond difference from start_time to "end_time"
-  duration: number;
+	id: string;
+	instructional_member_id: string;
+	week_day: WeekDay;
+	start_time: Date;
+	// millisecond difference from start_time to "end_time"
+	duration: number;
 }
 
 export interface Appointment {
