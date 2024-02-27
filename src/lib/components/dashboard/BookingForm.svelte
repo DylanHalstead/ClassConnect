@@ -1,5 +1,5 @@
 <script lang="ts">
-	// Blockers 
+	// Blockers
 	// booking form missing time selector
 	// Or a pop up for picking a time for that specified TA.
 

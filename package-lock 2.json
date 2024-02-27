@@ -75,14 +75,10 @@
 			"version": "0.19.11",
 			"resolved": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.19.11.tgz",
 			"integrity": "sha512-grbyMlVCvJSfxFQUndw5mCtWs5LO1gUlwP4CDi4iJBbVpZcqLVT29FxgGuBJGSzyOxotFG4LoO5X+M1350zmPA==",
-			"cpu": [
-				"x64"
-			],
+			"cpu": ["x64"],
 			"dev": true,
 			"optional": true,
-			"os": [
-				"linux"
-			],
+			"os": ["linux"],
 			"engines": {
 				"node": ">=12"
 			}
@@ -511,27 +507,19 @@
 			"version": "4.9.5",
 			"resolved": "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.9.5.tgz",
 			"integrity": "sha512-Dq1bqBdLaZ1Gb/l2e5/+o3B18+8TI9ANlA1SkejZqDgdU/jK/ThYaMPMJpVMMXy2uRHvGKbkz9vheVGdq3cJfA==",
-			"cpu": [
-				"x64"
-			],
+			"cpu": ["x64"],
 			"dev": true,
 			"optional": true,
-			"os": [
-				"linux"
-			]
+			"os": ["linux"]
 		},
 		"node_modules/@rollup/rollup-linux-x64-musl": {
 			"version": "4.9.5",
 			"resolved": "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.9.5.tgz",
 			"integrity": "sha512-ezyFUOwldYpj7AbkwyW9AJ203peub81CaAIVvckdkyH8EvhEIoKzaMFJj0G4qYJ5sw3BpqhFrsCc30t54HV8vg==",
-			"cpu": [
-				"x64"
-			],
+			"cpu": ["x64"],
 			"dev": true,
 			"optional": true,
-			"os": [
-				"linux"
-			]
+			"os": ["linux"]
 		},
 		"node_modules/@sveltejs/adapter-node": {
 			"version": "4.0.1",
@@ -4604,10 +4592,7 @@
 			"version": "9.0.1",
 			"resolved": "https://registry.npmjs.org/uuid/-/uuid-9.0.1.tgz",
 			"integrity": "sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==",
-			"funding": [
-				"https://github.com/sponsors/broofa",
-				"https://github.com/sponsors/ctavan"
-			],
+			"funding": ["https://github.com/sponsors/broofa", "https://github.com/sponsors/ctavan"],
 			"bin": {
 				"uuid": "dist/bin/uuid"
 			}
