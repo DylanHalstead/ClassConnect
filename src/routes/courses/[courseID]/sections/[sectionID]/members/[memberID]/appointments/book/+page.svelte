@@ -1,4 +1,3 @@
-
-	<div>
-		<h1>Book Appointment</h1>
-	</div>
+<div>
+	<h1>Book Appointment</h1>
+</div>
