@@ -2488,7 +2488,7 @@ svelte-preprocess@^5.1.0:
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
 
-"svelte@^3.0.0 || ^4.0.0 || ^5.0.0", "svelte@^3.19.0 || ^4.0.0", "svelte@^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0", "svelte@^3.23.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0", "svelte@^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0", "svelte@^4.0.0 || ^5.0.0-next.0", svelte@^4.2.7, "svelte@3.x || 4.x":
+"svelte@^3.0.0 || ^4.0.0 || ^5.0.0", "svelte@^3.19.0 || ^4.0.0", "svelte@^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0", "svelte@^3.23.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0", "svelte@^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0", "svelte@^4.0.0 || ^5.0.0-next.0", svelte@^4.2.7, svelte@>=3.35.0, "svelte@3.x || 4.x":
   version "4.2.8"
   resolved "https://registry.npmjs.org/svelte/-/svelte-4.2.8.tgz"
   integrity sha512-hU6dh1MPl8gh6klQZwK/n73GiAHiR95IkFsesLPbMeEZi36ydaXL/ZAb4g9sayT0MXzpxyZjR28yderJHxcmYA==
