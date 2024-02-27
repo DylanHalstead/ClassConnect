@@ -25,7 +25,7 @@
 		{
 			id: 2,
 			name: "Jaden Peterson",
-			designation: ["Fullstack Engineer"],
+			designation: ["Fullstack Engineer", "Database Architect"],
 			image:
 				"https://media.licdn.com/dms/image/C4E03AQFZytuUfaHpuA/profile-displayphoto-shrink_200_200/0/1644355335246?e=1714608000&v=beta&t=EXk96mYGKIYASMXjlOnLmlJ0IWxth1zmZs3OWn9Rg8o",
 			link: "https://www.linkedin.com/in/petersonjaden/"
