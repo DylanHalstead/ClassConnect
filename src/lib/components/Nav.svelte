@@ -1,5 +1,13 @@
 <script lang="ts">
 	import { signOut } from "svelte-google-auth/client";
+    import { Icon, User, Calendar, BookOpen, ArrowLeftEndOnRectangle } from "svelte-hero-icons";
+
+    import { invalidateAll } from "$app/navigation";
+	import { initialize } from "svelte-google-auth/client";
+	import type { PageData } from "./$types.js";
+    
+	export let data: PageData;
+	initialize(data, invalidateAll);
 </script>
 
 <div class="flex flex-col justify-between bg-primary w-16 h-screen items-center">
@@ -8,26 +16,32 @@
         <nav class="flex flex-col items-center space-y-10">
             <div class="bg-white w-3/5 m-5 h-12 rounded-xl flex items-center justify-center">
                 <div>
-                    <a class="text-2xl font-bold" href="/">CC</a>
+                    <!-- If not user show CC 'logo' -->
+                    {#if !data.auth.user}
+                        <a class="text-2xl font-bold" href="/">CC</a>
+                    <!-- Else show CC user pfp -->
+                    {:else}
+                        <img src={data.auth.user.picture}>
+                    {/if}
                 </div>
             </div>
 
             <div class="space-y-14">
                 <div>
-                    <a href="/profile/[profileID]"><i class="fa-solid fa-user fa-xl" style="color: #ffffff;"></i></a>
+                    <a href="/profile/[profileID]"><Icon src="{User}" size="32" class="text-white" /></a>
                 </div>
                 <div>
-                    <a href="/calendar"><i class="fa-solid fa-calendar-days fa-xl" style="color: #ffffff;"></i></a>
+                    <a href="/calendar"><Icon src="{Calendar}" size="32" class="text-white" /></a>
                 </div>
                 <div>
-                    <a href="/courses/[courseID]/sections/[sectionID]/members/[memberID]/appointments/book"><i class="fa-solid fa-calendar-check fa-xl" style="color: #ffffff;"></i></a>
+                    <a href="/courses/[courseID]/sections/[sectionID]/members/[memberID]/appointments/book"><Icon src="{BookOpen}" size="32" class="text-white" /></a>
                 </div>
             </div>  
         </nav>
     </div>
 
     <div class="mb-5">
-        <button on:click={() => signOut()}><i class="fa-solid fa-right-from-bracket fa-xl" style="color: #ffffff;"></i></button>
+        <button on:click={() => signOut()}><Icon src="{ArrowLeftEndOnRectangle}" size="32" class="text-white" /></button>
     </div>
 
 </div>
