@@ -11,6 +11,13 @@
 </script>
 
 <div class="flex flex-col justify-between bg-primary w-16 h-screen items-center">
+	<div>
+		<nav class="flex flex-col items-center space-y-10">
+			<div class="bg-white w-3/5 m-5 h-12 rounded-xl flex items-center justify-center">
+				<div>
+					<a class="text-2xl font-bold" href="/">CC</a>
+				</div>
+			</div>
 
     <div>
         <nav class="flex flex-col items-center space-y-10">

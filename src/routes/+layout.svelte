@@ -11,13 +11,12 @@
 
 <div class="flex">
 	<div>
-		<Nav/>
+		<Nav />
 	</div>
 
-{#if $flash}
-	<p>{$flash.message}</p>
-{/if}
+	{#if $flash}
+		<p>{$flash.message}</p>
+	{/if}
 
-<slot />
-
+	<slot />
 </div>
