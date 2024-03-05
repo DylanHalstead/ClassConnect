@@ -10,15 +10,15 @@
 	 */
 	export let week: Date;
 
-	$: weekNormalizedByDate = normalizeDateByWeek(week);
-	$: date = weekNormalizedByDate.getDate();
+	$: weekNormalized = normalizeDateByWeek(week);
+	$: date = weekNormalized.getDate();
 
 	let dateOptions: number[];
 
 	$: {
 		dateOptions = [];
 
-		const current = new Date(weekNormalizedByDate);
+		const current = new Date(weekNormalized);
 
 		current.setDate(1);
 
@@ -32,11 +32,11 @@
 		}
 	}
 
-	$: monthName = weekNormalizedByDate.toLocaleString("en-US", {
+	$: monthName = weekNormalized.toLocaleString("en-US", {
 		month: "long"
 	});
 
-	$: year = weekNormalizedByDate.getFullYear();
+	$: year = weekNormalized.getFullYear();
 
 	const dispatch = createEventDispatcher<{
 		changeWeek: Date;
@@ -76,7 +76,7 @@
 	}
 
 	function handleDateChange(event: Event & { currentTarget: HTMLSelectElement }) {
-		const result = new Date(weekNormalizedByDate);
+		const result = new Date(weekNormalized);
 
 		result.setDate(parseInt(event.currentTarget.value));
 
@@ -87,7 +87,7 @@
 		const i = months.get(event.currentTarget.value);
 
 		if (i != undefined) {
-			const result = new Date(weekNormalizedByDate);
+			const result = new Date(weekNormalized);
 
 			result.setMonth(i);
 
@@ -99,7 +99,7 @@
 		const i = event.currentTarget.valueAsNumber;
 
 		if (!isNaN(i)) {
-			const result = new Date(weekNormalizedByDate);
+			const result = new Date(weekNormalized);
 
 			result.setFullYear(i);
 

@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/components/calendar";
+	import {
+		normalizeDateByDay,
+		normalizeDateByTimeWithinDay,
+		normalizeDateByWeek,
+		type ExtendedAppointment
+	} from "$lib/components/calendar";
+
+	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
 
 	/**
 	 * The date whose week the calendar will be focused on. Note that if the date's day is one other
@@ -14,17 +21,22 @@
 	 */
 	export let startTime: Date;
 
+	const startTimeNormalized = normalizeDateByTimeWithinDay(startTime);
+
 	/**
 	 * The maximum time to display on a given day.
 	 */
 	export let endTime: Date;
 
+	const endTimeNormalized = normalizeDateByTimeWithinDay(endTime);
+
 	/**
 	 * The length of time, in milliseconds, that a cell on the calendar measures.
 	 */
 	export let timeIncrement: number;
+	export let appointments: ExtendedAppointment[];
 
-	const rowCount = (endTime.getTime() - startTime.getTime()) / timeIncrement;
+	const rowCount = (endTimeNormalized.getTime() - startTimeNormalized.getTime()) / timeIncrement;
 	const today = normalizeDateByDay(new Date());
 	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -53,14 +65,18 @@
 		});
 	}
 
-	function getRowTime(i: number): string {
-		const result = new Date(startTime);
+	function formatRowTime(time: Date): string {
+		return time.toLocaleString("en-US", {
+			timeStyle: "short"
+		});
+	}
+
+	function getRowTime(i: number): Date {
+		const result = normalizeDateByTimeWithinDay(startTime);
 
 		result.setTime(result.getTime() + timeIncrement * i);
 
-		return result.toLocaleString("en-US", {
-			timeStyle: "short"
-		});
+		return result;
 	}
 
 	function handleScroll() {
@@ -88,6 +104,30 @@
 		lastGutterCellVisible = newLastVisible;
 	}
 
+	function isAppointmentInCell(appointment: ExtendedAppointment, i: number, j: number): boolean {
+		if (normalizeDateByDay(appointment.appointment_day).getTime() != columnDates[j].getTime()) {
+			return false;
+		}
+
+		const appointmentStartTime =
+			normalizeDateByTimeWithinDay(appointment.appointment_block.start_time);
+
+		const appointmentEndTime = new Date(appointmentStartTime);
+
+		appointmentEndTime
+			.setTime(appointmentEndTime.getTime() + appointment.appointment_block.duration);
+
+		const minimumTime = getRowTime(i);
+		const maximumTime = new Date(minimumTime);
+
+		maximumTime.setTime(maximumTime.getTime() + timeIncrement);
+
+		return (
+			appointmentStartTime.getTime() >= minimumTime.getTime() &&
+			appointmentEndTime.getTime() <= maximumTime.getTime()
+		);
+	}
+
 	function isGutterCellVisible(cell: Element): boolean {
 		const containerTop = container.scrollTop;
 		const containerBottom = containerTop + container.clientHeight;
@@ -111,10 +151,9 @@
 		<div class="gutter" bind:this={gutter}>
 			{#each { length: rowCount } as _, i}
 				<div
-					class="gutter-cell divider m-0 {i >= firstGutterCellVisible && i <= lastGutterCellVisible
-						? ''
-						: 'invisible'}">
-					<span class="gutter-cell-text">{getRowTime(i)}</span>
+					class="gutter-cell divider m-0"
+					class:invisible={i < firstGutterCellVisible || i > lastGutterCellVisible}>
+					<span class="gutter-cell-text">{formatRowTime(getRowTime(i))}</span>
 				</div>
 			{/each}
 		</div>
@@ -123,14 +162,15 @@
 			<thead>
 				<tr>
 					{#each columnDates as date, i}
+						{@const isToday = date.getTime() == today.getTime()}
+
 						<th
-							class="cell bg-base-100 border-neutral border-b border-s sticky top-0 {i == 6
-								? 'border-e'
-								: ''}">
+							class="cell bg-base-100 border-neutral border-b border-s sticky top-0 z-10"
+							class:border-e={i == 6}>
 							<h2
-								class="cell-header-weekday text-2xl {date.getTime() == today.getTime()
-									? 'text-primary underline'
-									: ''}">
+								class="cell-header-weekday text-2xl"
+								class:text-primary={isToday}
+								class:underline={isToday}>
 								{weekdays[i]}
 							</h2>
 
@@ -147,9 +187,15 @@
 					<tr>
 						{#each { length: 7 } as _, j}
 							<td
-								class="cell border-neutral border-s {i < rowCount - 1 ? 'border-b' : ''} {j == 6
-									? 'border-e'
-									: ''}"></td>
+								class="cell border-neutral border-s p-0"
+								class:border-b={i < rowCount - 1}
+								class:border-e={j == 6}>
+								<div class="card-carousel-container overflow-y-scroll p-2">
+									{#key week}
+										<CalendarCardCarousel appointments={appointments.filter(appointment => isAppointmentInCell(appointment, i, j))}/>
+									{/key}
+								</div>
+							</td>
 						{/each}
 					</tr>
 				{/each}
@@ -159,7 +205,7 @@
 
 	<div class="flex">
 		<div class="gutter-cell gutter-terminating-cell divider m-0">
-			{getRowTime(lastGutterCellVisible + 1)}
+			{formatRowTime(getRowTime(lastGutterCellVisible + 1))}
 		</div>
 
 		<div class="gutter-terminating-divider divider m-0 w-full h-0"></div>
@@ -173,7 +219,7 @@
 		--gutter-width: 8rem;
 	}
 
-	.cell {
+	.card-carousel-container {
 		height: var(--cell-height);
 	}
 
@@ -192,7 +238,7 @@
 
 	.gutter-cell {
 		font-family: "Kaisei HarunoUmi", serif;
-		height: var(--cell-height);
+		height: calc(var(--cell-height) + 1px);
 	}
 
 	.gutter-cell::before {
