@@ -1,10 +1,15 @@
 <script lang="ts">
-	import Calendar from "$lib/components/calendar/Calendar.svelte";
 	import { normalizeDateByWeek } from "$lib/utils";
-	import type { ExtendedAppointment, InstructionalMember, Student } from "$lib/types";
+	import {
+		type ExtendedAppointment,
+		type InstructionalMember,
+		SectionMemberType,
+		type Student,
+		WeekDay
+	} from "$lib/types";
 
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";
-	import { SectionMemberType, WeekDay } from "$lib/types";
+	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
 
 	const calendarStartTime = new Date();
 
@@ -115,7 +120,7 @@
 	</div>
 
 	<div class="grow min-h-0 p-4">
-		<Calendar
+		<CalendarWeekly
 			week={calendarWeek}
 			maximumStartTime={calendarStartTime}
 			minimumEndTime={calendarEndTime}
