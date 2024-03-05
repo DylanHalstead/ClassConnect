@@ -121,8 +121,8 @@
 	<div class="grow min-h-0 p-4">
 		<Calendar
 			week={calendarWeek}
-			startTime={calendarStartTime}
-			endTime={calendarEndTime}
+			maximumStartTime={calendarStartTime}
+			minimumEndTime={calendarEndTime}
 			timeIncrement={1000 * 60 * 30}
 			{appointments} />
 	</div>

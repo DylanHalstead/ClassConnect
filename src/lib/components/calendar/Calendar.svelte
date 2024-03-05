@@ -21,16 +21,12 @@
 	/**
 	 * The minimum time to display on a given day.
 	 */
-	export let startTime: Date;
-
-	const startTimeNormalized = normalizeDateByTimeWithinDay(startTime);
+	export let maximumStartTime: Date;
 
 	/**
 	 * The maximum time to display on a given day.
 	 */
-	export let endTime: Date;
-
-	const endTimeNormalized = normalizeDateByTimeWithinDay(endTime);
+	export let minimumEndTime: Date;
 
 	/**
 	 * The length of time, in milliseconds, that a cell on the calendar measures.
@@ -38,7 +34,25 @@
 	export let timeIncrement: number;
 	export let appointments: ExtendedAppointment[];
 
-	const rowCount = (endTimeNormalized.getTime() - startTimeNormalized.getTime()) / timeIncrement;
+	const startTime = new Date(
+		Math.min(
+			...[
+				...appointments.map(appointment => appointment.appointment_block.start_time),
+				maximumStartTime
+			].map(time => normalizeDateByTimeWithinDay(time).getTime())
+		)
+	);
+
+	const endTime = new Date(
+		Math.max(
+			...[
+				...appointments.map(appointment => appointment.appointment_block.start_time),
+				minimumEndTime
+			].map(time => normalizeDateByTimeWithinDay(time).getTime())
+		)
+	);
+
+	const rowCount = (endTime.getTime() - startTime.getTime()) / timeIncrement;
 	const today = normalizeDateByDay(new Date());
 	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
