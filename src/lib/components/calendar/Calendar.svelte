@@ -16,6 +16,8 @@
 	 */
 	export let week: Date;
 
+	$: weekNormalized = normalizeDateByWeek(week);
+
 	/**
 	 * The minimum time to display on a given day.
 	 */
@@ -45,12 +47,49 @@
 	$: {
 		columnDates = [];
 
-		const current = normalizeDateByWeek(week);
+		const current = new Date(weekNormalized);
 
 		for (let i = 0; i < 7; i++) {
 			columnDates.push(new Date(current));
 			current.setTime(current.getTime() + 24 * 60 * 60 * 1000);
 		}
+	}
+
+	let cellAppointments: ExtendedAppointment[][][];
+
+	$: {
+		cellAppointments = [];
+
+		for (let i = 0; i < rowCount; i++) {
+			cellAppointments.push([]);
+
+			for (let j = 0; j < 7; j++) {
+				cellAppointments[i].push([]);
+			}
+		}
+
+		appointments.forEach(appointment => {
+			const i =
+				Math.floor(
+					normalizeDateByTimeWithinDay(appointment.appointment_block.start_time).getTime() -
+						startTime.getTime()
+				) / timeIncrement;
+
+			if (i < 0 || i >= rowCount) {
+				return;
+			}
+
+			const j = Math.floor(
+				(normalizeDateByDay(appointment.appointment_day).getTime() - weekNormalized.getTime()) /
+					(24 * 60 * 60 * 1000)
+			);
+
+			if (j < 0 || j >= 7) {
+				return;
+			}
+
+			cellAppointments[i][j].push(appointment);
+		});
 	}
 
 	let container: HTMLDivElement;
@@ -65,18 +104,14 @@
 		});
 	}
 
-	function formatRowTime(time: Date): string {
-		return time.toLocaleString("en-US", {
-			timeStyle: "short"
-		});
-	}
-
-	function getRowTime(i: number): Date {
+	function getFormattedRowTime(i: number): string {
 		const result = normalizeDateByTimeWithinDay(startTime);
 
 		result.setTime(result.getTime() + timeIncrement * i);
 
-		return result;
+		return result.toLocaleString("en-US", {
+			timeStyle: "short"
+		});
 	}
 
 	function handleScroll() {
@@ -104,30 +139,6 @@
 		lastGutterCellVisible = newLastVisible;
 	}
 
-	function isAppointmentInCell(appointment: ExtendedAppointment, i: number, j: number): boolean {
-		if (normalizeDateByDay(appointment.appointment_day).getTime() != columnDates[j].getTime()) {
-			return false;
-		}
-
-		const appointmentStartTime =
-			normalizeDateByTimeWithinDay(appointment.appointment_block.start_time);
-
-		const appointmentEndTime = new Date(appointmentStartTime);
-
-		appointmentEndTime
-			.setTime(appointmentEndTime.getTime() + appointment.appointment_block.duration);
-
-		const minimumTime = getRowTime(i);
-		const maximumTime = new Date(minimumTime);
-
-		maximumTime.setTime(maximumTime.getTime() + timeIncrement);
-
-		return (
-			appointmentStartTime.getTime() >= minimumTime.getTime() &&
-			appointmentEndTime.getTime() <= maximumTime.getTime()
-		);
-	}
-
 	function isGutterCellVisible(cell: Element): boolean {
 		const containerTop = container.scrollTop;
 		const containerBottom = containerTop + container.clientHeight;
@@ -153,7 +164,7 @@
 				<div
 					class="gutter-cell divider m-0"
 					class:invisible={i < firstGutterCellVisible || i > lastGutterCellVisible}>
-					<span class="gutter-cell-text">{formatRowTime(getRowTime(i))}</span>
+					<span class="gutter-cell-text">{getFormattedRowTime(i)}</span>
 				</div>
 			{/each}
 		</div>
@@ -191,9 +202,7 @@
 								class:border-b={i < rowCount - 1}
 								class:border-e={j == 6}>
 								<div class="card-carousel-container overflow-y-scroll p-2">
-									{#key week}
-										<CalendarCardCarousel appointments={appointments.filter(appointment => isAppointmentInCell(appointment, i, j))}/>
-									{/key}
+									<CalendarCardCarousel appointments={cellAppointments[i][j]} />
 								</div>
 							</td>
 						{/each}
@@ -205,7 +214,7 @@
 
 	<div class="flex">
 		<div class="gutter-cell gutter-terminating-cell divider m-0">
-			{formatRowTime(getRowTime(lastGutterCellVisible + 1))}
+			{getFormattedRowTime(lastGutterCellVisible + 1)}
 		</div>
 
 		<div class="gutter-terminating-divider divider m-0 w-full h-0"></div>
