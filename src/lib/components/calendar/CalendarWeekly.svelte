@@ -6,7 +6,7 @@
 		normalizeDateByWeek
 	} from "$lib/utils";
 	import type { ExtendedAppointment } from "$lib/types";
-	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
+	import CalendarCardCarousel from "./CalendarCardCarousel.svelte";
 
 	/**
 	 * The date whose week the calendar will be focused on. Note that if the date's day is one other
