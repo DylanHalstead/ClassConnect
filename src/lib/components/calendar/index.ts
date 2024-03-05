@@ -8,6 +8,11 @@ import type {
 	User
 } from "../../types";
 
+export enum CalendarMode {
+	Daily = "daily",
+	Weekly = "weekly"
+}
+
 export type ExtendedAppointmentBlock = Omit<AppointmentBlock, "instructional_member_id"> & {
 	instructional_member: InstructionalMember;
 };

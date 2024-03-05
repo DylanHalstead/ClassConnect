@@ -1,6 +1,8 @@
 <script lang="ts">
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";
+	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
 	import {
+		CalendarMode,
 		normalizeDateByWeek,
 		type ExtendedAppointment,
 		type InstructionalMember,
@@ -32,6 +34,8 @@
 		day: "2-digit",
 		month: "2-digit"
 	});
+
+	let calendarMode = CalendarMode.Weekly;
 
 	// TODO: Replace with real data
 	const course = {
@@ -112,19 +116,25 @@
 			</div>
 
 			<CalendarControls
-				week={calendarWeek}
-				on:changeWeek={event => (calendarWeek = event.detail)} />
+				date={calendarWeek}
+				mode={calendarMode}
+				on:changeWeek={event => (calendarWeek = event.detail)}
+				on:changeMode={event => (calendarMode = event.detail)} />
 		</div>
 		<div class="divider divider-neutral my-2"></div>
 	</div>
 
 	<div class="grow min-h-0 p-4">
-		<CalendarWeekly
-			week={calendarWeek}
-			maximumStartTime={calendarStartTime}
-			minimumEndTime={calendarEndTime}
-			timeIncrement={1000 * 60 * 30}
-			{appointments} />
+		{#if calendarMode == CalendarMode.Daily}
+			<CalendarDaily />
+		{:else}
+			<CalendarWeekly
+				week={calendarWeek}
+				maximumStartTime={calendarStartTime}
+				minimumEndTime={calendarEndTime}
+				timeIncrement={1000 * 60 * 30}
+				{appointments} />
+		{/if}
 	</div>
 </div>
 
