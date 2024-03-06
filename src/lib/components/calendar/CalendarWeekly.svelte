@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
+	import CalendarGutter from "$lib/components/calendar/CalendarGutter.svelte";
+	import type { ExtendedAppointment } from "$lib/types";
 	import {
 		normalizeDateByDay,
 		normalizeDateByTimeWithinDay,
 		normalizeDateByWeek
 	} from "$lib/utils";
-	import type { ExtendedAppointment } from "$lib/types";
-	import CalendarCardCarousel from "./CalendarCardCarousel.svelte";
 
 	/**
 	 * The date whose week the calendar will be focused on. Note that if the date's day is one other
@@ -18,12 +18,14 @@
 	$: weekNormalized = normalizeDateByWeek(week);
 
 	/**
-	 * The minimum time to display on a given day.
+	 * The minimum time to display on a given day. Note that this time will be decreased to
+	 * accomodate any appointments that fall before it.
 	 */
 	export let maximumStartTime: Date;
 
 	/**
-	 * The maximum time to display on a given day.
+	 * The maximum time to display on a given day. Note that this time will be increased to
+	 * accomodate any appointments that fall after it.
 	 */
 	export let minimumEndTime: Date;
 
@@ -33,6 +35,8 @@
 	export let timeIncrement: number;
 	export let appointments: ExtendedAppointment[];
 
+	const gutterCellHeight = "8rem";
+	const gutterTopMargin = "6rem";
 	const startTime = new Date(
 		Math.min(
 			...[
@@ -105,177 +109,61 @@
 		});
 	}
 
-	let container: HTMLDivElement;
-	let gutter: HTMLDivElement;
-	let firstGutterCellVisible = 0;
-	let lastGutterCellVisible = rowCount - 1;
-
 	function formatColumnDate(date: Date): string {
 		return date.toLocaleString("en-US", {
 			day: "2-digit",
 			month: "2-digit"
 		});
 	}
-
-	function getFormattedRowTime(i: number): string {
-		const result = normalizeDateByTimeWithinDay(startTime);
-
-		result.setTime(result.getTime() + timeIncrement * i);
-
-		return result.toLocaleString("en-US", {
-			timeStyle: "short"
-		});
-	}
-
-	function handleScroll() {
-		const gutterCells = gutter.getElementsByClassName("gutter-cell");
-		let newFirstVisible = rowCount;
-		let newLastVisible = -1;
-
-		for (let i = 0; i < gutterCells.length; i++) {
-			if (isGutterCellVisible(gutterCells[i])) {
-				newFirstVisible = i;
-
-				break;
-			}
-		}
-
-		for (let i = gutterCells.length - 1; i >= 0; i--) {
-			if (isGutterCellVisible(gutterCells[i])) {
-				newLastVisible = i;
-
-				break;
-			}
-		}
-
-		firstGutterCellVisible = newFirstVisible;
-		lastGutterCellVisible = newLastVisible;
-	}
-
-	function isGutterCellVisible(cell: Element): boolean {
-		const containerTop = container.scrollTop;
-		const containerBottom = containerTop + container.clientHeight;
-		const cellText = cell.querySelector(".gutter-cell-text");
-
-		if (!(cellText instanceof HTMLElement)) {
-			return false;
-		}
-
-		const cellTop = cellText.offsetTop;
-		const cellBottom = cellTop + cellText.clientHeight;
-
-		return cellTop >= containerTop && cellBottom <= containerBottom;
-	}
-
-	onMount(() => handleScroll());
 </script>
 
-<div class="flex flex-col h-full">
-	<div class="flex grow overflow-y-scroll relative" bind:this={container} on:scroll={handleScroll}>
-		<div class="gutter" bind:this={gutter}>
+<CalendarGutter {startTime} {endTime} {timeIncrement} {gutterCellHeight} {gutterTopMargin}>
+	<table class="border-separate border-spacing-0 table-fixed w-full">
+		<thead>
+			<tr>
+				{#each columnDates as date, i}
+					{@const isToday = date.getTime() == today.getTime()}
+
+					<th
+						class="bg-base-100 border-neutral border-b border-s sticky top-0 z-10"
+						class:border-e={i == 6}
+						style:height={gutterTopMargin}>
+						<h2
+							class="cell-header-weekday text-2xl"
+							class:text-primary={isToday}
+							class:underline={isToday}>
+							{weekdays[i]}
+						</h2>
+
+						<span class="text-base-content/50 text-sm">
+							{formatColumnDate(date)}
+						</span>
+					</th>
+				{/each}
+			</tr>
+		</thead>
+
+		<tbody>
 			{#each { length: rowCount } as _, i}
-				<div
-					class="gutter-cell divider m-0"
-					class:invisible={i < firstGutterCellVisible || i > lastGutterCellVisible}>
-					<span class="gutter-cell-text">{getFormattedRowTime(i)}</span>
-				</div>
-			{/each}
-		</div>
-
-		<table class="border-separate border-spacing-0 table-fixed w-full">
-			<thead>
 				<tr>
-					{#each columnDates as date, i}
-						{@const isToday = date.getTime() == today.getTime()}
-
-						<th
-							class="cell bg-base-100 border-neutral border-b border-s sticky top-0 z-10"
-							class:border-e={i == 6}>
-							<h2
-								class="cell-header-weekday text-2xl"
-								class:text-primary={isToday}
-								class:underline={isToday}>
-								{weekdays[i]}
-							</h2>
-
-							<span class="text-base-content/50 text-sm">
-								{formatColumnDate(date)}
-							</span>
-						</th>
+					{#each { length: 7 } as _, j}
+						<td
+							class="border-neutral border-s p-0"
+							class:border-b={i < rowCount - 1}
+							class:border-e={j == 6}>
+							<div class="overflow-y-scroll p-2" style:height={gutterCellHeight}>
+								<CalendarCardCarousel appointments={cellAppointments[i][j]} />
+							</div>
+						</td>
 					{/each}
 				</tr>
-			</thead>
-
-			<tbody>
-				{#each { length: rowCount } as _, i}
-					<tr>
-						{#each { length: 7 } as _, j}
-							<td
-								class="cell border-neutral border-s p-0"
-								class:border-b={i < rowCount - 1}
-								class:border-e={j == 6}>
-								<div class="card-carousel-container overflow-y-scroll p-2">
-									<CalendarCardCarousel appointments={cellAppointments[i][j]} />
-								</div>
-							</td>
-						{/each}
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-
-	<div class="flex">
-		<div class="gutter-cell gutter-terminating-cell divider m-0">
-			{getFormattedRowTime(lastGutterCellVisible + 1)}
-		</div>
-
-		<div class="gutter-terminating-divider divider m-0 w-full h-0"></div>
-	</div>
-</div>
+			{/each}
+		</tbody>
+	</table>
+</CalendarGutter>
 
 <style>
-	* {
-		--cell-height: 8rem;
-		--gutter-top-margin: 6rem;
-		--gutter-width: 8rem;
-	}
-
-	.card-carousel-container {
-		height: var(--cell-height);
-	}
-
-	th.cell {
-		height: var(--gutter-top-margin);
-	}
-
 	.cell-header-weekday {
 		font-family: "Kaisei HarunoUmi", serif;
-	}
-
-	.gutter {
-		margin-top: calc(var(--gutter-top-margin) - var(--cell-height) / 2 - 1px);
-		width: var(--gutter-width);
-	}
-
-	.gutter-cell {
-		font-family: "Kaisei HarunoUmi", serif;
-		height: calc(var(--cell-height) + 1px);
-	}
-
-	.gutter-cell::before {
-		visibility: hidden;
-	}
-
-	.gutter-cell::after,
-	.gutter-terminating-divider::before,
-	.gutter-terminating-divider::after {
-		background-color: oklch(var(--n));
-		height: 1px;
-	}
-
-	.gutter-terminating-cell {
-		width: var(--gutter-width);
-		height: 0;
 	}
 </style>
