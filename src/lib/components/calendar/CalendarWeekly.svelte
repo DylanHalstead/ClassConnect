@@ -1,12 +1,13 @@
 <script lang="ts">
 	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
 	import CalendarGutter from "$lib/components/calendar/CalendarGutter.svelte";
-	import type { ExtendedAppointment } from "$lib/types";
 	import {
 		normalizeDateByDay,
 		normalizeDateByTimeWithinDay,
 		normalizeDateByWeek
-	} from "$lib/utils";
+	} from "$lib/datemanipulation";
+
+	import type { ExtendedAppointment } from "$lib/types";
 
 	/**
 	 * The date whose week the calendar will be focused on. Note that if the date's day is one other

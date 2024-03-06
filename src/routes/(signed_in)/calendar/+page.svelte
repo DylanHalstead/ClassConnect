@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { normalizeDateByWeek } from "$lib/utils";
 	import { CalendarMode } from "$lib/components/calendar";
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";
 	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
+	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
+	import { normalizeDateByWeek } from "$lib/datemanipulation";
 	import {
 		type ExtendedAppointment,
 		type InstructionalMember,
@@ -10,8 +11,6 @@
 		type Student,
 		WeekDay
 	} from "$lib/types";
-
-	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
 
 	const calendarStartTime = new Date();
 

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import { ArrowLeft, ArrowRight, Icon } from "svelte-hero-icons";
-	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/utils";
 	import { CalendarMode } from "$lib/components/calendar";
+	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/datemanipulation";
 
 	/**
 	 * The date the calendar is currently focused on.
