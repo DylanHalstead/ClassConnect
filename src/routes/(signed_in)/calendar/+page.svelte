@@ -95,8 +95,7 @@
 		minimumEndTime: calendarEndTime,
 		timeIncrement: 30 * 60 * 1000,
 		appointments: appointments,
-		gutterCellHeight: "8rem",
-		gutterTopMargin: "6rem"
+		gutterCellHeight: "8rem"
 	};
 </script>
 
@@ -118,7 +117,7 @@
 
 	<div class="grow min-h-0 p-4">
 		{#if calendarMode == CalendarMode.Daily}
-			<CalendarDaily />
+			<CalendarDaily configuration={calendarConfiguration} />
 		{:else}
 			<CalendarWeekly configuration={calendarConfiguration} />
 		{/if}

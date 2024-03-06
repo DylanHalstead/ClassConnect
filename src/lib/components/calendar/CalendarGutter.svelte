@@ -111,9 +111,7 @@
 			{/each}
 		</div>
 
-		<div>
-			<slot />
-		</div>
+		<slot />
 	</div>
 
 	<div class="flex">
