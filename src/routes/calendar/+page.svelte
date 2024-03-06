@@ -3,13 +3,13 @@
 	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
 	import {
 		CalendarMode,
-		normalizeDateByWeek,
 		type ExtendedAppointment,
 		type InstructionalMember,
 		type Student
 	} from "$lib/components/calendar/index";
 
 	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
+	import { normalizeDateByWeek } from "$lib/datemanipulation";
 	import { SectionMemberType, WeekDay } from "$lib/types";
 
 	const calendarStartTime = new Date();

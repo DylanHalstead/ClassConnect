@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { normalizeDateByTimeWithinDay } from ".";
+	import { normalizeDateByTimeWithinDay } from "$lib/datemanipulation";
 
 	/**
 	 * The minimum time to display on a given day.
