@@ -78,6 +78,8 @@
 		});
 	}
 
+	const gutterTopMargin = "6rem";
+
 	function formatColumnDate(date: Date): string {
 		return date.toLocaleString("en-US", {
 			day: "2-digit",
@@ -91,7 +93,7 @@
 	{endTime}
 	timeIncrement={configuration.timeIncrement}
 	gutterCellHeight={configuration.gutterCellHeight}
-	gutterTopMargin={configuration.gutterTopMargin}>
+	gutterTopMargin="6rem">
 	<table class="border-separate border-spacing-0 table-fixed w-full">
 		<thead>
 			<tr>
@@ -101,7 +103,7 @@
 					<th
 						class="bg-base-100 border-neutral border-b border-s sticky top-0 z-10"
 						class:border-e={i == 6}
-						style:height={configuration.gutterTopMargin}>
+						style:height={gutterTopMargin}>
 						<h2
 							class="cell-header-weekday text-2xl"
 							class:text-primary={isToday}

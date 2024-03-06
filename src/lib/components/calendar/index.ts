@@ -42,13 +42,6 @@ export interface CalendarConfiguration {
 	 * Note: Don't provide any user-supplied values here, since this is vulnerable to injection.
 	 */
 	gutterCellHeight: string;
-
-	/**
-	 * The `margin-top` of the calendar gutter as a CSS expression.
-	 *
-	 * Note: Don't provide any user-supplied values here, since this is vulnerable to injection.
-	 */
-	gutterTopMargin: string;
 }
 
 export enum CalendarMode {
