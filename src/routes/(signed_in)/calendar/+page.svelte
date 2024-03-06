@@ -2,6 +2,7 @@
 	import { CalendarMode } from "$lib/components/calendar";
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";
 	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
+	import CalendarHeading from "$lib/components/calendar/CalendarHeading.svelte";
 	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
 	import {
 		type ExtendedAppointment,
@@ -20,20 +21,6 @@
 	calendarEndTime.setHours(17, 0, 0, 0);
 
 	let calendarDate = new Date();
-
-	$: month = calendarDate.toLocaleString("en-US", {
-		month: "long"
-	});
-
-	$: year = calendarDate.toLocaleString("en-US", {
-		year: "numeric"
-	});
-
-	$: subheading = calendarDate.toLocaleString("en-US", {
-		day: "2-digit",
-		month: "2-digit"
-	});
-
 	let calendarMode = CalendarMode.Weekly;
 
 	// TODO: Replace with real data
@@ -117,11 +104,7 @@
 	<div class="px-6 py-2">
 		<div class="flex justify-between items-end">
 			<div>
-				<h1 class="heading">
-					<span>{month}</span> <span class="text-primary">{year}</span>
-				</h1>
-
-				<h2 class="subheading text-primary">{subheading}</h2>
+				<CalendarHeading date={calendarDate} mode={calendarMode} />
 			</div>
 
 			<CalendarControls
