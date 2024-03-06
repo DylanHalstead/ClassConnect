@@ -1,6 +1,7 @@
 <script lang="ts">
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";
 	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
+	import CalendarHeading from "$lib/components/calendar/CalendarHeading.svelte";
 	import {
 		CalendarMode,
 		type ExtendedAppointment,
@@ -9,7 +10,6 @@
 	} from "$lib/components/calendar/index";
 
 	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
-	import { normalizeDateByWeek } from "$lib/datemanipulation";
 	import { SectionMemberType, WeekDay } from "$lib/types";
 
 	const calendarStartTime = new Date();
@@ -21,20 +21,6 @@
 	calendarEndTime.setHours(17, 0, 0, 0);
 
 	let calendarDate = new Date();
-
-	$: month = calendarDate.toLocaleString("en-US", {
-		month: "long"
-	});
-
-	$: year = calendarDate.toLocaleString("en-US", {
-		year: "numeric"
-	});
-
-	$: subheading = calendarDate.toLocaleString("en-US", {
-		day: "2-digit",
-		month: "2-digit"
-	});
-
 	let calendarMode = CalendarMode.Weekly;
 
 	// TODO: Replace with real data
@@ -118,11 +104,7 @@
 	<div class="px-6 py-2">
 		<div class="flex justify-between items-end">
 			<div>
-				<h1 class="heading">
-					<span>{month}</span> <span class="text-primary">{year}</span>
-				</h1>
-
-				<h2 class="subheading text-primary">{subheading}</h2>
+				<CalendarHeading date={calendarDate} mode={calendarMode} />
 			</div>
 
 			<CalendarControls
@@ -142,19 +124,3 @@
 		{/if}
 	</div>
 </div>
-
-<style>
-	.heading,
-	.subheading {
-		font-family: "Kaisei HarunoUmi", serif;
-		font-weight: bold;
-	}
-
-	.heading {
-		font-size: 2.5rem;
-	}
-
-	.subheading {
-		font-size: 1.25rem;
-	}
-</style>
