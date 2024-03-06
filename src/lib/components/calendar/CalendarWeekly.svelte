@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { type ExtendedAppointment } from "$lib/components/calendar";
+	import {
+		calendarStartAndEndTimes,
+		type CalendarConfiguration,
+		type ExtendedAppointment,
+		calendarRowCount
+	} from "$lib/components/calendar";
+
 	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
 	import CalendarGutter from "$lib/components/calendar/CalendarGutter.svelte";
 	import {
@@ -8,54 +14,17 @@
 		normalizeDateByWeek
 	} from "$lib/datemanipulation";
 
-	/**
-	 * The date whose week the calendar will be focused on. Note that if the date's day is one other
-	 * than the start of the week, its day will be set to the start of the week so the calendar
-	 * doesn't display two weeks at once.
-	 */
-	export let week: Date;
+	export let configuration: CalendarConfiguration;
 
-	$: weekNormalized = normalizeDateByWeek(week);
+	$: weekNormalized = normalizeDateByWeek(configuration.currentDate);
 
-	/**
-	 * The minimum time to display on a given day. Note that this time will be decreased to
-	 * accomodate any appointments that fall before it.
-	 */
-	export let maximumStartTime: Date;
-
-	/**
-	 * The maximum time to display on a given day. Note that this time will be increased to
-	 * accomodate any appointments that fall after it.
-	 */
-	export let minimumEndTime: Date;
-
-	/**
-	 * The length of time, in milliseconds, that a cell on the calendar measures.
-	 */
-	export let timeIncrement: number;
-	export let appointments: ExtendedAppointment[];
-
-	const gutterCellHeight = "8rem";
-	const gutterTopMargin = "6rem";
-	const startTime = new Date(
-		Math.min(
-			...[
-				...appointments.map(appointment => appointment.appointment_block.start_time),
-				maximumStartTime
-			].map(time => normalizeDateByTimeWithinDay(time).getTime())
-		)
+	const [startTime, endTime] = calendarStartAndEndTimes(
+		configuration.appointments,
+		configuration.maximumStartTime,
+		configuration.minimumEndTime
 	);
 
-	const endTime = new Date(
-		Math.max(
-			...[
-				...appointments.map(appointment => appointment.appointment_block.start_time),
-				minimumEndTime
-			].map(time => normalizeDateByTimeWithinDay(time).getTime())
-		)
-	);
-
-	const rowCount = (endTime.getTime() - startTime.getTime()) / timeIncrement;
+	const rowCount = calendarRowCount(startTime, endTime, configuration.timeIncrement);
 	const today = normalizeDateByDay(new Date());
 	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -85,12 +54,12 @@
 			}
 		}
 
-		appointments.forEach(appointment => {
+		configuration.appointments.forEach(appointment => {
 			const i =
 				Math.floor(
 					normalizeDateByTimeWithinDay(appointment.appointment_block.start_time).getTime() -
 						startTime.getTime()
-				) / timeIncrement;
+				) / configuration.timeIncrement;
 
 			if (i < 0 || i >= rowCount) {
 				return;
@@ -117,7 +86,12 @@
 	}
 </script>
 
-<CalendarGutter {startTime} {endTime} {timeIncrement} {gutterCellHeight} {gutterTopMargin}>
+<CalendarGutter
+	{startTime}
+	{endTime}
+	timeIncrement={configuration.timeIncrement}
+	gutterCellHeight={configuration.gutterCellHeight}
+	gutterTopMargin={configuration.gutterTopMargin}>
 	<table class="border-separate border-spacing-0 table-fixed w-full">
 		<thead>
 			<tr>
@@ -127,7 +101,7 @@
 					<th
 						class="bg-base-100 border-neutral border-b border-s sticky top-0 z-10"
 						class:border-e={i == 6}
-						style:height={gutterTopMargin}>
+						style:height={configuration.gutterTopMargin}>
 						<h2
 							class="cell-header-weekday text-2xl"
 							class:text-primary={isToday}
@@ -151,7 +125,7 @@
 							class="border-neutral border-s p-0"
 							class:border-b={i < rowCount - 1}
 							class:border-e={j == 6}>
-							<div class="overflow-y-scroll p-2" style:height={gutterCellHeight}>
+							<div class="overflow-y-scroll p-2" style:height={configuration.gutterCellHeight}>
 								<CalendarCardCarousel appointments={cellAppointments[i][j]} />
 							</div>
 						</td>

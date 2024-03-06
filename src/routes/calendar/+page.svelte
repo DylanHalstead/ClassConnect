@@ -20,17 +20,17 @@
 
 	calendarEndTime.setHours(17, 0, 0, 0);
 
-	let calendarWeek = normalizeDateByWeek(new Date());
+	let calendarDate = new Date();
 
-	$: month = calendarWeek.toLocaleString("en-US", {
+	$: month = calendarDate.toLocaleString("en-US", {
 		month: "long"
 	});
 
-	$: year = calendarWeek.toLocaleString("en-US", {
+	$: year = calendarDate.toLocaleString("en-US", {
 		year: "numeric"
 	});
 
-	$: subheading = calendarWeek.toLocaleString("en-US", {
+	$: subheading = calendarDate.toLocaleString("en-US", {
 		day: "2-digit",
 		month: "2-digit"
 	});
@@ -102,6 +102,16 @@
 			id: "2"
 		}
 	];
+
+	$: calendarConfiguration = {
+		currentDate: calendarDate,
+		maximumStartTime: calendarStartTime,
+		minimumEndTime: calendarEndTime,
+		timeIncrement: 30 * 60 * 1000,
+		appointments: appointments,
+		gutterCellHeight: "8rem",
+		gutterTopMargin: "6rem"
+	};
 </script>
 
 <div class="flex flex-col h-screen">
@@ -116,9 +126,9 @@
 			</div>
 
 			<CalendarControls
-				date={calendarWeek}
+				currentDate={calendarDate}
 				mode={calendarMode}
-				on:changeWeek={event => (calendarWeek = event.detail)}
+				on:changeWeek={event => (calendarDate = event.detail)}
 				on:changeMode={event => (calendarMode = event.detail)} />
 		</div>
 		<div class="divider divider-neutral my-2"></div>
@@ -128,12 +138,7 @@
 		{#if calendarMode == CalendarMode.Daily}
 			<CalendarDaily />
 		{:else}
-			<CalendarWeekly
-				week={calendarWeek}
-				maximumStartTime={calendarStartTime}
-				minimumEndTime={calendarEndTime}
-				timeIncrement={1000 * 60 * 30}
-				{appointments} />
+			<CalendarWeekly configuration={calendarConfiguration} />
 		{/if}
 	</div>
 </div>
