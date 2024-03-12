@@ -26,7 +26,7 @@
 		}
 	];
 
-	let selectedClass: any;
+	let selectedClass: String;
 	let chosenClass = "";
 
 	let tas = [
@@ -44,7 +44,7 @@
 		}
 	];
 
-	let selectedTA: any;
+	let selectedTA: String;
 	let chosenTA = "";
 </script>
 
