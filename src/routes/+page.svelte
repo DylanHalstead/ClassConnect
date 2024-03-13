@@ -107,7 +107,8 @@
 </script>
 
 <section
-	class="flex h-[50rem] w-full flex-col items-center justify-center bg-neutral-950 rounded-b-md">
+class="flex h-[50rem] w-full flex-col items-center justify-center bg-neutral-950 rounded-b-md">
+	
 	<h1 class="relative z-30 text-center text-5xl font-bold text-base-100 md:text-7xl lg:text-9xl">
 		Class Connect
 	</h1>
@@ -115,6 +116,15 @@
 		Making <span class="text-primary">Office Hours</span> Fast, Functional, and
 		<span class="text-primary">Seamless</span>
 	</h2>
+
+	<div class="flex items-center justify-center z-50">
+		<button class="btn btn-outline btn-primary text-white relative mb-5 px-8 py-4 hover:bg-primary">
+			Login
+		</button>
+		<button class="btn btn-primary relative mb-5 mx-8 px-6 py-4 hover:bg-primar-200">
+			Sign Up
+		</button>
+	</div>
 	<!-- grid effect -->
 	<div
 		class="absolute z-20 h-full w-full [background-position:calc(100%+5px)_calc(100%+5px)] bg-fixed"
