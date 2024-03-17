@@ -12,6 +12,14 @@
 		VideoCamera,
 		PaperAirplane
 	} from "svelte-hero-icons";
+	import { invalidateAll } from "$app/navigation";
+	import { signIn, initialize } from "svelte-google-auth/client";
+	import { updateFlash } from "sveltekit-flash-message";
+	import { page } from "$app/stores";
+	import type { PageData } from "./$types.js";
+
+	export let data: PageData;
+	initialize(data, invalidateAll);
 
 	const teamMembers = [
 		{
@@ -107,8 +115,7 @@
 </script>
 
 <section
-class="flex h-[50rem] w-full flex-col items-center justify-center bg-neutral-950 rounded-b-md">
-	
+	class="flex h-[50rem] w-full flex-col items-center justify-center bg-neutral-950 rounded-b-md">
 	<h1 class="relative z-30 text-center text-5xl font-bold text-base-100 md:text-7xl lg:text-9xl">
 		Class Connect
 	</h1>
@@ -118,10 +125,22 @@ class="flex h-[50rem] w-full flex-col items-center justify-center bg-neutral-950
 	</h2>
 
 	<div class="flex items-center justify-center z-50">
-		<button class="btn btn-outline btn-primary text-white relative mb-5 px-8 py-4 hover:bg-primary">
+		<button
+			class="btn btn-outline btn-primary text-white relative mb-5 px-8 py-4 hover:bg-primary"
+			on:click={async () => {
+				await signIn();
+				invalidateAll();
+				updateFlash(page);
+			}}>
 			Login
 		</button>
-		<button class="btn btn-primary relative mb-5 mx-8 px-6 py-4 hover:bg-primar-200">
+		<button
+			class="btn btn-primary relative mb-5 mx-8 px-6 py-4 hover:bg-primar-200"
+			on:click={async () => {
+				await signIn();
+				invalidateAll();
+				updateFlash(page);
+			}}>
 			Sign Up
 		</button>
 	</div>
