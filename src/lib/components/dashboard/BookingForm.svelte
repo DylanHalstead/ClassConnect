@@ -43,10 +43,10 @@
 			text: "TA Example 3"
 		}
 	];
-	
+
 	let selectedTA: String;
 	let chosenTA = "";
-	
+
 	let times = [
 		{
 			id: 1,
@@ -61,7 +61,7 @@
 			text: "10:00AM - 10:30AM"
 		}
 	];
-	
+
 	let selectedTime: String;
 	let chosenTime = "";
 </script>
