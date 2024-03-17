@@ -43,9 +43,27 @@
 			text: "TA Example 3"
 		}
 	];
-
+	
 	let selectedTA: String;
 	let chosenTA = "";
+	
+	let times = [
+		{
+			id: 1,
+			text: "09:00AM - 09:30AM"
+		},
+		{
+			id: 2,
+			text: "09:30AM - 10:00AM"
+		},
+		{
+			id: 3,
+			text: "10:00AM - 10:30AM"
+		}
+	];
+	
+	let selectedTime: String;
+	let chosenTime = "";
 </script>
 
 <h2 class="subheading main-text text-center">Book Now</h2>
@@ -91,6 +109,20 @@
 		{#each tas as ta}
 			<option value={ta}>
 				{ta.text}
+			</option>
+		{/each}
+	</select>
+
+	<label for="time" class="main-text mt-4">Time:</label>
+	<select
+		name="time"
+		id="time"
+		class="input-sm rounded-md bg-gray-200 input-bordered w-full max-w-xs text-black mt-1"
+		value={selectedTime}
+		on:change={() => chosenTime}>
+		{#each times as time}
+			<option value={time}>
+				{time.text}
 			</option>
 		{/each}
 	</select>
