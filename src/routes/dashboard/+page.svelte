@@ -1,10 +1,11 @@
 <script lang="ts">
 	import BookingForm from "$lib/components/dashboard/BookingForm.svelte";
 	import OfficeHourSummary from "$lib/components/dashboard/OfficeHourSummary.svelte";
+	import { WeekDay } from "$lib/types";
 
 	const currentDate = new Date();
 	const dayNumber = currentDate.getDay();
-	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	const weekdays = Object.values(WeekDay);
 	const DayOfWeek = weekdays[dayNumber];
 
 	const month = currentDate.toLocaleString("en-US", {
@@ -37,7 +38,7 @@
 <div class="px-12 py-2">
 	<div class="flex flex-row w-full">
 		<div class="flex justify-between w-full">
-			<h1 class="main-text header">
+			<h1 class="main-text header capitalize">
 				{DayOfWeek}, {month}
 				{day}<sup class="text-primary">{dateSuffix}</sup>
 			</h1>

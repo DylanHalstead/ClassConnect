@@ -33,14 +33,14 @@ export interface SectionMember {
 	is_restricted: boolean;
 }
 
-enum WeekDay {
+export enum WeekDay {
+	Sunday = "sunday",
 	Monday = "monday",
 	Tuesday = "tuesday",
 	Wednesday = "wednesday",
 	Thursday = "thursday",
 	Friday = "friday",
-	Saturday = "saturday",
-	Sunday = "sunday"
+	Saturday = "saturday"
 }
 
 export interface AppointmentBlock {
