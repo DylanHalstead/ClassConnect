@@ -2,21 +2,21 @@
 	import { getFlash } from "sveltekit-flash-message";
 	import { page } from "$app/stores";
 	import "../app.css";
+	import Nav from "$lib/components/Nav.svelte";
 
 	const flash = getFlash(page, {
 		clearAfterMs: 5000
 	});
 </script>
 
-<nav>
-	<a href="/dashboard">Dashboard</a>
-	<a href="/profile/[id]">Profile</a>
-	<a href="/calendar">Calendar</a>
-	<a href="/courses/[id]/sections/[id]/members/[id]/appointments/book">Book</a>
-</nav>
+<div class="flex">
+	<div>
+		<Nav />
+	</div>
 
-{#if $flash}
-	<p>{$flash.message}</p>
-{/if}
+	{#if $flash}
+		<p>{$flash.message}</p>
+	{/if}
 
-<slot />
+	<slot />
+</div>

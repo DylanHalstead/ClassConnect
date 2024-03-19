@@ -127,19 +127,3 @@
 			{appointments} />
 	</div>
 </div>
-
-<style>
-	.heading,
-	.subheading {
-		font-family: "Kaisei HarunoUmi", serif;
-		font-weight: bold;
-	}
-
-	.heading {
-		font-size: 2.5rem;
-	}
-
-	.subheading {
-		font-size: 1.25rem;
-	}
-</style>
