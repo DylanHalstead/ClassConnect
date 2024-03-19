@@ -18,6 +18,8 @@
 					<a class="text-2xl font-bold" href="/">CC</a>
 				</div>
 			</div>
+        </nav>
+    </div>
 
     <div>
         <nav class="flex flex-col items-center space-y-10">
