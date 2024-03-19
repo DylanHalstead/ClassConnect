@@ -106,7 +106,7 @@
 						class:border-e={i == 6}
 						style:height={gutterTopMargin}>
 						<h2
-							class="cell-header-weekday text-2xl"
+							class="cell-header-weekday font-kaisei text-2xl"
 							class:text-primary={isToday}
 							class:underline={isToday}>
 							{weekdays[i]}
@@ -138,9 +138,3 @@
 		</tbody>
 	</table>
 </CalendarGutter>
-
-<style>
-	.cell-header-weekday {
-		font-family: "Kaisei HarunoUmi", serif;
-	}
-</style>

@@ -22,24 +22,14 @@
 	});
 </script>
 
-<h1 class="heading">
+<h1 class="heading font-bold font-kaisei">
 	<span>{month}</span> <span class="text-primary">{year}</span>
 </h1>
 
-<h2 class="subheading text-primary">{subheading}</h2>
+<h2 class="subheading font-bold font-kaisei text-primary text-xl">{subheading}</h2>
 
 <style>
-	.heading,
-	.subheading {
-		font-family: "Kaisei HarunoUmi", serif;
-		font-weight: bold;
-	}
-
 	.heading {
 		font-size: 2.5rem;
-	}
-
-	.subheading {
-		font-size: 1.25rem;
 	}
 </style>
