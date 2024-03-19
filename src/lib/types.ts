@@ -19,7 +19,7 @@ export interface Section {
 	max_daily_bookable_hours: number;
 }
 
-enum SectionMemberType {
+export enum SectionMemberType {
 	Instructor = "instructor",
 	TA = "ta",
 	Student = "student"
@@ -33,23 +33,26 @@ export interface SectionMember {
 	is_restricted: boolean;
 }
 
-enum WeekDay {
+export enum WeekDay {
+	Sunday = "sunday",
 	Monday = "monday",
 	Tuesday = "tuesday",
 	Wednesday = "wednesday",
 	Thursday = "thursday",
 	Friday = "friday",
-	Saturday = "saturday",
-	Sunday = "sunday"
+	Saturday = "saturday"
 }
 
 export interface AppointmentBlock {
 	id: string;
 	instructional_member_id: string;
 	week_day: WeekDay;
-	// May want to make Time class/type which limits Date to remove epoch date
 	start_time: Date;
-	duration: string;
+
+	/**
+	 * Represented in milliseconds.
+	 */
+	duration: number;
 }
 
 export interface Appointment {
