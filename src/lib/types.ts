@@ -9,7 +9,6 @@ export type Course = PartialCourse & {
 };
 
 export interface PartialUser {
-	id: string;
 	email: string;
 	first_name: string;
 	last_name: string;
@@ -17,9 +16,9 @@ export interface PartialUser {
 
 export type User = PartialUser & {
 	id: string;
-};
+}
 
-export type Section = {
+export interface Section {
 	id: string;
 	course_id: string;
 	section_number: number;
