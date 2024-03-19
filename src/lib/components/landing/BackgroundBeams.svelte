@@ -86,7 +86,7 @@
 			</Motion>
 		{/each}
 		<defs>
-			{#each paths as path, index (`gradient-${index}`)}
+			{#each paths as _, index (`gradient-${index}`)}
 				<Motion
 					isSVG={true}
 					let:motion

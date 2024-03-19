@@ -53,12 +53,12 @@
 	}
 
 	function handleScroll() {
-		const gutterCells = gutter.getElementsByClassName("gutter-cell");
+		const gutterCells = Array.from(gutter.getElementsByClassName("gutter-cell"));
 		let newFirstVisible = rowCount;
 		let newLastVisible = -1;
 
-		for (let i = 0; i < gutterCells.length; i++) {
-			if (isGutterCellVisible(gutterCells[i])) {
+		for (const [i, cell] of gutterCells.entries()) {
+			if (isGutterCellVisible(cell)) {
 				newFirstVisible = i;
 
 				break;
@@ -66,7 +66,9 @@
 		}
 
 		for (let i = gutterCells.length - 1; i >= 0; i--) {
-			if (isGutterCellVisible(gutterCells[i])) {
+			const cell = gutterCells[i];
+
+			if (cell != undefined && isGutterCellVisible(cell)) {
 				newLastVisible = i;
 
 				break;

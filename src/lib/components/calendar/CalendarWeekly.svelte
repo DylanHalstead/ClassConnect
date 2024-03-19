@@ -48,10 +48,12 @@
 		cellAppointments = [];
 
 		for (let i = 0; i < rowCount; i++) {
-			cellAppointments.push([]);
+			const row: ExtendedAppointment[][] = [];
+
+			cellAppointments.push(row);
 
 			for (let j = 0; j < 7; j++) {
-				cellAppointments[i].push([]);
+				row.push([]);
 			}
 		}
 
@@ -75,7 +77,7 @@
 				return;
 			}
 
-			cellAppointments[i][j].push(appointment);
+			getAppointments(i, j).push(appointment);
 		});
 	}
 
@@ -86,6 +88,10 @@
 			day: "2-digit",
 			month: "2-digit"
 		});
+	}
+
+	function getAppointments(row: number, column: number): ExtendedAppointment[] {
+		return (cellAppointments[row] ?? [])[column] ?? [];
 	}
 </script>
 
@@ -129,7 +135,7 @@
 							class:border-b={i < rowCount - 1}
 							class:border-e={j == 6}>
 							<div class="overflow-y-scroll p-2" style:height={configuration.gutterCellHeight}>
-								<CalendarCardCarousel appointments={cellAppointments[i][j]} />
+								<CalendarCardCarousel appointments={getAppointments(i, j)} />
 							</div>
 						</td>
 					{/each}

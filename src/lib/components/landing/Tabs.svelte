@@ -17,7 +17,11 @@
 	const moveSelectedTabToTop = (idx: number) => {
 		const newTabs = [...propTabs];
 		const selectedTab = newTabs.splice(idx, 1);
-		newTabs.unshift(selectedTab[0]);
+
+		if (selectedTab[0] != undefined) {
+			newTabs.unshift(selectedTab[0]);
+		}
+
 		tabs = newTabs;
 		active = newTabs[0];
 	};
@@ -39,7 +43,7 @@
 			on:mouseleave={() => (hovering = false)}
 			class={cn("", tabClassName)}
 			style="transform-style: preserve-3d;">
-			{#if active.value === tab.value}
+			{#if active != undefined && active.value === tab.value}
 				<Motion
 					let:motion
 					layoutId="clickedbutton"
