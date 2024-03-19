@@ -66,26 +66,26 @@
 	let chosenTime = "";
 </script>
 
-<h2 class="subheading main-text text-center">Book Now</h2>
+<h2 class="subheading main-text font-kaisei text-center">Book Now</h2>
 <form action="" class="form-control w-80">
-	<label for="name" class="main-text mt-4">Name:</label>
+	<label for="name" class="main-text font-kaisei mt-4">Name:</label>
 	<input
 		type="text"
 		class="input-sm rounded-md bg-gray-200 input-bordered w-full max-w-xs text-black mt-1"
 		placeholder="John Doe" />
 
-	<label for="email" class="main-text mt-4">Email:</label>
+	<label for="email" class="main-text font-kaisei mt-4">Email:</label>
 	<input
 		type="text"
 		class="input-sm rounded-md bg-gray-200 input-bordered w-full max-w-xs text-black mt-1"
 		placeholder="example@uncc.edu" />
 
-	<label for="date" class="main-text mt-4">Date:</label>
+	<label for="date" class="main-text font-kaisei mt-4">Date:</label>
 	<input
 		type="date"
 		class="input-sm rounded-md bg-gray-200 input-bordered w-full max-w-xs text-black mt-1" />
 
-	<label for="class" class="main-text mt-4">Course:</label>
+	<label for="class" class="main-text font-kaisei mt-4">Course:</label>
 	<select
 		name="courses"
 		id="courses"
@@ -99,7 +99,7 @@
 		{/each}
 	</select>
 
-	<label for="ta" class="main-text mt-4">TA:</label>
+	<label for="ta" class="main-text font-kaisei mt-4">TA:</label>
 	<select
 		name="ta"
 		id="ta"
@@ -113,7 +113,7 @@
 		{/each}
 	</select>
 
-	<label for="time" class="main-text mt-4">Time:</label>
+	<label for="time" class="main-text font-kaisei mt-4">Time:</label>
 	<select
 		name="time"
 		id="time"
@@ -127,14 +127,13 @@
 		{/each}
 	</select>
 
-	<button class="btn btn-primary btn-sm text-base-100 main-text mt-4 mx-20 rounded-md">
+	<button class="btn btn-primary btn-sm text-base-100 main-text font-kaisei mt-4 mx-20 rounded-md">
 		Submit
 	</button>
 </form>
 
 <style>
 	.main-text {
-		font-family: "Kaisei HarunoUmi", serif;
 		font-size: 1rem;
 	}
 

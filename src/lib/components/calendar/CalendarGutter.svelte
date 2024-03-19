@@ -103,7 +103,7 @@
 			bind:this={gutter}>
 			{#each { length: rowCount } as _, i}
 				<div
-					class="gutter-cell divider m-0"
+					class="gutter-cell divider font-kaisei m-0"
 					class:invisible={i < firstGutterCellVisible || i > lastGutterCellVisible}
 					style:height={`calc(${gutterCellHeight} + 1px`}>
 					<span class="gutter-cell-text">{getFormattedRowTime(i)}</span>
@@ -115,7 +115,7 @@
 	</div>
 
 	<div class="flex">
-		<div class="gutter-cell gutter-terminating-cell divider m-0">
+		<div class="gutter-cell gutter-terminating-cell divider font-kaisei m-0">
 			{getFormattedRowTime(lastGutterCellVisible + 1)}
 		</div>
 
@@ -130,10 +130,6 @@
 
 	.gutter {
 		width: var(--gutter-width);
-	}
-
-	.gutter-cell {
-		font-family: "Kaisei HarunoUmi", serif;
 	}
 
 	.gutter-cell::before {
