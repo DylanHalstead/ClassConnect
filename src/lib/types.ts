@@ -1,15 +1,22 @@
-export type Course = {
-	id: string;
+export interface PartialCourse {
 	department_code: string;
 	course_code: string;
 	course_name: string;
+}
+
+export type Course = PartialCourse & {
+	id: string;
 };
 
-export type User = {
+export interface PartialUser {
 	id: string;
 	email: string;
 	first_name: string;
 	last_name: string;
+}
+
+export type User = PartialUser & {
+	id: string;
 };
 
 export type Section = {
