@@ -8,7 +8,8 @@ export const load: LayoutServerLoad = loadFlash(async ({ cookies, params, parent
 	const userID: string | undefined = parentVals.userID;
 	const { sectionID, memberID } = params;
 	if (!userID || !sectionID || !memberID) {
-		const errorMessage = "There was an issue obtaining your user ID, the section ID, or the member ID.";
+		const errorMessage =
+			"There was an issue obtaining your user ID, the section ID, or the member ID.";
 		error(500, errorMessage);
 	}
 	await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);

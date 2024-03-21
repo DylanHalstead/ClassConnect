@@ -7,7 +7,12 @@ import {
 } from "$lib/db/appointmentBlocks";
 import { formTimeToDate, getEnumValue } from "$lib/utils";
 import { redirect, error } from "@sveltejs/kit";
-import { verifyAuthentication, verifyUserIsInSection, verifyUserIsApartOfInstructionalTeam, verifyUserIsMember } from "$lib/auth";
+import {
+	verifyAuthentication,
+	verifyUserIsInSection,
+	verifyUserIsApartOfInstructionalTeam,
+	verifyUserIsMember
+} from "$lib/auth";
 
 export const actions: Actions = {
 	default: async ({ locals, request, params, cookies }) => {

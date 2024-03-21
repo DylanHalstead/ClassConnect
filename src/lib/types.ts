@@ -3,21 +3,21 @@ export type Course = {
 	department_code: string;
 	course_code: string;
 	course_name: string;
-}
+};
 
 export type User = {
 	id: string;
 	email: string;
 	first_name: string;
 	last_name: string;
-}
+};
 
 export type Section = {
 	id: string;
 	course_id: string;
 	section_number: number;
 	max_daily_bookable_hours: number;
-}
+};
 
 export enum SectionMemberType {
 	Instructor = "instructor",
@@ -31,7 +31,7 @@ export type SectionMember = {
 	user_id: string;
 	member_type: SectionMemberType;
 	is_restricted: boolean;
-}
+};
 
 export enum WeekDay {
 	Sunday = "sunday",
@@ -46,7 +46,7 @@ export enum WeekDay {
 export type Interval = {
 	hours?: number;
 	minutes?: number;
-}
+};
 
 export interface PostgresAppointmentBlock {
 	id: string;
@@ -56,10 +56,10 @@ export interface PostgresAppointmentBlock {
 	duration: Interval;
 }
 
-export type AppointmentBlock = Omit<PostgresAppointmentBlock, "start_time"|"duration"> & {
-  start_time: Date,
+export type AppointmentBlock = Omit<PostgresAppointmentBlock, "start_time" | "duration"> & {
+	start_time: Date;
 	// millisecond difference from start_time to "end_time"
-	duration: number
+	duration: number;
 };
 
 export type Appointment = {
@@ -69,7 +69,7 @@ export type Appointment = {
 	student_id: string;
 	cancelled: boolean;
 	link: string;
-}
+};
 
 export type ExtendedAppointmentBlock = Omit<AppointmentBlock, "instructional_member_id"> & {
 	instructional_member: InstructionalMember;

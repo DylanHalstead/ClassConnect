@@ -1,8 +1,6 @@
 <script lang="ts">
 	import Calendar from "$lib/components/calendar/Calendar.svelte";
-	import {
-		normalizeDateByWeek,
-	} from "$lib/utils";
+	import { normalizeDateByWeek } from "$lib/utils";
 	import type { ExtendedAppointment, InstructionalMember, Student } from "$lib/types";
 
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";

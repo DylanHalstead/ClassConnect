@@ -1,4 +1,10 @@
-import type { PostgresAppointmentBlock, AppointmentBlock, Interval, User, ExtendedSection } from "./types";
+import type {
+	PostgresAppointmentBlock,
+	AppointmentBlock,
+	Interval,
+	User,
+	ExtendedSection
+} from "./types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -40,11 +46,14 @@ export function formTimeToDate(time: string): Date | undefined {
 	return date;
 }
 
-export function getEnumValue<A extends Record<string, string>>(value: string, enum_: A): A[keyof A] | undefined {
+export function getEnumValue<A extends Record<string, string>>(
+	value: string,
+	enum_: A
+): A[keyof A] | undefined {
 	for (const key in enum_) {
-			if (enum_[key] == value) {
-					return enum_[key];
-			}
+		if (enum_[key] == value) {
+			return enum_[key];
+		}
 	}
 
 	return undefined;
@@ -77,7 +86,9 @@ export function millisecondsToIntervalString(milliseconds: number): string {
 	return intervalString;
 }
 
-export function postgresAppointmentBlockToAppointmentBlock(postgresAppointmentBlock: PostgresAppointmentBlock): AppointmentBlock | undefined {
+export function postgresAppointmentBlockToAppointmentBlock(
+	postgresAppointmentBlock: PostgresAppointmentBlock
+): AppointmentBlock | undefined {
 	const start_time = postgresTimeWithTimeZoneToDate(postgresAppointmentBlock.start_time);
 	if (!start_time) {
 		return undefined;
