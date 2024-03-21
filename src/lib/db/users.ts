@@ -3,7 +3,7 @@ import type { QueryConfig, QueryResult, PoolClient } from "pg";
 import { withConnection } from "./index";
 import type { User } from "../types";
 
-export async function getUser(id: string): Promise<User> {
+export async function getUser(id: string): Promise<User | undefined> {
 	return withConnection(async (client: PoolClient) => {
 		const query: QueryConfig = {
 			text: "SELECT users.id, users.email, users.first_name, users.last_name FROM users WHERE id = $1",
@@ -11,12 +11,15 @@ export async function getUser(id: string): Promise<User> {
 		};
 
 		const res: QueryResult<User> = await client.query(query);
+		if (res.rows.length === 0) {
+			return undefined;
+		}
 		const user = res.rows[0];
 		return user;
 	});
 }
 
-export async function getUserByEmail(email: string): Promise<User> {
+export async function getUserByEmail(email: string): Promise<User | undefined> {
 	return withConnection(async (client: PoolClient) => {
 		const query: QueryConfig = {
 			text: "SELECT users.id, users.email, users.first_name, users.last_name FROM users WHERE email = $1",
@@ -24,20 +27,11 @@ export async function getUserByEmail(email: string): Promise<User> {
 		};
 
 		const res: QueryResult<User> = await client.query(query);
+		if (res.rows.length === 0) {
+			return undefined;
+		}
 		const user = res.rows[0];
 		return user;
-	});
-}
-
-export async function doesUserExist(email: string): Promise<boolean> {
-	return withConnection(async (client: PoolClient) => {
-		const query: QueryConfig = {
-			text: "SELECT users.id, users.email, users.first_name, users.last_name FROM users WHERE email = $1",
-			values: [email]
-		};
-
-		const res: QueryResult<User> = await client.query(query);
-		return res.rows.length !== 0;
 	});
 }
 
@@ -45,7 +39,7 @@ export async function createUser(
 	email: string,
 	firstName: string,
 	lastName: string
-): Promise<User> {
+): Promise<User | undefined> {
 	return withConnection(async (client: PoolClient) => {
 		const newUser: User = {
 			id: uuidv4(),
@@ -65,7 +59,7 @@ export async function createUser(
 	});
 }
 
-export async function deleteUser(id: string): Promise<User> {
+export async function deleteUser(id: string): Promise<User | undefined> {
 	return withConnection(async (client: PoolClient) => {
 		const query: QueryConfig = {
 			text: "DELETE FROM users WHERE id = $1 RETURNING users.id, users.email, users.first_name, users.last_name",

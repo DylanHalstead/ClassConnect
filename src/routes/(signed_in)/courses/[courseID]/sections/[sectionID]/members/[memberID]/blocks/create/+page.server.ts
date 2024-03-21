@@ -1,12 +1,12 @@
 import type { Actions } from "./$types";
-import { AppointmentBlock, SectionMember, SectionMemberType, WeekDay } from "$lib/types";
-import { getUsersSectionMembers } from "$lib/db/sectionMembers";
+import { AppointmentBlock, SectionMemberType, WeekDay } from "../../../../../../../../../../lib/types";
+import { getUsersSectionMembers } from "../../../../../../../../../../lib/db/sectionMembers";
 import {
 	getMembersAppointmentBlocks,
 	createAppointmentBlock,
 	deleteAppointmentBlocks
-} from "$lib/db/appointmentBlocks";
-import { getEnumValue } from "$lib/utils";
+} from "../../../../../../../../../../lib/db/appointmentBlocks";
+import { getEnumValue } from "../../../../../../../../../../lib/utils";
 import { isSignedIn } from "svelte-google-auth/server";
 import { redirect, error } from "@sveltejs/kit";
 
@@ -17,7 +17,10 @@ export const actions: Actions = {
 			error(401, { message: "Unauthorized: not logged in" });
 		}
 		// Validate user owns the memberID
-		const usersMembers: SectionMember[] = await getUsersSectionMembers(userID);
+		const usersMembers = await getUsersSectionMembers(userID);
+		if (!usersMembers) {
+			error(500, { message: "Internal server error: Failed to get user's section members" });
+		}
 		const member = usersMembers.find(member => member.id === params.memberID);
 		if (
 			!member ||
@@ -56,7 +59,10 @@ export const actions: Actions = {
 
 		let duration = end.getTime() - start.getTime();
 		// Validate that the start-time and end-time aren't conflicting with existing appointment blocks
-		const membersBlocks: AppointmentBlock[] = await getMembersAppointmentBlocks(params.memberID);
+		const membersBlocks = await getMembersAppointmentBlocks(params.memberID);
+		if (!membersBlocks) {
+			error(500, { message: "Internal server error: Failed to get appointment blocks" });
+		}
 		const possiblyConflictingBlocks = membersBlocks.filter(block => block.week_day === dayOfWeek);
 		const mergeableBlocks: AppointmentBlock[] = [];
 		for (const block of possiblyConflictingBlocks) {

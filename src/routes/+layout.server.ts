@@ -1,7 +1,7 @@
 import { hydrateAuth, isSignedIn } from "svelte-google-auth/server";
 import { loadFlash, setFlash } from "sveltekit-flash-message/server";
-import { doesUserExist, getUserByEmail, createUser } from "$lib/db/users";
-import type { User } from "$lib/types";
+import { getUserByEmail, createUser } from "../lib/db/users";
+import type { User } from "../lib/types";
 import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch }) => {
@@ -10,8 +10,9 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
 	} | null = null;
 	// If the user has signed in with google but hasn't grabbed their data from the database
 	if (!locals.db && isSignedIn(locals)) {
-		if (await doesUserExist(locals.user.email)) {
-			db = { user: await getUserByEmail(locals.user.email) };
+		const user = await getUserByEmail(locals.user.email);
+		if (user) {
+			db = { user: user };
 			cookies.set("userID", db.user.id, { path: "/" });
 			const message = {
 				type: "success",

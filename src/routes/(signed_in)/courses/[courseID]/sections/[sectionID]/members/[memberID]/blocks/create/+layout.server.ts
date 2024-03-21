@@ -1,7 +1,7 @@
 import type { LayoutServerLoad } from "./$types";
 import { loadFlash, setFlash } from "sveltekit-flash-message/server";
 import { error } from "@sveltejs/kit";
-import { SectionMember, SectionMemberType } from "$lib/types";
+import { SectionMember, SectionMemberType } from "../../../../../../../../../../lib/types";
 
 export const load: LayoutServerLoad = loadFlash(async ({ cookies, params, parent }) => {
 	const parentVals = await parent();

@@ -9,29 +9,32 @@ import {
 	millisecondsToIntervalString
 } from "../utils";
 
-export async function getAppointmentBlock(id: string): Promise<AppointmentBlock> {
+export async function getAppointmentBlock(id: string): Promise<AppointmentBlock | undefined> {
 	return withConnection(async (client: PoolClient) => {
 		const query: QueryConfig = {
-			text: "SELECT appointment_blocks.id, appointment_blocks.start_time, appointment_blocks.end_time, appointment_blocks.notes FROM appointment_blocks WHERE id = $1",
+			text: "SELECT ab.id, ab.start_time, ab.end_time, ab.notes FROM appointment_blocks ab WHERE id = $1",
 			values: [id]
 		};
 
 		const res: QueryResult<PostgresAppointmentBlock> = await client.query(query);
-		const appointmentBlocks = res.rows.map(row => {
-			const appointmentBlock: AppointmentBlock = {
-				id: row.id,
-				instructional_member_id: row.instructional_member_id,
-				week_day: row.week_day,
-				start_time: postgresTimeWithTimeZoneToDate(row.start_time),
-				duration: intervalToMilliseconds(row.duration)
-			};
-			return appointmentBlock;
-		})[0];
-		return appointmentBlocks;
+		if (res.rows.length === 0) {
+			return undefined;
+		}
+
+		const row = res.rows[0];
+		return {
+			id: row.id,
+			instructional_member_id: row.instructional_member_id,
+			week_day: row.week_day,
+			start_time: postgresTimeWithTimeZoneToDate(row.start_time),
+			duration: intervalToMilliseconds(row.duration)
+		};
 	});
+
+
 }
 
-export async function getSectionsAppointmentBlocks(sectionId: string): Promise<AppointmentBlock[]> {
+export async function getSectionsAppointmentBlocks(sectionId: string): Promise<AppointmentBlock[] | undefined> {
 	return withConnection(async (client: PoolClient) => {
 		const query: QueryConfig = {
 			text: "SELECT ab.id, ab.instructional_member_id, ab.week_day, ab.start_time, ab.duration FROM appointment_blocks ab JOIN section_members sm ON ab.instructional_member_id = sm.id WHERE sm.section_id = $1",
@@ -39,6 +42,9 @@ export async function getSectionsAppointmentBlocks(sectionId: string): Promise<A
 		};
 
 		const res: QueryResult<PostgresAppointmentBlock> = await client.query(query);
+		if (res.rows.length === 0) {
+			return undefined;
+		}
 		const appointmentBlocks = res.rows.map(row => {
 			const appointmentBlock: AppointmentBlock = {
 				id: row.id,
@@ -53,7 +59,7 @@ export async function getSectionsAppointmentBlocks(sectionId: string): Promise<A
 	});
 }
 
-export async function getMembersAppointmentBlocks(memberId: string): Promise<AppointmentBlock[]> {
+export async function getMembersAppointmentBlocks(memberId: string): Promise<AppointmentBlock[] | undefined> {
 	return withConnection(async (client: PoolClient) => {
 		const query: QueryConfig = {
 			text: "SELECT id, instructional_member_id, week_day, start_time, duration FROM appointment_blocks WHERE instructional_member_id = $1",
@@ -61,6 +67,10 @@ export async function getMembersAppointmentBlocks(memberId: string): Promise<App
 		};
 
 		const res: QueryResult<PostgresAppointmentBlock> = await client.query(query);
+		if (res.rows.length === 0) {
+			return undefined;
+		}
+		
 		const appointmentBlocks = res.rows.map(row => {
 			const appointmentBlock: AppointmentBlock = {
 				id: row.id,
@@ -80,7 +90,7 @@ export async function createAppointmentBlock(
 	weekDay: WeekDay,
 	startTime: Date,
 	duration: number
-): Promise<AppointmentBlock> {
+): Promise<AppointmentBlock | undefined> {
 	return withConnection(async (client: PoolClient) => {
 		const query: QueryConfig = {
 			text: "INSERT INTO appointment_blocks (id, instructional_member_id, week_day, start_time, duration) VALUES ($1, $2, $3, $4, $5) RETURNING appointment_blocks.id, appointment_blocks.instructional_member_id, appointment_blocks.week_day, appointment_blocks.start_time, appointment_blocks.duration",
@@ -93,18 +103,22 @@ export async function createAppointmentBlock(
 			]
 		};
 
-		const res: QueryResult<PostgresAppointmentBlock> = await client.query(query);
-		const appointmentBlock = res.rows.map(row => {
-			const appointmentBlock: AppointmentBlock = {
-				id: row.id,
-				instructional_member_id: row.instructional_member_id,
-				week_day: row.week_day,
-				start_time: postgresTimeWithTimeZoneToDate(row.start_time),
-				duration: intervalToMilliseconds(row.duration)
-			};
+		try {
+			const res: QueryResult<PostgresAppointmentBlock> = await client.query(query);
+			const appointmentBlock = res.rows.map(row => {
+				const appointmentBlock: AppointmentBlock = {
+					id: row.id,
+					instructional_member_id: row.instructional_member_id,
+					week_day: row.week_day,
+					start_time: postgresTimeWithTimeZoneToDate(row.start_time),
+					duration: intervalToMilliseconds(row.duration)
+				};
+				return appointmentBlock;
+			})[0];
 			return appointmentBlock;
-		})[0];
-		return appointmentBlock;
+		} catch (error) {
+			return undefined;
+		}
 	});
 }
 
