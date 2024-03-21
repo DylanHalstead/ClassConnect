@@ -1,18 +1,18 @@
-export interface Course {
+export type Course = {
 	id: string;
 	department_code: string;
 	course_code: string;
 	course_name: string;
 }
 
-export interface User {
+export type User = {
 	id: string;
 	email: string;
 	first_name: string;
 	last_name: string;
 }
 
-export interface Section {
+export type Section = {
 	id: string;
 	course_id: string;
 	section_number: number;
@@ -25,7 +25,7 @@ export enum SectionMemberType {
 	Student = "student"
 }
 
-export interface SectionMember {
+export type SectionMember = {
 	id: string;
 	section_id: string;
 	user_id: string;
@@ -43,7 +43,7 @@ export enum WeekDay {
 	Sunday = "sunday"
 }
 
-export interface Interval {
+export type Interval = {
 	hours?: number;
 	minutes?: number;
 }
@@ -56,16 +56,13 @@ export interface PostgresAppointmentBlock {
 	duration: Interval;
 }
 
-export interface AppointmentBlock {
-	id: string;
-	instructional_member_id: string;
-	week_day: WeekDay;
-	start_time: Date;
+export type AppointmentBlock = Omit<PostgresAppointmentBlock, "start_time"|"duration"> | {
+  start_time: Date,
 	// millisecond difference from start_time to "end_time"
-	duration: number;
-}
+	duration: number
+};
 
-export interface Appointment {
+export type Appointment = {
 	id: string;
 	appointment_day: Date;
 	appointment_block: string;
