@@ -34,13 +34,13 @@ export type SectionMember = {
 }
 
 export enum WeekDay {
+	Sunday = "sunday",
 	Monday = "monday",
 	Tuesday = "tuesday",
 	Wednesday = "wednesday",
 	Thursday = "thursday",
 	Friday = "friday",
-	Saturday = "saturday",
-	Sunday = "sunday"
+	Saturday = "saturday"
 }
 
 export type Interval = {
@@ -70,3 +70,27 @@ export type Appointment = {
 	cancelled: boolean;
 	link: string;
 }
+
+export type ExtendedAppointmentBlock = Omit<AppointmentBlock, "instructional_member_id"> & {
+	instructional_member: InstructionalMember;
+};
+
+export type ExtendedAppointment = Omit<Appointment, "appointment_block" | "student_id"> & {
+	appointment_block: ExtendedAppointmentBlock;
+	student: Student;
+};
+
+export type ExtendedSection = Omit<Section, "course_id"> & { course: Course };
+
+export type ExtendedSectionMember = Omit<SectionMember, "section_id" | "user_id"> & {
+	section: ExtendedSection;
+	user: User;
+};
+
+export type InstructionalMember = Omit<ExtendedSectionMember, "member_type"> & {
+	member_type: SectionMemberType.Instructor | SectionMemberType.TA;
+};
+
+export type Student = Omit<ExtendedSectionMember, "member_type"> & {
+	member_type: SectionMemberType.Student;
+};
