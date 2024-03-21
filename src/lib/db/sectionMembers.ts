@@ -1,4 +1,4 @@
-import type { QueryConfig, QueryResult, PoolClient } from "pg";
+import type { QueryConfig, QueryResult } from "pg";
 import { withConnection } from "./index";
 import type { SectionMember } from "../types";
 

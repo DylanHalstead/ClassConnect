@@ -1,16 +1,24 @@
 import type { Interval } from "./types";
 import { PostgresAppointmentBlock, AppointmentBlock } from "./types";
 
-export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date {
+export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date | undefined {
 	const [time, timeZoneOffset] = timeWithZone.split("-");
 	if (!time || !timeZoneOffset) {
-		console.error('Invalid input format. Expected "HH:MM-TZ".');
+		return undefined;
 	}
 
 	const [hours, minutes] = time.split(":").map(num => parseInt(num));
+	if (isNaN(hours) || isNaN(minutes)) {
+		return undefined;
+	}
+
+	const parsedTimeZoneOffset = parseInt(timeZoneOffset);
+	if (isNaN(parsedTimeZoneOffset)) {
+		return undefined;
+	}
 
 	const date = new Date(0);
-	date.setHours(hours - parseInt(timeZoneOffset));
+	date.setHours(hours - parsedTimeZoneOffset);
 	date.setMinutes(minutes);
 
 	return date;
@@ -53,12 +61,16 @@ export function millisecondsToIntervalString(milliseconds: number): string {
 	return intervalString;
 }
 
-export function postgresAppointmentBlockToAppointmentBlock(postgresAppointmentBlock: PostgresAppointmentBlock): AppointmentBlock {
+export function postgresAppointmentBlockToAppointmentBlock(postgresAppointmentBlock: PostgresAppointmentBlock): AppointmentBlock | undefined {
+	const start_time = postgresTimeWithTimeZoneToDate(postgresAppointmentBlock.start_time);
+	if (!start_time) {
+		return undefined;
+	}
 	const appointmentBlock: AppointmentBlock = {
 		id: postgresAppointmentBlock.id,
 		instructional_member_id: postgresAppointmentBlock.instructional_member_id,
 		week_day: postgresAppointmentBlock.week_day,
-		start_time: postgresTimeWithTimeZoneToDate(postgresAppointmentBlock.start_time),
+		start_time: start_time,
 		duration: intervalToMilliseconds(postgresAppointmentBlock.duration)
 	};
 	return appointmentBlock;

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import type { QueryConfig, QueryResult, PoolClient } from "pg";
+import type { QueryConfig, QueryResult } from "pg";
 import { withConnection } from "./index";
 import type { AppointmentBlock, PostgresAppointmentBlock, WeekDay } from "../types";
 import {
@@ -40,7 +40,12 @@ export async function getSectionsAppointmentBlocks(sectionId: string): Promise<A
 		const appointmentBlocks = res.rows.map(row => {
 			return postgresAppointmentBlockToAppointmentBlock(row);
 		});
-		return appointmentBlocks;
+		// for type safety
+		const filteredBlocks = appointmentBlocks.filter(block => block !== undefined)
+    if (filteredBlocks.length !== appointmentBlocks.length) {
+			return undefined;
+    }
+    return filteredBlocks;
 	});
 }
 
@@ -58,7 +63,12 @@ export async function getMembersAppointmentBlocks(memberId: string): Promise<App
 		const appointmentBlocks = res.rows.map(row => {
 			return postgresAppointmentBlockToAppointmentBlock(row);
 		});
-		return appointmentBlocks;
+		// for type safety
+		const filteredBlocks = appointmentBlocks.filter(block => block !== undefined)
+    if (filteredBlocks.length !== appointmentBlocks.length) {
+			return undefined;
+    }
+    return filteredBlocks;
 	});
 }
 
