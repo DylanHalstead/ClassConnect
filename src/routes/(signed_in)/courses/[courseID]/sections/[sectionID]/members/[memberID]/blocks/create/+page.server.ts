@@ -9,26 +9,20 @@ import {
 import { getEnumValue } from "../../../../../../../../../../lib/utils";
 import { isSignedIn } from "svelte-google-auth/server";
 import { redirect, error } from "@sveltejs/kit";
+import { verifyAuthentication, verifyUserIsInSection, verifyUserIsApartOfInstructionalTeam, verifyUserIsMember } from "../../../../../../../../../../lib/auth";
 
 export const actions: Actions = {
 	default: async ({ locals, request, params, cookies }) => {
 		const userID: string | undefined = cookies.get("userID");
-		if (!isSignedIn(locals) || !userID) {
-			error(401, { message: "Unauthorized: not logged in" });
+		const { sectionID, memberID } = params;
+		if (!userID || !sectionID || !memberID) {
+			const errorMessage = "Internal server error: Failed to get user ID, section ID, or member ID";
+			error(500, errorMessage);
 		}
-		// Validate user owns the memberID
-		const usersMembers = await getUsersSectionMembers(userID);
-		if (!usersMembers) {
-			error(500, { message: "Internal server error: Failed to get user's section members" });
-		}
-		const member = usersMembers.find(member => member.id === params.memberID);
-		if (
-			!member ||
-			(member.member_type !== SectionMemberType.TA &&
-				member.member_type !== SectionMemberType.Instructor)
-		) {
-			error(403, { message: "Forbidden: Not a part of the instructional team" });
-		}
+		verifyAuthentication(locals, cookies);
+		await verifyUserIsInSection(cookies, userID, sectionID);
+		await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
+		await verifyUserIsMember(cookies, userID, memberID);
 
 		const data: FormData = await request.formData();
 		const startTime = data.get("start-time");

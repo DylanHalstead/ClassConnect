@@ -56,7 +56,7 @@ export interface PostgresAppointmentBlock {
 	duration: Interval;
 }
 
-export type AppointmentBlock = Omit<PostgresAppointmentBlock, "start_time"|"duration"> | {
+export type AppointmentBlock = Omit<PostgresAppointmentBlock, "start_time"|"duration"> & {
   start_time: Date,
 	// millisecond difference from start_time to "end_time"
 	duration: number

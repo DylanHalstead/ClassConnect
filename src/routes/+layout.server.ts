@@ -39,7 +39,7 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
 		const message = {
 			type: messageType,
 			message: messageContent
-		} as const;
+		};
 		setFlash(message, cookies);
 	}
 
