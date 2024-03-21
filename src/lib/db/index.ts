@@ -18,10 +18,13 @@ export const pool = new pg.Pool({
 
 export async function withConnection<Result>(
 	fn: (client: PoolClient) => Promise<Result>
-): Promise<Result> {
+): Promise<Result | undefined> {
 	const client = await pool.connect();
 	try {
 		return await fn(client);
+	} catch (error) {
+		console.error(error);
+		return undefined;
 	} finally {
 		client.release();
 	}

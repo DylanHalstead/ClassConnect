@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { sectionName, userName, type ExtendedAppointment } from ".";
+	import { sectionName, userName } from "$lib/utils";
+	import type { ExtendedAppointment } from "$lib/types";
 
 	export let appointment: ExtendedAppointment;
 	export let collapsed: boolean;
