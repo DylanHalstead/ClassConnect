@@ -16,25 +16,14 @@ export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date {
 	return date;
 }
 
-export function stringToWeekDay(dayString: string): WeekDay | undefined {
-	switch (dayString.toLowerCase()) {
-		case "monday":
-			return WeekDay.Monday;
-		case "tuesday":
-			return WeekDay.Tuesday;
-		case "wednesday":
-			return WeekDay.Wednesday;
-		case "thursday":
-			return WeekDay.Thursday;
-		case "friday":
-			return WeekDay.Friday;
-		case "saturday":
-			return WeekDay.Saturday;
-		case "sunday":
-			return WeekDay.Sunday;
-		default:
-			return undefined;
+export function getEnumValue<A extends Record<string, string>>(value: string, enum_: A): A[keyof A] | undefined {
+	for (const key in enum_) {
+			if (enum_[key] == value) {
+					return enum_[key];
+			}
 	}
+
+	return undefined;
 }
 
 export function intervalToMilliseconds(interval: Interval): number {

@@ -6,7 +6,7 @@ import {
 	createAppointmentBlock,
 	deleteAppointmentBlocks
 } from "$lib/db/appointmentBlocks";
-import { stringToWeekDay } from "$lib/utils";
+import { getEnumValue } from "$lib/utils";
 import { isSignedIn } from "svelte-google-auth/server";
 import { redirect, error } from "@sveltejs/kit";
 
@@ -37,7 +37,7 @@ export const actions: Actions = {
 		if (!formDayOfWeek || typeof formDayOfWeek !== "string") {
 			error(400, { message: "Invalid input: missing or invalid day of the week" });
 		}
-		const dayOfWeek = stringToWeekDay(formDayOfWeek);
+		const dayOfWeek = getEnumValue(formDayOfWeek, WeekDay);
 		if (!dayOfWeek) {
 			error(400, { message: "Invalid input: Invalid day of the week" });
 		}
@@ -67,9 +67,6 @@ export const actions: Actions = {
 			const blockStartMillis = blockStart.getTime();
 			const blockEndMillis = blockEnd.getTime();
 
-			console.log(startMillis < blockStartMillis && endMillis > blockStartMillis);
-			console.log(startMillis < blockEndMillis && endMillis > blockEndMillis);
-			console.log(startMillis > blockStartMillis && endMillis < blockEndMillis);
 			if (
 				(startMillis < blockStartMillis && endMillis > blockStartMillis) ||
 				(startMillis < blockEndMillis && endMillis > blockEndMillis) ||
