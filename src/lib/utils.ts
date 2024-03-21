@@ -24,6 +24,17 @@ export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date | und
 	return date;
 }
 
+export function formTimeToDate(time: string): Date | undefined {
+	const date = new Date(0);
+	const [hours, minutes] = time.split(":").map(num => parseInt(num));
+	if (isNaN(hours) || isNaN(minutes)) {
+		return undefined;
+	}
+	date.setHours(hours);
+	date.setMinutes(minutes);
+	return date;
+}
+
 export function getEnumValue<A extends Record<string, string>>(value: string, enum_: A): A[keyof A] | undefined {
 	for (const key in enum_) {
 			if (enum_[key] == value) {

@@ -6,7 +6,7 @@ import {
 	createAppointmentBlock,
 	deleteAppointmentBlocks
 } from "../../../../../../../../../../lib/db/appointmentBlocks";
-import { getEnumValue } from "../../../../../../../../../../lib/utils";
+import { formTimeToDate, getEnumValue } from "../../../../../../../../../../lib/utils";
 import { isSignedIn } from "svelte-google-auth/server";
 import { redirect, error } from "@sveltejs/kit";
 import { verifyAuthentication, verifyUserIsInSection, verifyUserIsApartOfInstructionalTeam, verifyUserIsMember } from "../../../../../../../../../../lib/auth";
@@ -28,34 +28,31 @@ export const actions: Actions = {
 		const startTime = data.get("start-time");
 		const endTime = data.get("end-time");
 		if (!startTime || !endTime || typeof startTime !== "string" || typeof endTime !== "string") {
-			error(400, { message: "Invalid input: missing or invalid times" });
+			error(400, "Invalid input: missing or invalid times");
 		}
 		const formDayOfWeek = data.get("day-of-week");
 		if (!formDayOfWeek || typeof formDayOfWeek !== "string") {
-			error(400, { message: "Invalid input: missing or invalid day of the week" });
+			error(400, "Invalid input: missing or invalid day of the week");
 		}
 		const dayOfWeek = getEnumValue(formDayOfWeek, WeekDay);
 		if (!dayOfWeek) {
-			error(400, { message: "Invalid input: Invalid day of the week" });
+			error(400, "Invalid input: Invalid day of the week");
 		}
 
-		const start = new Date(0);
-		const [startHours, startMinues] = startTime.split(":").map(num => parseInt(num));
-		start.setHours(startHours);
-		start.setMinutes(startMinues);
-		const end = new Date(0);
-		const [endHours, endMinues] = endTime.split(":").map(num => parseInt(num));
-		end.setHours(endHours);
-		end.setMinutes(endMinues);
+		const start = formTimeToDate(startTime);
+		const end = formTimeToDate(endTime);
+		if (!start || !end) {
+			error(400, "Invalid input: Invalid time format");
+		}
 		if (start >= end) {
-			error(400, { message: "Invalid input: Start time must be before end" });
+			error(400, "Invalid input: Start time must be before end");
 		}
 
 		let duration = end.getTime() - start.getTime();
 		// Validate that the start-time and end-time aren't conflicting with existing appointment blocks
 		const membersBlocks = await getMembersAppointmentBlocks(params.memberID);
 		if (!membersBlocks) {
-			error(500, { message: "Internal server error: Failed to get appointment blocks" });
+			error(500, "Internal server error: Failed to get appointment blocks");
 		}
 		const possiblyConflictingBlocks = membersBlocks.filter(block => block.week_day === dayOfWeek);
 		const mergeableBlocks: AppointmentBlock[] = [];
@@ -72,7 +69,7 @@ export const actions: Actions = {
 				(startMillis < blockEndMillis && endMillis > blockEndMillis) ||
 				(startMillis > blockStartMillis && endMillis < blockEndMillis)
 			) {
-				error(400, { message: "Invalid input: times conflict with existing block" });
+				error(400, "Invalid input: times conflict with existing block");
 			}
 
 			// concatinate blocks if they are touching
@@ -88,7 +85,7 @@ export const actions: Actions = {
 		// if there are mergeable blocks, delete them and adjust the start and end times
 		if (mergeableBlocks.length > 0) {
 			if (deleteAppointmentBlocks(mergeableBlocks.map(block => block.id)) === undefined) {
-				error(500, { message: "Internal server error: Failed to delete conflicting blocks" });
+				error(500, "Internal server error: Failed to delete conflicting blocks");
 			}
 			const earliestStart = new Date(
 				Math.min(...mergeableBlocks.map(block => block.start_time.getTime()), start.getTime())
