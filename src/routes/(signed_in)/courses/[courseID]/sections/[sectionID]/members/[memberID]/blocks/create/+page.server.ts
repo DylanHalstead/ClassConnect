@@ -93,7 +93,9 @@ export const actions: Actions = {
 		}
 		// if there are mergeable blocks, delete them and adjust the start and end times
 		if (mergeableBlocks.length > 0) {
-			deleteAppointmentBlocks(mergeableBlocks.map(block => block.id));
+			if (deleteAppointmentBlocks(mergeableBlocks.map(block => block.id)) === undefined) {
+				error(500, { message: "Internal server error: Failed to delete conflicting blocks" });
+			}
 			const earliestStart = new Date(
 				Math.min(...mergeableBlocks.map(block => block.start_time.getTime()), start.getTime())
 			);

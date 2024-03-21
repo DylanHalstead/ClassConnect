@@ -1,5 +1,5 @@
 import type { Interval } from "./types";
-import { WeekDay } from "./types";
+import { PostgresAppointmentBlock, AppointmentBlock } from "./types";
 
 export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date {
 	const [time, timeZoneOffset] = timeWithZone.split("-");
@@ -51,4 +51,15 @@ export function millisecondsToIntervalString(milliseconds: number): string {
 
 	const intervalString = `${days} days ${hours % 24} hours ${minutes % 60} minutes ${seconds % 60} seconds`;
 	return intervalString;
+}
+
+export function postgresAppointmentBlockToAppointmentBlock(postgresAppointmentBlock: PostgresAppointmentBlock): AppointmentBlock {
+	const appointmentBlock: AppointmentBlock = {
+		id: postgresAppointmentBlock.id,
+		instructional_member_id: postgresAppointmentBlock.instructional_member_id,
+		week_day: postgresAppointmentBlock.week_day,
+		start_time: postgresTimeWithTimeZoneToDate(postgresAppointmentBlock.start_time),
+		duration: intervalToMilliseconds(postgresAppointmentBlock.duration)
+	};
+	return appointmentBlock;
 }

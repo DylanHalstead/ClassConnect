@@ -5,7 +5,7 @@ import type { SectionMember } from "../types";
 export async function getUsersSectionMembers(userId: string): Promise<SectionMember[] | undefined> {
 	return withConnection(async (client: PoolClient) => {
 		const query: QueryConfig = {
-			text: "SELECT * FROM section_members WHERE user_id = $1",
+			text: "SELECT sm.id, sm.section_id, sm.user_id, sm.member_type, sm.is_restricted FROM section_members sm WHERE sm.user_id = $1",
 			values: [userId]
 		};
 
