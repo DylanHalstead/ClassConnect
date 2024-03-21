@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import type { QueryConfig, QueryResult } from "pg";
 import { withConnection } from "./index";
-import type { AppointmentBlock, PostgresAppointmentBlock, WeekDay } from "../types";
+import type { AppointmentBlock, PostgresAppointmentBlock, WeekDay } from "$lib/types";
 import {
 	dateToPostgresTimeWithTimeZone,
 	millisecondsToIntervalString, 

@@ -1,8 +1,8 @@
 import { isSignedIn } from "svelte-google-auth/server";
 import { setFlash } from "sveltekit-flash-message/server";
 import { Cookies, error } from "@sveltejs/kit";
-import { getUsersSectionMembers } from "../db/sectionMembers";
-import { SectionMemberType } from "../types";
+import { getUsersSectionMembers } from "$lib/db/sectionMembers";
+import { SectionMemberType } from "$lib/types";
 
 export function verifyAuthentication(locals: App.Locals, cookies: Cookies): void  {
 	const userID = cookies.get("userID");

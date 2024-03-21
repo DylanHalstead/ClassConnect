@@ -1,5 +1,10 @@
-import type { Interval } from "./types";
-import { PostgresAppointmentBlock, AppointmentBlock } from "./types";
+import type { PostgresAppointmentBlock, AppointmentBlock, Interval } from "./types";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
+}
 
 export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date | undefined {
 	const [time, timeZoneOffset] = timeWithZone.split("-");
@@ -85,4 +90,20 @@ export function postgresAppointmentBlockToAppointmentBlock(postgresAppointmentBl
 		duration: intervalToMilliseconds(postgresAppointmentBlock.duration)
 	};
 	return appointmentBlock;
+}
+
+export function normalizeDateByDay(date: Date): Date {
+	const result = new Date(date);
+
+	result.setHours(0, 0, 0, 0);
+
+	return result;
+}
+
+export function normalizeDateByWeek(date: Date): Date {
+	const result = normalizeDateByDay(date);
+
+	result.setTime(result.getTime() - result.getDay() * 24 * 60 * 60 * 1000);
+
+	return result;
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/components/calendar";
+	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/utils";
 
 	/**
 	 * The date whose week the calendar will be focused on. Note that if the date's day is one other

@@ -1,6 +1,6 @@
 <script lang="ts">
 	// TS warning are not correct because of the "isSVG=true" prop motion will not have any issues. Can't use ts-ignore in template https://svelte.dev/docs/typescript#limitations
-	import { cn } from "$lib/utils/cn";
+	import { cn } from "$lib/utils";
 	import { Motion } from "svelte-motion";
 	export let className = void 0;
 	const paths = [

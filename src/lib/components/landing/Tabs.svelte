@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from "$lib/utils/cn";
+	import { cn } from "$lib/utils";
 	import { Motion } from "svelte-motion";
 	import FadeInDiv from "./FadeInDiv.svelte";
 	export let propTabs: {
