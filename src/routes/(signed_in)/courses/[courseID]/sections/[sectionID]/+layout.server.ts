@@ -1,7 +1,6 @@
 import type { LayoutServerLoad } from "./$types";
 import { loadFlash } from "sveltekit-flash-message/server";
-import { verifyUserIsInSection } from "../../../../../../lib/auth";
-import { getUsersSectionMembers } from "../../../../../../lib/db/sectionMembers";
+import { verifyUserIsInSection } from "$lib/auth";
 import { error } from "@sveltejs/kit";
 
 export const load: LayoutServerLoad = loadFlash(async ({ cookies, params, parent }) => {
