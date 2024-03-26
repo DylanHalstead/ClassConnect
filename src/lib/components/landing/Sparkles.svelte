@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from "$lib/utils/cn";
+	import { cn } from "$lib/utils";
 	import { Motion } from "svelte-motion";
 	let randomMove = () => Math.random() * 4 - 2;
 	export let minSize = 0.6;

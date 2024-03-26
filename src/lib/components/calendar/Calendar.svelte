@@ -3,10 +3,9 @@
 	import {
 		normalizeDateByDay,
 		normalizeDateByTimeWithinDay,
-		normalizeDateByWeek,
-		type ExtendedAppointment
-	} from "$lib/components/calendar";
-
+		normalizeDateByWeek
+	} from "$lib/utils";
+	import type { ExtendedAppointment } from "$lib/types";
 	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
 
 	/**
