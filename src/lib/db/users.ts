@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import type { QueryConfig, QueryResult } from "pg";
-import { withConnection } from "./index";
-import type { PartialUser, User } from "../types";
+import { withConnection } from ".";
+import type { PartialUser, User } from "$lib/types";
 
 export async function getUser(id: string): Promise<User | undefined> {
 	return withConnection(async client => {

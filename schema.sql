@@ -60,7 +60,11 @@ CREATE TABLE IF NOT EXISTS appointments (
 	appointment_day DATE NOT NULL,
 	appointment_block UUID NOT NULL REFERENCES appointment_blocks(id),
 	student_id UUID NOT NULL REFERENCES section_members(id),
-	cancelled BOOLEAN DEFAULT FALSE,
+	cancelled BOOLEAN NOT NULL DEFAULT FALSE,
 	link VARCHAR(255) NOT NULL,
-	UNIQUE (appointment_day, appointment_block, student_id)
+	UNIQUE (appointment_day, appointment_block)
+);
+
+CREATE TABLE IF NOT EXISTS initialized (
+	initialized BOOLEAN PRIMARY KEY CHECK (initialized) DEFAULT TRUE
 );
