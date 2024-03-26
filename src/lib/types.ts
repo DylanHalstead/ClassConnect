@@ -93,6 +93,10 @@ export type ExtendedAppointmentBlock = Omit<AppointmentBlock, "instructional_mem
 	instructional_member: InstructionalMember;
 };
 
+export type ExtendedAppointmentBlock = Omit<AppointmentBlock, "instructional_member_id"> & {
+	instructional_member: InstructionalMember;
+};
+
 export interface PartialAppointment {
 	appointment_day: Date;
 	appointment_block: string;
@@ -103,6 +107,11 @@ export interface PartialAppointment {
 
 export type Appointment = PartialAppointment & {
 	id: string;
+};
+
+export type ExtendedAppointment = Omit<Appointment, "appointment_block" | "student_id"> & {
+	appointment_block: ExtendedAppointmentBlock;
+	student: Student;
 };
 
 export type ExtendedAppointment = Omit<Appointment, "appointment_block" | "student_id"> & {
