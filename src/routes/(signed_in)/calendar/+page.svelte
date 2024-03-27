@@ -5,11 +5,11 @@
 	import CalendarHeading from "$lib/components/calendar/CalendarHeading.svelte";
 	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
 	import {
-		type ExtendedAppointment,
-		type InstructionalMember,
 		SectionMemberType,
+		WeekDay,
+		type InstructionalMember,
 		type Student,
-		WeekDay
+		type ExtendedAppointment
 	} from "$lib/types";
 
 	const calendarStartTime = new Date();

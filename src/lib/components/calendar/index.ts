@@ -1,5 +1,5 @@
-import { normalizeDateByTimeWithinDay } from "../../datemanipulation";
-import type { ExtendedAppointment } from "../../types";
+import { normalizeDateByTimeWithinDay } from "$lib/datemanipulation";
+import type { ExtendedAppointment } from "$lib/types";
 
 export interface CalendarConfiguration {
 	/**

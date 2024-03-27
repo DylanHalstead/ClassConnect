@@ -69,13 +69,13 @@
 		</thead>
 
 		<tbody class="relative">
-			{#each { length: rowCount } as _, i}
+			{#each cellAppointments as appointments, i}
 				<tr>
 					<td class="border-neutral border-e border-s p-0" class:border-b={i < rowCount - 1}>
 						<div
 							class="overflow-y-scroll p-2 relative z-10"
 							style:height={configuration.gutterCellHeight}>
-							<CalendarCardCarousel appointments={cellAppointments[i]} />
+							<CalendarCardCarousel {appointments} />
 						</div>
 					</td>
 				</tr>
