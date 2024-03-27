@@ -38,11 +38,11 @@
 <div class="px-12 py-2">
 	<div class="flex flex-row w-full">
 		<div class="flex justify-between w-full">
-			<h1 class="main-text header capitalize">
+			<h1 class="main-text font-kaisei header capitalize">
 				{DayOfWeek}, {month}
 				{day}<sup class="text-primary">{dateSuffix}</sup>
 			</h1>
-			<h1 class="main-text header-year text-primary px-8">{year}</h1>
+			<h1 class="main-text font-kaisei header-year text-primary px-8">{year}</h1>
 		</div>
 	</div>
 
@@ -50,12 +50,12 @@
 
 	<div class="px-12 py-6 mx-auto flex flex-row justify-center">
 		<div class="appointment my-8 mx-auto">
-			<h2 class="subheading main-text">Upcoming Appointments</h2>
+			<h2 class="subheading main-text font-kaisei">Upcoming Appointments</h2>
 			<OfficeHourSummary />
 			<OfficeHourSummary />
 			<OfficeHourSummary />
 			<div class="mt-12">
-				<h2 class="subheading main-text">TA Meetings:</h2>
+				<h2 class="subheading main-text font-kaisei">TA Meetings:</h2>
 				<OfficeHourSummary />
 			</div>
 		</div>
@@ -70,7 +70,6 @@
 
 <style>
 	.main-text {
-		font-family: "Kaisei HarunoUmi", serif;
 		font-size: 1rem;
 	}
 

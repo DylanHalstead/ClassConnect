@@ -1,10 +1,16 @@
 <script lang="ts">
-	import Calendar from "$lib/components/calendar/Calendar.svelte";
-	import { normalizeDateByWeek } from "$lib/utils";
-	import type { ExtendedAppointment, InstructionalMember, Student } from "$lib/types";
-
+	import { CalendarMode } from "$lib/components/calendar";
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";
-	import { SectionMemberType, WeekDay } from "$lib/types";
+	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
+	import CalendarHeading from "$lib/components/calendar/CalendarHeading.svelte";
+	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
+	import {
+		type ExtendedAppointment,
+		type InstructionalMember,
+		SectionMemberType,
+		type Student,
+		WeekDay
+	} from "$lib/types";
 
 	const calendarStartTime = new Date();
 
@@ -14,20 +20,8 @@
 
 	calendarEndTime.setHours(17, 0, 0, 0);
 
-	let calendarWeek = normalizeDateByWeek(new Date());
-
-	$: month = calendarWeek.toLocaleString("en-US", {
-		month: "long"
-	});
-
-	$: year = calendarWeek.toLocaleString("en-US", {
-		year: "numeric"
-	});
-
-	$: subheading = calendarWeek.toLocaleString("en-US", {
-		day: "2-digit",
-		month: "2-digit"
-	});
+	let calendarDate = new Date();
+	let calendarMode = CalendarMode.Weekly;
 
 	// TODO: Replace with real data
 	const course = {
@@ -94,32 +88,38 @@
 			id: "2"
 		}
 	];
+
+	$: calendarConfiguration = {
+		currentDate: calendarDate,
+		maximumStartTime: calendarStartTime,
+		minimumEndTime: calendarEndTime,
+		timeIncrement: 30 * 60 * 1000,
+		appointments: appointments,
+		gutterCellHeight: "8rem"
+	};
 </script>
 
 <div class="flex flex-col h-screen">
 	<div class="px-6 py-2">
 		<div class="flex justify-between items-end">
 			<div>
-				<h1 class="heading">
-					<span>{month}</span> <span class="text-primary">{year}</span>
-				</h1>
-
-				<h2 class="subheading text-primary">{subheading}</h2>
+				<CalendarHeading date={calendarDate} mode={calendarMode} />
 			</div>
 
 			<CalendarControls
-				week={calendarWeek}
-				on:changeWeek={event => (calendarWeek = event.detail)} />
+				currentDate={calendarDate}
+				mode={calendarMode}
+				on:changeWeek={event => (calendarDate = event.detail)}
+				on:changeMode={event => (calendarMode = event.detail)} />
 		</div>
 		<div class="divider divider-neutral my-2"></div>
 	</div>
 
 	<div class="grow min-h-0 p-4">
-		<Calendar
-			week={calendarWeek}
-			maximumStartTime={calendarStartTime}
-			minimumEndTime={calendarEndTime}
-			timeIncrement={1000 * 60 * 30}
-			{appointments} />
+		{#if calendarMode == CalendarMode.Daily}
+			<CalendarDaily configuration={calendarConfiguration} />
+		{:else}
+			<CalendarWeekly configuration={calendarConfiguration} />
+		{/if}
 	</div>
 </div>

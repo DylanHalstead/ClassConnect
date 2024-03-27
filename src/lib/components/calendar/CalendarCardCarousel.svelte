@@ -1,6 +1,6 @@
 <script lang="ts">
-	import CalendarCard from "$lib/components/calendar/CalendarCard.svelte";
 	import type { ExtendedAppointment } from "$lib/types";
+	import CalendarCard from "./CalendarCard.svelte";
 
 	export let appointments: ExtendedAppointment[];
 </script>
