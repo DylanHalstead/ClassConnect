@@ -75,7 +75,7 @@
 						<div
 							class="overflow-y-scroll p-2 relative z-10"
 							style:height={configuration.gutterCellHeight}>
-							<CalendarCardCarousel appointments={appointments} />
+							<CalendarCardCarousel {appointments} />
 						</div>
 					</td>
 				</tr>

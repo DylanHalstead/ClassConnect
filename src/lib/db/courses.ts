@@ -8,7 +8,7 @@ export async function createCourse(partialCourse: PartialCourse): Promise<Course
 			...partialCourse,
 
 			id: uuidv4()
-		}
+		};
 
 		await client.query({
 			text: `\

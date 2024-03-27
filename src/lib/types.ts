@@ -22,7 +22,7 @@ export interface PartialSection {
 	course_id: string;
 	section_number: number;
 	max_daily_bookable_hours: number;
-};
+}
 
 export type Section = PartialSection & {
 	id: string;
@@ -41,7 +41,7 @@ export interface PartialSectionMember {
 	user_id: string;
 	member_type: SectionMemberType;
 	is_restricted: boolean;
-};
+}
 
 export type SectionMember = PartialSectionMember & {
 	id: string;
@@ -106,7 +106,7 @@ export interface PartialAppointment {
 }
 
 export type Appointment = PartialAppointment & {
-	id: string
+	id: string;
 };
 
 export type ExtendedAppointment = Omit<Appointment, "appointment_block" | "student_id"> & {

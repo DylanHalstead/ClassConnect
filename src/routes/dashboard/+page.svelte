@@ -30,10 +30,14 @@
 		}
 
 		switch (selected) {
-			case 0: return "th";
-			case 1: return "st";
-			case 2: return "nd";
-			default: return "rd";
+			case 0:
+				return "th";
+			case 1:
+				return "st";
+			case 2:
+				return "nd";
+			default:
+				return "rd";
 		}
 	}
 

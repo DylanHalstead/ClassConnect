@@ -54,7 +54,7 @@ async function initializeDatabase() {
 		email: "dhalstea@uncc.edu",
 		first_name: "Dylan",
 		last_name: "Halstead"
-	})
+	});
 
 	const section = await createSection({
 		course_id: course.id,
@@ -78,7 +78,7 @@ async function initializeDatabase() {
 
 	const appointmentBlock1Time = new Date();
 
-	appointmentBlock1Time.setDate(appointmentBlock1Time.getDate() - appointmentBlock1Time.getDay())
+	appointmentBlock1Time.setDate(appointmentBlock1Time.getDate() - appointmentBlock1Time.getDay());
 	appointmentBlock1Time.setHours(9, 0, 0, 0);
 
 	const appointmentBlock2Time = new Date(appointmentBlock1Time);
