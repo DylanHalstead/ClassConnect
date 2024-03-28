@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { getFlash } from "sveltekit-flash-message";
 	import { page } from "$app/stores";
-	import "../app.css";
-	import Nav from "$lib/components/Nav.svelte";
 	import { invalidateAll } from "$app/navigation";
 	import { initialize } from "svelte-google-auth/client";
-
+	import "./app.css"
 	import type { PageData } from "./$types.js";
 
 	export let data: PageData;
@@ -16,14 +14,8 @@
 	});
 </script>
 
-<div class="flex">
-	<Nav data="data" />
+{#if $flash}
+	<p>{$flash.message}</p>
+{/if}
 
-	<div class="flex-1 ml-16">
-		{#if $flash}
-			<p>{$flash.message}</p>
-		{/if}
-
-		<slot />
-	</div>
-</div>
+<slot />
