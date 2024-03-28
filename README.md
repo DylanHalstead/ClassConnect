@@ -11,7 +11,7 @@ Class Connect is an scheduling application designed to streamline the process of
 - **SSO with Google**: Single Sign-On (SSO) functionality with Google accounts for authentication. Used to also verify that all accounts are UNC Charlotte students.
 - **Server Side Rendering**: For enhanced performance and user experience, the application has been built as a full-stack, Server Side Rendered application via [SvelteKit](https://kit.svelte.dev/).
 
-## Local Development 🛠️
+## 🛠️ Local Development
 ### Postgres
 This applaction requires a Postgres database to run. You can set up a local Postgres database with the following command using [Docker](https://docs.docker.com/get-docker/):
 
