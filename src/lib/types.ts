@@ -85,6 +85,8 @@ export type ExtendedAppointment = Omit<Appointment, "appointment_block" | "stude
 
 export type ExtendedSection = Omit<Section, "course_id"> & { course: Course };
 
+export type FlatExtendedSection = Section & Omit<Course, "id">;
+
 export type ExtendedSectionMember = Omit<SectionMember, "section_id" | "user_id"> & {
 	section: ExtendedSection;
 	user: User;

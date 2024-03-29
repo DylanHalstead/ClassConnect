@@ -24,7 +24,7 @@
   
   <div class="flex justify-between items-center mb-12">
     <h1 class="text-4xl font-bold font-kaisei">
-      ITSC 3155-091 | <span class="text-primary">Software Engineering</span>
+      {sectionName(data.section)} | <span class="text-primary">{data.section.course.course_name}</span>
     </h1>
     <button>
       <Icon src={Cog8Tooth} class="h-8 w-8 stroke-gray-800 hover:stroke-primary transition-colors duration-200 ease-out" />
