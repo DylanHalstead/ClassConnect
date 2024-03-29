@@ -1,7 +1,7 @@
 import type { QueryConfig, QueryResult } from "pg";
 import { withConnection } from "./index";
-import type { ExtendedSectionMember, FlatExtendedSectionMember, SectionMember } from "../types";
-import { flatExtendedSectionMemberToExtendedSectionMember } from "../utils";
+import type { ExtendedSectionMember, FlatExtendedSectionMember, SectionMember } from "$lib/types";
+import { flatExtendedSectionMemberToExtendedSectionMember } from "$lib/utils";
 
 export async function getUsersSectionMembers(userId: string): Promise<SectionMember[] | undefined> {
 	return withConnection(async client => {

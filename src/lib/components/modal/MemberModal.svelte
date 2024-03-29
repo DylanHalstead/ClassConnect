@@ -13,7 +13,6 @@
 </script>
 
 <Modal bind:this={modal}> 
-  <!-- name, email, member_id, is_restricted, member_type -->
   <div>
     <h2 class="font-bold text-xl">{userName(member.user)}</h2>
     <h3 class="text-sm text-gray-600">{member.id}</h3>

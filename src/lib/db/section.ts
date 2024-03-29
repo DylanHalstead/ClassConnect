@@ -1,7 +1,7 @@
 import { withConnection } from "./index";
 import type { QueryConfig, QueryResult } from "pg";
 import { ExtendedSection, FlatExtendedSection } from "$lib/types";
-import { flatExtendedSectionToExtendedSection } from "../utils";
+import { flatExtendedSectionToExtendedSection } from "$lib/utils";
 
 export async function getExtendedSection(sectionID: string): Promise<ExtendedSection | null> {
   return withConnection(async (connection) => {
