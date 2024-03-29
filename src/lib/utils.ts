@@ -3,7 +3,9 @@ import type {
 	AppointmentBlock,
 	Interval,
 	User,
-	ExtendedSection
+	ExtendedSection,
+	FlatExtendedSectionMember,
+	ExtendedSectionMember
 } from "./types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -101,6 +103,34 @@ export function postgresAppointmentBlockToAppointmentBlock(
 		duration: intervalToMilliseconds(postgresAppointmentBlock.duration)
 	};
 	return appointmentBlock;
+}
+
+export function flatExtendedSectionMemberToExtendedSectionMember(
+	flatExtendedSectionMember: FlatExtendedSectionMember
+): ExtendedSectionMember {
+	const extendedSectionMember = {
+		id: flatExtendedSectionMember.id,
+		section: {
+			id: flatExtendedSectionMember.section_id,
+			course: {
+				id: flatExtendedSectionMember.course_id,
+				department_code: flatExtendedSectionMember.department_code,
+				course_code: flatExtendedSectionMember.course_code,
+				course_name: flatExtendedSectionMember.course_name
+			},
+			section_number: flatExtendedSectionMember.section_number,
+			max_daily_bookable_hours: flatExtendedSectionMember.max_daily_bookable_hours
+		},
+		user: {
+			id: flatExtendedSectionMember.user_id,
+			email: flatExtendedSectionMember.email,
+			first_name: flatExtendedSectionMember.first_name,
+			last_name: flatExtendedSectionMember.last_name
+		},
+		member_type: flatExtendedSectionMember.member_type,
+		is_restricted: flatExtendedSectionMember.is_restricted
+	};
+	return extendedSectionMember;
 }
 
 export function sectionName(section: ExtendedSection): string {

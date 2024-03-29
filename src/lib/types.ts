@@ -19,10 +19,13 @@ export type Section = {
 	max_daily_bookable_hours: number;
 };
 
+/**
+ * @description Note that the order of these enums is used their level of authority (student at top index0).
+ */
 export enum SectionMemberType {
-	Instructor = "instructor",
+	Student = "student",
 	TA = "ta",
-	Student = "student"
+	Instructor = "instructor",
 }
 
 export type SectionMember = {
@@ -86,6 +89,8 @@ export type ExtendedSectionMember = Omit<SectionMember, "section_id" | "user_id"
 	section: ExtendedSection;
 	user: User;
 };
+
+export type FlatExtendedSectionMember = SectionMember & Omit<User, "id"> & Omit<Course, "id"> & Omit<Section, "id">;
 
 export type InstructionalMember = Omit<ExtendedSectionMember, "member_type"> & {
 	member_type: SectionMemberType.Instructor | SectionMemberType.TA;
