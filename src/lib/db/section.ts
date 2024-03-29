@@ -4,8 +4,8 @@ import { ExtendedSection, FlatExtendedSection } from "$lib/types";
 import { flatExtendedSectionToExtendedSection } from "$lib/utils";
 
 export async function getExtendedSection(sectionID: string): Promise<ExtendedSection | null> {
-  return withConnection(async (connection) => {
-    const query: QueryConfig = {
+	return withConnection(async connection => {
+		const query: QueryConfig = {
 			text: `
         SELECT
           s.id,
@@ -22,11 +22,11 @@ export async function getExtendedSection(sectionID: string): Promise<ExtendedSec
 			values: [sectionID]
 		};
 
-    const res: QueryResult<FlatExtendedSection> = await connection.query(query);
-    if (res.rows.length === 0) {
+		const res: QueryResult<FlatExtendedSection> = await connection.query(query);
+		if (res.rows.length === 0) {
 			return undefined;
 		}
-    const row = res.rows[0];
+		const row = res.rows[0];
 		return flatExtendedSectionToExtendedSection(row);
-  });
+	});
 }

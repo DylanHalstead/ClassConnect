@@ -134,17 +134,19 @@ export function flatExtendedSectionMemberToExtendedSectionMember(
 	return extendedSectionMember;
 }
 
-export function flatExtendedSectionToExtendedSection(flatExtendedSection: FlatExtendedSection): ExtendedSection {
+export function flatExtendedSectionToExtendedSection(
+	flatExtendedSection: FlatExtendedSection
+): ExtendedSection {
 	const extendedSection = {
 		id: flatExtendedSection.id,
 		course: {
 			id: flatExtendedSection.course_id,
 			department_code: flatExtendedSection.department_code,
 			course_name: flatExtendedSection.course_name,
-			course_code: flatExtendedSection.course_code,
+			course_code: flatExtendedSection.course_code
 		},
 		section_number: flatExtendedSection.section_number,
-		max_daily_bookable_hours: flatExtendedSection.max_daily_bookable_hours,
+		max_daily_bookable_hours: flatExtendedSection.max_daily_bookable_hours
 	};
 	return extendedSection;
 }

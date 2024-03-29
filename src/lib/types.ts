@@ -25,7 +25,7 @@ export type Section = {
 export enum SectionMemberType {
 	Student = "student",
 	TA = "ta",
-	Instructor = "instructor",
+	Instructor = "instructor"
 }
 
 export type SectionMember = {
@@ -92,7 +92,10 @@ export type ExtendedSectionMember = Omit<SectionMember, "section_id" | "user_id"
 	user: User;
 };
 
-export type FlatExtendedSectionMember = SectionMember & Omit<User, "id"> & Omit<Course, "id"> & Omit<Section, "id">;
+export type FlatExtendedSectionMember = SectionMember &
+	Omit<User, "id"> &
+	Omit<Course, "id"> &
+	Omit<Section, "id">;
 
 export type InstructionalMember = Omit<ExtendedSectionMember, "member_type"> & {
 	member_type: SectionMemberType.Instructor | SectionMemberType.TA;
