@@ -4,12 +4,14 @@
 	import type { PageData } from "./$types.js";
   import { Icon, Cog8Tooth, EllipsisVertical } from "svelte-hero-icons";
   import MemberModal from "$lib/components/modal/MemberModal.svelte";
+  import Modal from "$lib/components/modal/Modal.svelte";
   import { SectionMemberType, type ExtendedSectionMember } from "$lib/types";
   import { userName, sectionName } from "$lib/utils";
 
   export let data: PageData;
   initialize(data, invalidateAll);
 
+  let sectionSettingsModal: Modal;
   let memberModal: MemberModal;
   let modalMember: ExtendedSectionMember = data.sectionMembers[0];
 
@@ -26,14 +28,41 @@
     <h1 class="text-4xl font-bold font-kaisei">
       {sectionName(data.section)} | <span class="text-primary">{data.section.course.course_name}</span>
     </h1>
-    <button>
-      <Icon src={Cog8Tooth} class="h-8 w-8 stroke-gray-800 hover:stroke-primary transition-colors duration-200 ease-out" />
+    <button on:click={sectionSettingsModal.open}>
+      <Icon src={Cog8Tooth} class="h-8 w-8 stroke-gray-800 hover:stroke-primary hover:rotate-45 transition-all duration-200 ease-out" />
     </button>
   </div>
 
-
-  <MemberModal bind:this={memberModal} member={modalMember} />
+  <Modal bind:this={sectionSettingsModal}>
+    <div>
+      <h2 class="font-bold text-xl mb-1">Settings</h2>
+      <h3 class="text-sm text-gray-600">ID: {data.section.id}</h3>
+    </div>
+    <form method="POST">
+      <div class="flow-root my-5">
+        <dl class="-my-3 divide-y divide-gray-400 text-sm">
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 items-center">
+            <dt class="font-medium text-gray-900">Maximum Daily Bookable Hours</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              <input type="number" min="0" step=".25" value={data.section.max_daily_bookable_hours} class="input input-bordered input-primary w-full max-w-xs" />
+            </dd>
+          </div>
+          <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 items-center">
+            <dt class="font-medium text-gray-900">Section Number</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              <input type="number" min="0" value={data.section.section_number} class="input input-bordered input-primary w-full max-w-xs" />
+            </dd>
+          </div>    
+        </dl>
+      </div>  
+      <div class="flex justify-between">
+        <button type="button" class="btn btn-error">Delete</button>
+        <button type="submit" class="btn btn-primary text-white">Save Changes</button>
+      </div>
+    </form>
+  </Modal>
   
+  <MemberModal bind:this={memberModal} member={modalMember} />
   <div class="overflow-x-auto rounded-lg border border-gray-200">
     <table class="min-w-full max-w-sm divide-y-2 divide-gray-200 bg-white text-sm">
       <thead class="text-left">
@@ -58,23 +87,11 @@
           <td class="whitespace-nowrap px-4 py-2 text-gray-900">{member.member_type == SectionMemberType.Student ? (member.is_restricted ? 'Yes' : 'No') : "N/A"}</td>
           <td class="whitespace-nowrap w-8 pr-8 pl-4 py-2">
             <button on:click={() => {openMemberModal(member)}}>
-              <Icon src={EllipsisVertical} class="h-8 w-8 stroke-gray-400 hover:stroke-gray-800 transition-colors duration-200 ease-in-out" />
+              <Icon src={EllipsisVertical} class="h-8 w-8 stroke-gray-400 rounded-full hover:stroke-gray-700 hover:bg-gray-700/20 transition-colors duration-200 ease-in-out" />
             </button>
           </td>
         </tr>
         {/each}
-        
-        <!-- <tr>
-          <td class="whitespace-nowrap pl-8 pr-4 py-2 font-medium text-gray-900">Dylan Halstead</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-900">dhalstea@uncc.edu</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-900">Student</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-900">No</td>
-          <td class="whitespace-nowrap w-8 pr-8 pl-4 py-2">
-            <button on:click={memberModal.open}>
-              <Icon src={EllipsisVertical} class="h-8 w-8 stroke-gray-400 hover:stroke-gray-800 transition-colors duration-200 ease-in-out" />
-            </button>
-          </td>
-        </tr> -->
       </tbody>
     </table>
   </div>
