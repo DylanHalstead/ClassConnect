@@ -78,7 +78,7 @@
       <tbody class="divide-y divide-gray-200">
         {#each data.sectionMembers.sort((a, b) => {
           const possibleTypes = Object.values(SectionMemberType)
-          return possibleTypes.indexOf(a.member_type) - possibleTypes.indexOf(b.member_type)
+          return possibleTypes.indexOf(b.member_type) - possibleTypes.indexOf(a.member_type)
         }) as member}
         <tr>
           <td class="whitespace-nowrap pl-8 pr-4 py-2 font-medium text-gray-900">{userName(member.user)}</td>
