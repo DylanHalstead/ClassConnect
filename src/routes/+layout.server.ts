@@ -34,8 +34,8 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch,
 			}
 		}
 
-		if (url.pathname === '/') {
-			redirect(302, '/dashboard')
+		if (url.pathname === "/") {
+			redirect(302, "/dashboard");
 		}
 		if (user) {
 			db = {
