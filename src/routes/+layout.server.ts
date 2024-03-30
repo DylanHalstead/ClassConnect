@@ -5,10 +5,12 @@ import type { User } from "$lib/types";
 import type { LayoutServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 
-export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch, url }) => {
-	let db: {
-		user: User;
-	} | null = null;
+export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch, url}) => {
+	let db:
+		| {
+				user: User;
+		  }
+		| undefined = undefined;
 	// If the user has signed in with google but hasn't grabbed their data from the database
 	if (!locals.db && isSignedIn(locals)) {
 		let user = await getUserByEmail(locals.user.email);
@@ -35,6 +37,17 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch,
 		if (url.pathname === '/') {
 			redirect(302, '/dashboard')
 		}
+		if (user) {
+			db = {
+				user: user
+			};
+			cookies.set("userID", db.user.id, { path: "/" });
+		}
+		const message = {
+			type: messageType,
+			message: messageContent
+		};
+		setFlash(message, cookies);
 	}
 
 	return { ...hydrateAuth(locals), db };
