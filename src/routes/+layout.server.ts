@@ -13,7 +13,7 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
 	// If the user has signed in with google but hasn't grabbed their data from the database
 	if (!locals.db && isSignedIn(locals)) {
 		let user = await getUserByEmail(locals.user.email);
-		let messageType = "";
+		let messageType: "success" | "error";
 		let messageContent = "";
 		if (user) {
 			messageType = "success";
@@ -27,7 +27,12 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
 				messageType = "error";
 				messageContent = "You must use a UNC Charlotte email address to sign in.";
 			} else {
-				user = await createUser(locals.user.email, locals.user.given_name, locals.user.family_name);
+				user = await createUser({
+					email: locals.user.email,
+					first_name: locals.user.given_name,
+					last_name: locals.user.family_name
+				});
+
 				messageType = "success";
 				messageContent = "Created account successfully!";
 			}
