@@ -2,6 +2,7 @@
 	import BookingForm from "$lib/components/dashboard/BookingForm.svelte";
 	import OfficeHourSummary from "$lib/components/dashboard/OfficeHourSummary.svelte";
 	import { WeekDay } from "$lib/types";
+	import Header from "$lib/components/Header.svelte";
 
 	const currentDate = new Date();
 	const dayNumber = currentDate.getDay();
@@ -36,17 +37,19 @@
 </script>
 
 <div class="px-12 py-2">
-	<div class="flex flex-row w-full">
-		<div class="flex justify-between w-full">
-			<h1 class="main-text header capitalize">
-				{DayOfWeek}, {month}
-				{day}<sup class="text-primary">{dateSuffix}</sup>
-			</h1>
-			<h1 class="main-text header-year text-primary px-8">{year}</h1>
+	<Header>
+		<div class="header-component">
+			<div class="flex flex-row w-full">
+				<div class="flex justify-between w-full">
+					<h1 class="main-text header capitalize">
+						{DayOfWeek}, {month}
+						{day}<sup class="text-primary">{dateSuffix}</sup>
+					</h1>
+					<h1 class="main-text header-year text-primary px-8">{year}</h1>
+				</div>
+			</div>
 		</div>
-	</div>
-
-	<div class="border-t-4 border-solid border-gray-500 my-4 me-36"></div>
+	</Header>
 
 	<div class="px-12 py-6 mx-auto flex flex-row justify-center">
 		<div class="appointment my-8 mx-auto">
