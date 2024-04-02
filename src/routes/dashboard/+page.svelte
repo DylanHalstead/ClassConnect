@@ -30,7 +30,16 @@
 			selected = i % 10;
 		}
 
-		return ["th", "st", "nd", "rd"][selected];
+		switch (selected) {
+			case 0:
+				return "th";
+			case 1:
+				return "st";
+			case 2:
+				return "nd";
+			default:
+				return "rd";
+		}
 	}
 
 	const dateSuffix = getNumSuffix(currentDate.getDate());
@@ -53,12 +62,12 @@
 
 	<div class="px-12 py-6 mx-auto flex flex-row justify-center">
 		<div class="appointment my-8 mx-auto">
-			<h2 class="subheading main-text">Upcoming Appointments</h2>
+			<h2 class="subheading main-text font-kaisei">Upcoming Appointments</h2>
 			<OfficeHourSummary />
 			<OfficeHourSummary />
 			<OfficeHourSummary />
 			<div class="mt-12">
-				<h2 class="subheading main-text">TA Meetings:</h2>
+				<h2 class="subheading main-text font-kaisei">TA Meetings:</h2>
 				<OfficeHourSummary />
 			</div>
 		</div>
@@ -73,7 +82,6 @@
 
 <style>
 	.main-text {
-		font-family: "Kaisei HarunoUmi", serif;
 		font-size: 1rem;
 	}
 

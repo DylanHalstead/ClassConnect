@@ -1,10 +1,10 @@
 import type { Actions } from "./$types";
-import { AppointmentBlock, WeekDay } from "$lib/types";
+import { type AppointmentBlock, WeekDay } from "$lib/types";
 import {
 	getMembersAppointmentBlocks,
 	createAppointmentBlock,
 	deleteAppointmentBlocks
-} from "$lib/db/appointmentBlocks";
+} from "$lib/db/appointmentblocks";
 import { formTimeToDate, getEnumValue } from "$lib/utils";
 import { redirect, error } from "@sveltejs/kit";
 import {
@@ -87,7 +87,7 @@ export const actions: Actions = {
 		}
 		// if there are mergeable blocks, delete them and adjust the start and end times
 		if (mergeableBlocks.length > 0) {
-			if (deleteAppointmentBlocks(mergeableBlocks.map(block => block.id)) === undefined) {
+			if (await deleteAppointmentBlocks(mergeableBlocks.map(block => block.id))) {
 				error(500, "Internal server error: Failed to delete conflicting blocks");
 			}
 			const earliestStart = new Date(
@@ -103,7 +103,14 @@ export const actions: Actions = {
 			end.setTime(latestEnd.getTime());
 			duration = latestEnd.getTime() - earliestStart.getTime();
 		}
-		await createAppointmentBlock(params.memberID, dayOfWeek, start, duration);
+
+		await createAppointmentBlock({
+			instructional_member_id: params.memberID,
+			week_day: dayOfWeek,
+			start_time: start,
+			duration
+		});
+
 		redirect(303, `/courses/${params.courseID}/sections/${params.sectionID}`);
 	}
 };

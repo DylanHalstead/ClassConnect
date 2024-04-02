@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import type { QueryConfig, QueryResult } from "pg";
-import { withConnection } from "./index";
-import type { User } from "../types";
+import { withConnection } from ".";
+import type { PartialUser, User } from "$lib/types";
 
 export async function getUser(id: string): Promise<User | undefined> {
 	return withConnection(async client => {
@@ -35,27 +35,22 @@ export async function getUserByEmail(email: string): Promise<User | undefined> {
 	});
 }
 
-export async function createUser(
-	email: string,
-	firstName: string,
-	lastName: string
-): Promise<User | undefined> {
+export async function createUser(partialUser: PartialUser): Promise<User> {
 	return withConnection(async client => {
 		const newUser: User = {
-			id: uuidv4(),
-			email: email,
-			first_name: firstName,
-			last_name: lastName
+			...partialUser,
+
+			id: uuidv4()
 		};
 
 		const query: QueryConfig = {
-			text: "INSERT INTO users (id, email, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING users.id, users.email, users.first_name, users.last_name",
+			text: "INSERT INTO users (id, email, first_name, last_name) VALUES ($1, $2, $3, $4)",
 			values: [newUser.id, newUser.email, newUser.first_name, newUser.last_name]
 		};
 
-		const res: QueryResult<User> = await client.query(query);
-		const user = res.rows[0];
-		return user;
+		await client.query(query);
+
+		return newUser;
 	});
 }
 

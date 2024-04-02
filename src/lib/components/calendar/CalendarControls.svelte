@@ -1,24 +1,27 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import { ArrowLeft, ArrowRight, Icon } from "svelte-hero-icons";
-	import { normalizeDateByWeek } from "$lib/utils";
+	import { CalendarMode } from "$lib/components/calendar";
+	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/datemanipulation";
 
 	/**
-	 * The date whose week the calendar is currently focused on.
+	 * The date the calendar is currently focused on.
 	 *
-	 * @see {@link $lib/components/calendar/Calendar.svelte}'s `week` prop for more information.
+	 * @see {@link $lib/components/calendar/CalendarWeekly.svelte}'s `week` prop for more
+	 * information.
 	 */
-	export let week: Date;
+	export let currentDate: Date;
+	export let mode: CalendarMode;
 
-	$: weekNormalized = normalizeDateByWeek(week);
-	$: date = weekNormalized.getDate();
+	$: dateNormalized =
+		mode == CalendarMode.Daily ? normalizeDateByDay(currentDate) : normalizeDateByWeek(currentDate);
 
 	let dateOptions: number[];
 
 	$: {
 		dateOptions = [];
 
-		const current = new Date(weekNormalized);
+		const current = new Date(dateNormalized);
 
 		current.setDate(1);
 
@@ -32,14 +35,12 @@
 		}
 	}
 
-	$: monthName = weekNormalized.toLocaleString("en-US", {
-		month: "long"
-	});
-
-	$: year = weekNormalized.getFullYear();
+	$: directionalButtonTimeDelta =
+		mode == CalendarMode.Daily ? 1000 * 60 * 60 * 24 : 1000 * 60 * 60 * 24 * 7;
 
 	const dispatch = createEventDispatcher<{
 		changeWeek: Date;
+		changeMode: CalendarMode;
 	}>();
 
 	const months = new Map<string, number>(
@@ -60,34 +61,41 @@
 	);
 
 	function handleLeftButtonClick() {
-		const result = new Date(week);
+		const result = new Date(currentDate);
 
-		result.setTime(result.getTime() - 1000 * 60 * 60 * 24 * 7);
+		result.setTime(result.getTime() - directionalButtonTimeDelta);
 
 		dispatch("changeWeek", result);
 	}
 
 	function handleRightButtonClick() {
-		const result = new Date(week);
+		const result = new Date(currentDate);
 
-		result.setTime(result.getTime() + 1000 * 60 * 60 * 24 * 7);
+		result.setTime(result.getTime() + directionalButtonTimeDelta);
 
 		dispatch("changeWeek", result);
 	}
 
 	function handleDateChange(event: Event & { currentTarget: HTMLSelectElement }) {
-		const result = new Date(weekNormalized);
+		const result = new Date(dateNormalized);
 
 		result.setDate(parseInt(event.currentTarget.value));
 
-		dispatch("changeWeek", normalizeDateByWeek(result));
+		dispatch("changeWeek", result);
+	}
+
+	function handleModeChange(event: Event & { currentTarget: HTMLSelectElement }) {
+		dispatch(
+			"changeMode",
+			event.currentTarget.value == CalendarMode.Daily ? CalendarMode.Daily : CalendarMode.Weekly
+		);
 	}
 
 	function handleMonthChange(event: Event & { currentTarget: HTMLSelectElement }) {
 		const i = months.get(event.currentTarget.value);
 
 		if (i != undefined) {
-			const result = new Date(weekNormalized);
+			const result = new Date(dateNormalized);
 
 			result.setMonth(i);
 
@@ -99,7 +107,7 @@
 		const i = event.currentTarget.valueAsNumber;
 
 		if (!isNaN(i)) {
-			const result = new Date(weekNormalized);
+			const result = new Date(dateNormalized);
 
 			result.setFullYear(i);
 
@@ -108,30 +116,45 @@
 	}
 </script>
 
-<div class="flex items-center">
-	<select class="select select-bordered me-1" value={monthName} on:change={handleMonthChange}>
-		{#each months as [month, _]}
-			<option>{month}</option>
-		{/each}
+<div class="flex flex-col items-end">
+	<select class="select bg-secondary mb-1.5 rounded-full" value={mode} on:change={handleModeChange}>
+		<option value={CalendarMode.Daily}>Daily</option>
+		<option value={CalendarMode.Weekly}>Weekly</option>
 	</select>
 
-	<select class="select select-bordered me-1" value={date} on:change={handleDateChange}>
-		{#each dateOptions as date}
-			<option>{date}</option>
-		{/each}
-	</select>
+	<div class="flex items-center">
+		<select
+			class="select select-bordered me-1"
+			value={dateNormalized.toLocaleString("en-US", {
+				month: "long"
+			})}
+			on:change={handleMonthChange}>
+			{#each months as [month, _]}
+				<option>{month}</option>
+			{/each}
+		</select>
 
-	<input
-		type="number"
-		class="input input-bordered me-3 w-28"
-		value={year}
-		on:change={handleYearChange} />
+		<select
+			class="select select-bordered me-1"
+			value={dateNormalized.getDate()}
+			on:change={handleDateChange}>
+			{#each dateOptions as date}
+				<option>{date}</option>
+			{/each}
+		</select>
 
-	<button type="button" class="btn btn-circle btn-sm me-2" on:click={handleLeftButtonClick}>
-		<Icon size="24" src={ArrowLeft} />
-	</button>
+		<input
+			type="number"
+			class="input input-bordered me-3 w-28"
+			value={dateNormalized.getFullYear()}
+			on:change={handleYearChange} />
 
-	<button type="button" class="btn btn-circle btn-sm" on:click={handleRightButtonClick}>
-		<Icon size="24" src={ArrowRight} />
-	</button>
+		<button type="button" class="btn btn-circle btn-sm me-2" on:click={handleLeftButtonClick}>
+			<Icon size="24" src={ArrowLeft} />
+		</button>
+
+		<button type="button" class="btn btn-circle btn-sm" on:click={handleRightButtonClick}>
+			<Icon size="24" src={ArrowRight} />
+		</button>
+	</div>
 </div>
