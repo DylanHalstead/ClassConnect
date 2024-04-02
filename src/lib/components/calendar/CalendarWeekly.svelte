@@ -14,6 +14,7 @@
 	} from "$lib/dateManipulation";
 
 	import type { ExtendedAppointment } from "$lib/types";
+	import { createEventDispatcher } from "svelte";
 
 	export let configuration: CalendarConfiguration;
 
@@ -81,6 +82,10 @@
 		});
 	}
 
+	const dispatch = createEventDispatcher<{
+		appointmentClicked: ExtendedAppointment;
+	}>();
+
 	const gutterTopMargin = "6rem";
 
 	function formatColumnDate(date: Date): string {
@@ -135,7 +140,9 @@
 							class:border-b={i < rowCount - 1}
 							class:border-e={j == 6}>
 							<div class="overflow-y-scroll p-2" style:height={configuration.gutterCellHeight}>
-								<CalendarCardCarousel appointments={getAppointments(i, j)} />
+								<CalendarCardCarousel
+									appointments={getAppointments(i, j)}
+									on:appointmentClicked={event => dispatch("appointmentClicked", event.detail)} />
 							</div>
 						</td>
 					{/each}

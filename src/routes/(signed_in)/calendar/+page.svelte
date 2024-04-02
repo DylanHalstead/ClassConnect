@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { CalendarMode } from "$lib/components/calendar";
+	import CalendarBookingModal from "$lib/components/calendar/CalendarBookingModal.svelte";
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";
 	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
 	import Header from "$lib/components/Header.svelte";
@@ -97,6 +98,14 @@
 		appointments: appointments,
 		gutterCellHeight: "8rem"
 	};
+
+	let bookingAppointment: ExtendedAppointment | undefined;
+	let bookingModalOpen = false;
+
+	function handleAppointmentClicked(event: CustomEvent<ExtendedAppointment>) {
+		bookingAppointment = event.detail;
+		bookingModalOpen = true;
+	}
 </script>
 
 <div class="flex flex-col h-screen">
@@ -110,9 +119,18 @@
 
 	<div class="grow min-h-0 p-4">
 		{#if calendarMode == CalendarMode.Daily}
-			<CalendarDaily configuration={calendarConfiguration} />
+			<CalendarDaily
+				configuration={calendarConfiguration}
+				on:appointmentClicked={event => handleAppointmentClicked(event)} />
 		{:else}
-			<CalendarWeekly configuration={calendarConfiguration} />
+			<CalendarWeekly
+				configuration={calendarConfiguration}
+				on:appointmentClicked={event => handleAppointmentClicked(event)} />
 		{/if}
 	</div>
 </div>
+
+<CalendarBookingModal
+	appointment={bookingAppointment}
+	isOpen={bookingModalOpen}
+	on:close={() => (bookingModalOpen = false)} />
