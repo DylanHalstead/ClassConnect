@@ -3,8 +3,9 @@ import { loadFlash, setFlash } from "sveltekit-flash-message/server";
 import { getUserByEmail, createUser } from "$lib/db/users";
 import type { User } from "$lib/types";
 import type { LayoutServerLoad } from "./$types";
+import { redirect } from "@sveltejs/kit";
 
-export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch }) => {
+export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch, url }) => {
 	let db:
 		| {
 				user: User;
@@ -37,6 +38,7 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
 				messageContent = "Created account successfully!";
 			}
 		}
+
 		if (user) {
 			db = {
 				user: user
@@ -48,6 +50,10 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch 
 			message: messageContent
 		};
 		setFlash(message, cookies);
+
+		if (url.pathname === "/") {
+			redirect(302, "/dashboard");
+		}
 	}
 
 	return { ...hydrateAuth(locals), db };
