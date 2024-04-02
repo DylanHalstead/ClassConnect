@@ -5,10 +5,11 @@ import type { User } from "$lib/types";
 import type { LayoutServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 
-export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch, url}) => {
-	let db: {
+export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch, url }) => {
+	let db:
+		| {
 				user: User;
-		}
+		  }
 		| undefined = undefined;
 	// If the user has signed in with google but hasn't grabbed their data from the database
 	if (!locals.db && isSignedIn(locals)) {
