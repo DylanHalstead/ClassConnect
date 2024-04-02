@@ -1,4 +1,4 @@
-import type { QueryConfig } from "pg";
+import type { QueryConfig, QueryResult } from "pg";
 import { v4 as uuidv4 } from "uuid";
 import type { PartialSectionMember, SectionMember } from "$lib/types";
 import { withConnection } from ".";
@@ -29,5 +29,18 @@ VALUES ($1, $2, $3, $4, $5)`,
 		await client.query(query);
 
 		return newSectionMember;
+	});
+}
+
+export async function getUsersSectionMembers(userId: string): Promise<SectionMember[]> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: "SELECT sm.id, sm.section_id, sm.user_id, sm.member_type, sm.is_restricted FROM section_members sm WHERE sm.user_id = $1",
+			values: [userId]
+		};
+
+		const result: QueryResult<SectionMember> = await client.query(query);
+
+		return result.rows;
 	});
 }

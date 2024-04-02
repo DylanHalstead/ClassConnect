@@ -19,7 +19,7 @@ export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date | und
 	}
 
 	const [hours, minutes] = time.split(":").map(num => parseInt(num));
-	if (isNaN(hours) || isNaN(minutes)) {
+	if (hours == undefined || minutes == undefined || isNaN(hours) || isNaN(minutes)) {
 		return undefined;
 	}
 
@@ -38,7 +38,7 @@ export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date | und
 export function formTimeToDate(time: string): Date | undefined {
 	const date = new Date(0);
 	const [hours, minutes] = time.split(":").map(num => parseInt(num));
-	if (isNaN(hours) || isNaN(minutes)) {
+	if (hours == undefined || minutes == undefined || isNaN(hours) || isNaN(minutes)) {
 		return undefined;
 	}
 	date.setHours(hours);
@@ -66,24 +66,6 @@ export function intervalToMilliseconds(interval: Interval): number {
 
 	const totalMilliseconds = hours * millisecondsPerHour + minutes * millisecondsPerMinute;
 	return totalMilliseconds;
-}
-
-export function dateToPostgresTimeWithTimeZone(date: Date): string {
-	const hours = date.getUTCHours();
-	const minutes = date.getUTCMinutes();
-	const getTimezoneOffset = date.getTimezoneOffset() / 60;
-
-	return `${hours}:${minutes}-0${getTimezoneOffset}`;
-}
-
-export function millisecondsToIntervalString(milliseconds: number): string {
-	const seconds = Math.floor(milliseconds / 1000);
-	const minutes = Math.floor(seconds / 60);
-	const hours = Math.floor(minutes / 60);
-	const days = Math.floor(hours / 24);
-
-	const intervalString = `${days} days ${hours % 24} hours ${minutes % 60} minutes ${seconds % 60} seconds`;
-	return intervalString;
 }
 
 export function postgresAppointmentBlockToAppointmentBlock(

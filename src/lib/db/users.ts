@@ -35,7 +35,7 @@ export async function getUserByEmail(email: string): Promise<User | undefined> {
 	});
 }
 
-export async function createUser(partialUser: PartialUser): Promise<User | undefined> {
+export async function createUser(partialUser: PartialUser): Promise<User> {
 	return withConnection(async client => {
 		const newUser: User = {
 			...partialUser,
