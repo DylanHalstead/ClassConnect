@@ -30,13 +30,19 @@
   let currentType = notifcationType['info'];
   
   let isVisible =  false;
+  const incomingDelay = 100;
+  const dismissDelay = 3000;
   $: if ($flash) {
-    isVisible = true;
+    setTimeout(() => {
+      isVisible = true;
+    }, incomingDelay)
+
     currentType = notifcationType[$flash.type];
+    
     setTimeout(() => {
       isVisible = false;
       $flash = undefined;
-    }, 3000)
+    }, dismissDelay)
   }
 </script>
 
