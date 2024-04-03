@@ -14,7 +14,7 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 		interface PageData {
-			flash?: { type: "success" | "error"; message: string };
+			flash?: { type: "success" | "error" | "info"; message: string };
 		}
 	}
 }

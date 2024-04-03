@@ -13,8 +13,8 @@ export default {
 					"accent": "#28546c",
 					"neutral": "#bfbfbf",
 					"base-100": "#f4f8fb",
-					"info": "#9ac3db",
-					"success": "#33c95d",
+					"info": "#0d9488",
+					"success": "#129637",
 					"error": "#c02626"
 				}
 			}

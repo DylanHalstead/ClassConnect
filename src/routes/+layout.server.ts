@@ -56,5 +56,11 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals, cookies, fetch,
 		}
 	}
 
+	const bruh = {
+		type: "error",
+		message: "You did someting?"
+	} as const;
+	setFlash(bruh, cookies);
+
 	return { ...hydrateAuth(locals), db };
 });
