@@ -29,21 +29,21 @@
   }
   let currentType = notifcationType['info'];
   
-  let shouldShow =  false;
+  let isVisible =  false;
   $: if ($flash) {
-    shouldShow = true;
-    currentType = notifcationType[$flash.type] || notifcationType['info'];
+    isVisible = true;
+    currentType = notifcationType[$flash.type];
     setTimeout(() => {
-      shouldShow = false;
+      isVisible = false;
       $flash = undefined;
     }, 3000)
   }
 </script>
 
-{#if shouldShow && $flash}
+{#if isVisible && $flash}
   <div transition:slide={{ delay: 100, duration: 200, easing: quintInOut, axis: 'y' }} class={cn("flex items-center justify-center w-fit backdrop-blur-md rounded-md text-sm p-1 fixed m-auto left-0 right-0 top-4 z-50 border-2", currentType.classNames)}>
     <Icon src={currentType.icon} class="w-6 h-6" />
     <p class="ml-2 mr-1">{$flash.message}</p>
-    <button on:click={() => shouldShow = false} class="btn btn-sm btn-circle btn-ghost">✕</button>
+    <button on:click={() => isVisible = false} class="btn btn-sm btn-circle btn-ghost">✕</button>
   </div>
 {/if}
