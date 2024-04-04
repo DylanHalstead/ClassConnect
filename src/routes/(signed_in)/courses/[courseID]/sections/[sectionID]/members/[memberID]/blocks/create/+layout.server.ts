@@ -5,7 +5,7 @@ import { verifyUserIsApartOfInstructionalTeam, verifyUserIsMember } from "$lib/a
 
 export const load: LayoutServerLoad = loadFlash(async ({ cookies, params, parent }) => {
 	const parentVals = await parent();
-	const userID: string | undefined = parentVals['userID'];
+	const userID: string | undefined = parentVals["userID"];
 	const { sectionID, memberID } = params;
 	if (!userID || !sectionID || !memberID) {
 		const errorMessage =

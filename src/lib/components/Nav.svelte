@@ -1,36 +1,44 @@
 <script lang="ts">
 	import { signOut } from "svelte-google-auth/client";
-	import { Icon, User as UserIcon, Calendar, BookOpen, ArrowLeftEndOnRectangle } from "svelte-hero-icons";
+	import {
+		Icon,
+		User as UserIcon,
+		Calendar,
+		BookOpen,
+		ArrowLeftEndOnRectangle
+	} from "svelte-hero-icons";
 	import type { User } from "$lib/types";
 
 	export let data: {
-    db: {
-        user: User;
-    } | undefined;
+		db:
+			| {
+					user: User;
+			  }
+			| undefined;
 		// type built from svelte-google-auth/server types; cannot import to client
-    auth: {
+		auth: {
 			client_id: string;
 			user?: {
-					iss: string;
-					azp: string;
-					aud: string;
-					sub: string;
-					hd: string;
-					email: string;
-					email_verified: string;
-					at_hash: string;
-					name: string;
-					picture: string;
-					given_name: string;
-					family_name: string;
-					locale: string;
-					iat: string;
-					exp: string;
+				iss: string;
+				azp: string;
+				aud: string;
+				sub: string;
+				hd: string;
+				email: string;
+				email_verified: string;
+				at_hash: string;
+				name: string;
+				picture: string;
+				given_name: string;
+				family_name: string;
+				locale: string;
+				iat: string;
+				exp: string;
 			};
 			access_token?: string;
 		};
-    userID: string | undefined;
-};
+		userID: string | undefined;
+	};
 </script>
 
 <div class="fixed z-50">

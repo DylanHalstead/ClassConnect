@@ -16,11 +16,16 @@
 	function validateDates() {
 		const splitStartTime = startTime.split(":");
 		const splitEndTime = endTime.split(":");
-		if (splitStartTime[0] === undefined || splitStartTime[1] === undefined || splitEndTime[0] === undefined || splitEndTime[1] === undefined) {
+		if (
+			splitStartTime[0] === undefined ||
+			splitStartTime[1] === undefined ||
+			splitEndTime[0] === undefined ||
+			splitEndTime[1] === undefined
+		) {
 			areDatesValid = false;
 			return;
 		}
-		
+
 		const startHour = parseInt(splitStartTime[0]);
 		const startMinute = parseInt(splitStartTime[1]);
 		const endHour = parseInt(splitEndTime[0]);
