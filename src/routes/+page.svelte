@@ -12,6 +12,14 @@
 		VideoCamera,
 		PaperAirplane
 	} from "svelte-hero-icons";
+	import { invalidateAll } from "$app/navigation";
+	import { signIn, initialize } from "svelte-google-auth/client";
+	import { updateFlash } from "sveltekit-flash-message";
+	import { page } from "$app/stores";
+	import type { PageData } from "./$types.js";
+
+	export let data: PageData;
+	initialize(data, invalidateAll);
 
 	const teamMembers = [
 		{
@@ -115,6 +123,27 @@
 		Making <span class="text-primary">Office Hours</span> Fast, Functional, and
 		<span class="text-primary">Seamless</span>
 	</h2>
+
+	<div class="flex items-center justify-center z-50">
+		<button
+			class="btn btn-outline btn-primary text-white relative mb-5 px-8 py-4 hover:bg-primary"
+			on:click={async () => {
+				await signIn();
+				invalidateAll();
+				updateFlash(page);
+			}}>
+			Login
+		</button>
+		<button
+			class="btn btn-primary relative mb-5 mx-8 px-6 py-4 hover:bg-primar-200"
+			on:click={async () => {
+				await signIn();
+				invalidateAll();
+				updateFlash(page);
+			}}>
+			Sign Up
+		</button>
+	</div>
 	<!-- grid effect -->
 	<div
 		class="absolute z-20 h-full w-full [background-position:calc(100%+5px)_calc(100%+5px)] bg-fixed"

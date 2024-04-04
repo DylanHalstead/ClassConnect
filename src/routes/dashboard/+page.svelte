@@ -29,7 +29,16 @@
 			selected = i % 10;
 		}
 
-		return ["th", "st", "nd", "rd"][selected];
+		switch (selected) {
+			case 0:
+				return "th";
+			case 1:
+				return "st";
+			case 2:
+				return "nd";
+			default:
+				return "rd";
+		}
 	}
 
 	const dateSuffix = getNumSuffix(currentDate.getDate());

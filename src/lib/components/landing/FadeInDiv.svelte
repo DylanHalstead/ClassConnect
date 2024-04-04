@@ -9,7 +9,7 @@
 	}[];
 	export let hovering: boolean = false;
 	const isActive = (tab: { title: string; value: string; content: string }) => {
-		return tab.value === tabs[0].value;
+		return tabs[0] != undefined && tab.value == tabs[0].value;
 	};
 </script>
 
