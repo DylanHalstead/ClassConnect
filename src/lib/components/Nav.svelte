@@ -7,7 +7,7 @@
     db: {
         user: User;
     } | undefined;
-		// type build from svelte-google-auth/server types; cannot import to client
+		// type built from svelte-google-auth/server types; cannot import to client
     auth: {
 			client_id: string;
 			user?: {

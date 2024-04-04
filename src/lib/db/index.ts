@@ -21,8 +21,6 @@ export const pool = new pg.Pool({
 export async function withConnection<Result>(
 	fn: (client: PoolClient) => Promise<Result>
 ): Promise<Result> {
-	console.log("Connecting to database...");
-	console.log(`Host: ${SECRET_DB_HOST}\nPort: ${SECRET_DB_PORT}\nDatabase: ${SECRET_DB_NAME}\nUser: ${SECRET_DB_USER}`);
 	const client = await pool.connect();
 	try {
 		return await fn(client);
