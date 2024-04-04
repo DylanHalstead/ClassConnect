@@ -1,7 +1,7 @@
 import { type Cookies, error } from "@sveltejs/kit";
 import { isSignedIn } from "svelte-google-auth/server";
 import { setFlash } from "sveltekit-flash-message/server";
-import { getUsersSectionMembers } from "$lib/db/sectionmembers";
+import { getUsersSectionMembers } from "$lib/db/sectionMembers";
 import { SectionMemberType } from "$lib/types";
 
 export function verifyAuthentication(locals: App.Locals, cookies: Cookies): string | never {

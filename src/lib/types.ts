@@ -112,10 +112,3 @@ export type ExtendedAppointment = Omit<Appointment, "appointment_block" | "stude
 	appointment_block: ExtendedAppointmentBlock;
 	student: Student;
 };
-
-export type FlatExtendedSection = Section & Omit<Course, "id">;
-
-export type FlatExtendedSectionMember = SectionMember &
-	Omit<User, "id"> &
-	Omit<Course, "id"> &
-	Omit<Section, "id">;

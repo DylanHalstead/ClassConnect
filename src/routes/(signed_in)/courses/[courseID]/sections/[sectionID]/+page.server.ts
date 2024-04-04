@@ -1,8 +1,8 @@
-import type { PageServerLoad, Actions } from "./$types";
+import { error } from "@sveltejs/kit";
 import { getExtendedSectionMembers } from "$lib/db/sectionMembers";
 import { getExtendedSection } from "$lib/db/section";
 import { verifyAuthentication, verifyUserIsApartOfInstructionalTeam } from "$lib/auth";
-import { error } from "@sveltejs/kit";
+import type { PageServerLoad, Actions } from "./$types";
 
 export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 	const { sectionID } = params;
@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 	if (!section) {
 		error(404, "Section not found.");
 	}
-	if (!sectionMembers) {
+	if (sectionMembers.length === 0) {
 		error(400, "Must have section members to view this page.");
 	}
 	return {

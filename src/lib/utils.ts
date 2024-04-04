@@ -3,10 +3,7 @@ import type {
 	AppointmentBlock,
 	Interval,
 	User,
-	ExtendedSection,
-	FlatExtendedSection,
-	FlatExtendedSectionMember,
-	ExtendedSectionMember
+	ExtendedSection
 } from "./types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -86,51 +83,6 @@ export function postgresAppointmentBlockToAppointmentBlock(
 		duration: intervalToMilliseconds(postgresAppointmentBlock.duration)
 	};
 	return appointmentBlock;
-}
-
-export function flatExtendedSectionMemberToExtendedSectionMember(
-	flatExtendedSectionMember: FlatExtendedSectionMember
-): ExtendedSectionMember {
-	const extendedSectionMember = {
-		id: flatExtendedSectionMember.id,
-		section: {
-			id: flatExtendedSectionMember.section_id,
-			course: {
-				id: flatExtendedSectionMember.course_id,
-				department_code: flatExtendedSectionMember.department_code,
-				course_code: flatExtendedSectionMember.course_code,
-				course_name: flatExtendedSectionMember.course_name
-			},
-			section_number: flatExtendedSectionMember.section_number,
-			max_daily_bookable_hours: flatExtendedSectionMember.max_daily_bookable_hours
-		},
-		user: {
-			id: flatExtendedSectionMember.user_id,
-			email: flatExtendedSectionMember.email,
-			first_name: flatExtendedSectionMember.first_name,
-			last_name: flatExtendedSectionMember.last_name
-		},
-		member_type: flatExtendedSectionMember.member_type,
-		is_restricted: flatExtendedSectionMember.is_restricted
-	};
-	return extendedSectionMember;
-}
-
-export function flatExtendedSectionToExtendedSection(
-	flatExtendedSection: FlatExtendedSection
-): ExtendedSection {
-	const extendedSection = {
-		id: flatExtendedSection.id,
-		course: {
-			id: flatExtendedSection.course_id,
-			department_code: flatExtendedSection.department_code,
-			course_name: flatExtendedSection.course_name,
-			course_code: flatExtendedSection.course_code
-		},
-		section_number: flatExtendedSection.section_number,
-		max_daily_bookable_hours: flatExtendedSection.max_daily_bookable_hours
-	};
-	return extendedSection;
 }
 
 export function sectionName(section: ExtendedSection): string {

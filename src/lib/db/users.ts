@@ -3,19 +3,18 @@ import type { QueryConfig, QueryResult } from "pg";
 import { withConnection } from ".";
 import type { PartialUser, User } from "$lib/types";
 
-export async function getUser(id: string): Promise<User | undefined> {
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: "SELECT users.id, users.email, users.first_name, users.last_name FROM users WHERE id = $1",
-			values: [id]
-		};
+export async function getUsers(userIDS: string[]): Promise<User[]> {
+		const uniqueIds = Array.from(new Set(userIDS));
+		return withConnection(async client => {
+			const query: QueryConfig = {
+				text: `SELECT u.id, u.email, u.first_name, u.last_name
+								FROM users u
+								WHERE u.id = ANY($1)`,
+				values: [uniqueIds]
+			};
 
-		const res: QueryResult<User> = await client.query(query);
-		if (res.rows.length === 0) {
-			return undefined;
-		}
-		const user = res.rows[0];
-		return user;
+			const res: QueryResult<User> = await client.query(query);
+			return res.rows;
 	});
 }
 

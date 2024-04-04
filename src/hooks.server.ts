@@ -5,7 +5,7 @@ import { createAppointmentBlock } from "$lib/db/appointmentblocks";
 import { withConnection } from "$lib/db";
 import { createAppointment } from "$lib/db/appointments";
 import { createCourse } from "$lib/db/courses";
-import { createSectionMember } from "$lib/db/sectionmembers";
+import { createSectionMember } from "$lib/db/sectionMembers";
 import { createSection } from "$lib/db/sections";
 import { createUser } from "$lib/db/users";
 import { SectionMemberType, WeekDay } from "$lib/types";
