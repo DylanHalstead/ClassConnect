@@ -36,7 +36,7 @@ export type ExtendedSection = Omit<Section, "course_id"> & { course: Course };
 export enum SectionMemberType {
 	Student = "student",
 	TA = "ta",
-	Instructor = "instructor",
+	Instructor = "instructor"
 }
 
 export interface PartialSectionMember {
@@ -115,4 +115,7 @@ export type ExtendedAppointment = Omit<Appointment, "appointment_block" | "stude
 
 export type FlatExtendedSection = Section & Omit<Course, "id">;
 
-export type FlatExtendedSectionMember = SectionMember & Omit<User, "id"> & Omit<Course, "id"> & Omit<Section, "id">;
+export type FlatExtendedSectionMember = SectionMember &
+	Omit<User, "id"> &
+	Omit<Course, "id"> &
+	Omit<Section, "id">;

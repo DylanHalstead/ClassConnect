@@ -1,5 +1,5 @@
 <script lang="ts">
-	import "../app.css"
+	import "../app.css";
 	import { getFlash } from "sveltekit-flash-message";
 	import { page } from "$app/stores";
 	import { invalidateAll } from "$app/navigation";
