@@ -1,10 +1,10 @@
 <script lang="ts">
-	import "../app.css";
-	import { getFlash } from "sveltekit-flash-message";
-	import { page } from "$app/stores";
-	import { invalidateAll } from "$app/navigation";
 	import { initialize } from "svelte-google-auth/client";
+	import { getFlash } from "sveltekit-flash-message";
+	import { invalidateAll } from "$app/navigation";
+	import { page } from "$app/stores";
 	import type { PageData } from "./$types.js";
+	import "../app.css";
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
