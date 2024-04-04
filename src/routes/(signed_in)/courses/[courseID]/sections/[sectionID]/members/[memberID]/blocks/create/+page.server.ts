@@ -17,7 +17,7 @@ import {
 export const actions: Actions = {
 	default: async ({ locals, request, params, cookies }) => {
 		const { sectionID, memberID } = params;
-		if ( !sectionID || !memberID) {
+		if (!sectionID || !memberID) {
 			const errorMessage = "Internal server error: Failed to get section ID or member ID";
 			error(500, errorMessage);
 		}
