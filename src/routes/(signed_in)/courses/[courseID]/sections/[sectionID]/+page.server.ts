@@ -6,11 +6,7 @@ import { error } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 	const { sectionID } = params;
-	verifyAuthentication(locals, cookies);
-	const userID: string | undefined = cookies.get("userID");
-	if (!userID) {
-		error(401, "You must be signed in to view this page.");
-	}
+	const userID = verifyAuthentication(locals, cookies);
 	await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
 	let section = await getExtendedSection(sectionID);
 	let sectionMembers = await getExtendedSectionMembers(sectionID);
