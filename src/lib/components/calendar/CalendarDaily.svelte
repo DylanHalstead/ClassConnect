@@ -2,9 +2,9 @@
 	import {
 		calendarRowCount,
 		calendarStartAndEndTimes,
-		type CalendarConfiguration,
+		type CalendarConfiguration
 	} from "$lib/components/calendar";
-	import type { ExtendedAppointment} from "$lib/types";
+	import type { ExtendedAppointment } from "$lib/types";
 
 	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
 	import CalendarDailyCursor from "$lib/components/calendar/CalendarDailyCursor.svelte";

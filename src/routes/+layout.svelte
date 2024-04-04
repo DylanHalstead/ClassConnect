@@ -7,7 +7,6 @@
 
 	export let data: LayoutData;
 	initialize(data, invalidateAll);
-
 </script>
 
 <slot />

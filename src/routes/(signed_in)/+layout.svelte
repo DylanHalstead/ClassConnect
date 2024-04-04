@@ -16,7 +16,7 @@
 </script>
 
 <div class="flex">
-	<Nav data={data} />
+	<Nav {data} />
 
 	<div class="flex-1 ml-16">
 		{#if $flash}
