@@ -9,9 +9,15 @@ import { createSectionMember } from "$lib/db/sectionmembers";
 import { createSection } from "$lib/db/sections";
 import { createUser } from "$lib/db/users";
 import { SectionMemberType, WeekDay } from "$lib/types";
-import client_secret from "../client_secret.json";
+import {
+	SECRET_GCP_CLIENT_ID,
+	SECRET_GCP_CLIENT_SECRET,
+} from "$env/static/private";
 
-const auth = new SvelteGoogleAuthHook(client_secret.web);
+const auth = new SvelteGoogleAuthHook({
+	"client_id":SECRET_GCP_CLIENT_ID,
+	"client_secret":SECRET_GCP_CLIENT_SECRET,
+});
 
 export const handle: Handle = async ({ event, resolve }) => {
 	return await auth.handleAuth({ event, resolve });

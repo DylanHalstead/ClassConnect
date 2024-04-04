@@ -1,5 +1,5 @@
 import type { QueryConfig, QueryResult } from "pg";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 import type {
 	AppointmentBlock,
 	PartialAppointmentBlock,
@@ -90,7 +90,7 @@ export async function createAppointmentBlock(
 		const newAppointmentBlock: AppointmentBlock = {
 			...partialAppointmentBlock,
 
-			id: uuidv4()
+			id: randomUUID()
 		};
 
 		const query: QueryConfig = {

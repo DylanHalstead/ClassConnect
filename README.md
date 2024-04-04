@@ -35,7 +35,7 @@ or by running the scripts in `schema.sql` in your Postgres client.
 
 ### SvelteKit
 
-To run and build the application locally, you will need [Node.js](https://nodejs.org/en) installed (Built with v21.7.0; recommend using [nvm](https://github.com/nvm-sh/nvm)).
+To run and build the application locally, you will need [Node.js](https://nodejs.org/en) installed (Built with v20.12.1; recommend using [nvm](https://github.com/nvm-sh/nvm)).
 
 Once you've installed dependencies from `package.json` with `npm install`, start the development server with:
 

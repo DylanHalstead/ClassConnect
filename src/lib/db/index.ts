@@ -5,7 +5,8 @@ import {
 	SECRET_DB_PORT,
 	SECRET_DB_NAME,
 	SECRET_DB_USER,
-	SECRET_DB_PASSWORD
+	SECRET_DB_PASSWORD,
+	SECRET_DB_SSL
 } from "$env/static/private";
 
 export const pool = new pg.Pool({
@@ -13,12 +14,15 @@ export const pool = new pg.Pool({
 	port: parseInt(SECRET_DB_PORT),
 	database: SECRET_DB_NAME,
 	user: SECRET_DB_USER,
-	password: SECRET_DB_PASSWORD
+	password: SECRET_DB_PASSWORD,
+	ssl: SECRET_DB_SSL === "true" ? true : false
 });
 
 export async function withConnection<Result>(
 	fn: (client: PoolClient) => Promise<Result>
 ): Promise<Result> {
+	console.log("Connecting to database...");
+	console.log(`Host: ${SECRET_DB_HOST}\nPort: ${SECRET_DB_PORT}\nDatabase: ${SECRET_DB_NAME}\nUser: ${SECRET_DB_USER}`);
 	const client = await pool.connect();
 	try {
 		return await fn(client);

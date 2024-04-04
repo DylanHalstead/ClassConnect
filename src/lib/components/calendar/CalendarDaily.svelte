@@ -3,8 +3,8 @@
 		calendarRowCount,
 		calendarStartAndEndTimes,
 		type CalendarConfiguration,
-		type ExtendedAppointment
 	} from "$lib/components/calendar";
+	import type { ExtendedAppointment} from "$lib/types";
 
 	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
 	import CalendarDailyCursor from "$lib/components/calendar/CalendarDailyCursor.svelte";
@@ -45,7 +45,7 @@
 				i < rowCount &&
 				normalizeDateByDay(appointment.appointment_day).getTime() == dateNormalized.getTime()
 			) {
-				cellAppointments[i].push(appointment);
+				cellAppointments[i]?.push(appointment);
 			}
 		});
 	}

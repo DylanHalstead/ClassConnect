@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 import type { Course, PartialCourse } from "$lib/types";
 import { withConnection } from ".";
 
@@ -7,7 +7,7 @@ export async function createCourse(partialCourse: PartialCourse): Promise<Course
 		const newCourse = {
 			...partialCourse,
 
-			id: uuidv4()
+			id: randomUUID()
 		};
 
 		await client.query({
