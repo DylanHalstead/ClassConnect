@@ -7,7 +7,7 @@
 	import Modal from "$lib/components/modal/Modal.svelte";
 	import { SectionMemberType, type ExtendedSectionMember } from "$lib/types";
 	import { userName, sectionName } from "$lib/utils";
-	import { error } from "@sveltejs/kit"
+	import { error } from "@sveltejs/kit";
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
@@ -19,7 +19,7 @@
 	if (!data.sectionMembers[0]) {
 		error(400, "Must have section members to view this page.");
 	}
-	modalMember = data.sectionMembers[0]
+	modalMember = data.sectionMembers[0];
 
 	function openMemberModal(member: ExtendedSectionMember) {
 		modalMember = member;
