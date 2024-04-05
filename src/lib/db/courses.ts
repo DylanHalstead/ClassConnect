@@ -5,8 +5,8 @@ import { withConnection } from ".";
 
 export async function getCourse(courseID: string): Promise<Course | undefined> {
 	return withConnection(async client => {
-    const query: QueryConfig = {
-      text: `
+		const query: QueryConfig = {
+			text: `
       SELECT
         c.id,
         c.department_code,
@@ -15,15 +15,15 @@ export async function getCourse(courseID: string): Promise<Course | undefined> {
       FROM courses c
       WHERE c.id = $1
       `,
-      values: [courseID]
-    };
+			values: [courseID]
+		};
 
-    const res: QueryResult<Course> = await client.query(query);
-    if (res.rows.length === 0) {
-      return undefined;
-    }
-    return res.rows[0];
-  });
+		const res: QueryResult<Course> = await client.query(query);
+		if (res.rows.length === 0) {
+			return undefined;
+		}
+		return res.rows[0];
+	});
 }
 
 export async function createCourse(partialCourse: PartialCourse): Promise<Course> {

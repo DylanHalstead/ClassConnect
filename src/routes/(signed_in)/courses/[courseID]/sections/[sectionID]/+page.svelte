@@ -8,7 +8,6 @@
 	import { SectionMemberType, type ExtendedSectionMember } from "$lib/types";
 	import { userName, sectionName } from "$lib/utils";
 	import { error } from "@sveltejs/kit";
-	
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
@@ -20,6 +19,7 @@
 	let isMemberModalOpen = false;
 
 	let isSettingsModalOpen = false;
+	modalMember = data.sectionMembers[0];
 
 	function openMemberModal(member: ExtendedSectionMember) {
 		modalMember = member;

@@ -61,7 +61,9 @@ export async function getSectionMembers(sectionId: string): Promise<SectionMembe
 	});
 }
 
-export async function getExtendedSectionMembers(sectionId: string): Promise<ExtendedSectionMember[]> {
+export async function getExtendedSectionMembers(
+	sectionId: string
+): Promise<ExtendedSectionMember[]> {
 	const sectionMembers = await getSectionMembers(sectionId);
 	if (sectionMembers.length === 0) {
 		return [];

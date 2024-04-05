@@ -4,17 +4,17 @@ import { withConnection } from ".";
 import type { PartialUser, User } from "$lib/types";
 
 export async function getUsers(userIDS: string[]): Promise<User[]> {
-		const uniqueIds = Array.from(new Set(userIDS));
-		return withConnection(async client => {
-			const query: QueryConfig = {
-				text: `SELECT u.id, u.email, u.first_name, u.last_name
+	const uniqueIds = Array.from(new Set(userIDS));
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `SELECT u.id, u.email, u.first_name, u.last_name
 								FROM users u
 								WHERE u.id = ANY($1)`,
-				values: [uniqueIds]
-			};
+			values: [uniqueIds]
+		};
 
-			const res: QueryResult<User> = await client.query(query);
-			return res.rows;
+		const res: QueryResult<User> = await client.query(query);
+		return res.rows;
 	});
 }
 
