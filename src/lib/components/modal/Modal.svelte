@@ -1,15 +1,41 @@
 <script lang="ts">
-	let modalDialog: HTMLDialogElement;
+	import { createEventDispatcher, onDestroy } from "svelte";
 
-	export function open() {
-		modalDialog.showModal();
+	export let isOpen: boolean;
+	
+	let wasOpen = isOpen;
+	let modal: HTMLDialogElement;
+	const dispatch = createEventDispatcher<{ close: undefined }>();
+	
+	$: {
+		if (modal != undefined) {
+			const closeHandler = (event: Event) => {
+				dispatch("close");
+				event.preventDefault();
+			};
+
+			modal.addEventListener("close", closeHandler);
+			modal.addEventListener("close", closeHandler);
+			onDestroy(() => {
+				modal.removeEventListener("close", closeHandler);
+			});
+		}
+	}
+
+	$: {
+		if (!wasOpen && isOpen) {
+			modal.showModal();
+		} else if (wasOpen && !isOpen) {
+			modal.close();
+		}
+		wasOpen = isOpen;
 	}
 </script>
 
-<dialog bind:this={modalDialog} class="modal">
+<dialog bind:this={modal} class="modal">
 	<div class="modal-box">
 		<form method="dialog">
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			<button on:click={() => dispatch("close")} class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 		</form>
 		<slot />
 	</div>

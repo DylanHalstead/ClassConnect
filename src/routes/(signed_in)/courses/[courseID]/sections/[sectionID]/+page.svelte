@@ -7,23 +7,23 @@
 	import Modal from "$lib/components/modal/Modal.svelte";
 	import { SectionMemberType, type ExtendedSectionMember } from "$lib/types";
 	import { userName, sectionName } from "$lib/utils";
-	import { error } from "@sveltejs/kit"
+	import { error } from "@sveltejs/kit";
+	
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
 
-	let sectionSettingsModal: Modal;
-	let memberModal: MemberModal;
-	let modalMember: ExtendedSectionMember;
-	// For type safety
 	if (!data.sectionMembers[0]) {
 		error(400, "Must have section members to view this page.");
 	}
-	modalMember = data.sectionMembers[0]
+	let modalMember = data.sectionMembers[0];
+	let isMemberModalOpen = false;
+
+	let isSettingsModalOpen = false;
 
 	function openMemberModal(member: ExtendedSectionMember) {
 		modalMember = member;
-		memberModal.open();
+		isMemberModalOpen = true;
 	}
 </script>
 
@@ -33,14 +33,14 @@
 			{sectionName(data.section)} |
 			<span class="text-primary">{data.section.course.course_name}</span>
 		</h1>
-		<button on:click={sectionSettingsModal.open}>
+		<button on:click={() => isSettingsModalOpen=true}>
 			<Icon
 				src={Cog8Tooth}
 				class="h-8 w-8 stroke-gray-800 hover:stroke-primary hover:rotate-45 transition-all duration-200 ease-out" />
 		</button>
 	</div>
 
-	<Modal bind:this={sectionSettingsModal}>
+	<Modal isOpen={isSettingsModalOpen} on:close={() => isSettingsModalOpen=false}>
 		<div>
 			<h2 class="font-bold text-xl mb-1">Settings</h2>
 			<h3 class="text-sm text-gray-600">ID: {data.section.id}</h3>
@@ -78,7 +78,7 @@
 		</form>
 	</Modal>
 
-	<MemberModal bind:this={memberModal} member={modalMember} />
+	<MemberModal member={modalMember} isOpen={isMemberModalOpen} on:close={() => isMemberModalOpen=false} />
 	<div class="overflow-x-auto rounded-lg border border-gray-200">
 		<table class="min-w-full max-w-sm divide-y-2 divide-gray-200 bg-white text-sm">
 			<thead class="text-left">
@@ -109,9 +109,7 @@
 								: "N/A"}</td>
 						<td class="whitespace-nowrap w-8 pr-8 pl-4 py-2">
 							<button
-								on:click={() => {
-									openMemberModal(member);
-								}}>
+								on:click={() => openMemberModal(member)}>
 								<Icon
 									src={EllipsisVertical}
 									class="h-8 w-8 stroke-gray-400 rounded-full hover:stroke-gray-700 hover:bg-gray-700/20 transition-colors duration-200 ease-in-out" />

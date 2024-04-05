@@ -2,16 +2,16 @@
 	import Modal from "$lib/components/modal/Modal.svelte";
 	import { type ExtendedSectionMember, SectionMemberType } from "$lib/types";
 	import { userName } from "$lib/utils";
+	import { createEventDispatcher } from "svelte";
 
-	let modal: Modal;
 	export let member: ExtendedSectionMember;
+	export let isOpen: boolean;
 
-	export function open() {
-		modal.open();
-	}
+	const dispatch = createEventDispatcher<{ close: undefined }>();
+
 </script>
 
-<Modal bind:this={modal}>
+<Modal isOpen={isOpen} on:close={() => { dispatch("close") }}>
 	<div>
 		<h2 class="font-bold text-xl">{userName(member.user)}</h2>
 		<h3 class="text-sm text-gray-600">{member.id}</h3>
