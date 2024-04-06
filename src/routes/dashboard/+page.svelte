@@ -82,6 +82,7 @@
 
 <style>
 	.main-text {
+		font-family: "Kaisei HarunoUmi", serif;
 		font-size: 1rem;
 	}
 
