@@ -5,8 +5,8 @@ import type {
 } from "$lib/types";
 import { postgresAppointmentBlockToAppointmentBlock } from "../utils";
 import { withConnection } from "./index";
+import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
-import { v4 as uuidv4 } from "uuid";
 
 export async function getAppointmentBlock(id: string): Promise<AppointmentBlock | undefined> {
 	return withConnection(async client => {
@@ -116,7 +116,7 @@ export async function createAppointmentBlock(
 		const newAppointmentBlock: AppointmentBlock = {
 			...partialAppointmentBlock,
 
-			id: uuidv4()
+			id: randomUUID()
 		};
 
 		const query: QueryConfig = {

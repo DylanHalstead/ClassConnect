@@ -35,7 +35,7 @@ or by running the scripts in `schema.sql` in your Postgres client.
 
 ### SvelteKit
 
-To run and build the application locally, you will need [Node.js](https://nodejs.org/en) installed (Built with v21.7.0; recommend using [nvm](https://github.com/nvm-sh/nvm)).
+To run and build the application locally, you will need [Node.js](https://nodejs.org/en) installed (Built with v20.12.1; recommend using [nvm](https://github.com/nvm-sh/nvm)).
 
 Once you've installed dependencies from `package.json` with `npm install`, start the development server with:
 
@@ -50,14 +50,14 @@ npm run dev -- --open
 
 To run the application locally and connect to DB's and API's, you will need to create a `.env` file in the root directory of the project. You can create a template based on `sample.env`.
 
-Alongside the `.env`, you will also need a `client_secret.json` to connect to Google for SSO and API integrations. You can create a new project and download the `client_secret.json` from [Google Cloud Platform](https://console.cloud.google.com/). _More than likely a Google Cloud project has already been built, speak to Dylan or whoever is maintaining the application._
+For the variables `SECRET_GCP_CLIENT_ID` and `SECRET_GCP_CLIENT_SECRET`, you will need to create a new project and download the `client_secret.json` from [Google Cloud Platform](https://console.cloud.google.com/). _More than likely a Google Cloud project has already been built, speak to Dylan or whoever is maintaining the application._
 
 ## 🚀 Deployment
 
-To create a production version of your app, we utilize [Docker](https://docs.docker.com/get-docker/) to containerize the application. a `Dockerfile` has been built to configure the application and build an image ready for production. You can build the production version of the app with the following command:
+To create a production version of your app, we utilize [Docker](https://docs.docker.com/get-docker/) to containerize the application. a `Dockerfile` has been built to configure the application and build an image ready for production. To build the image, you will need to pass in build arguments which are the same as the values specified in your `.env` You can build the production version of the app with the following command:
 
 ```bash
-docker build -t class-connect .
+docker build --build-arg SECRET_GCP_CLIENT_ID="<value here>" --build-arg SECRET_GCP_CLIENT_SECRET="<value here>" --build-arg SECRET_DB_HOST="<value here>" --build-arg SECRET_DB_PORT="<value here>" --build-arg SECRET_DB_NAME="<value here>" --build-arg SECRET_DB_USER="<value here>" --build-arg SECRET_DB_PASSWORD="<value here>" --build-arg SECRET_DB_SSL="<value here>" --build-arg SECRET_NODE_ENVIROMENT="<value here>" -t class-connect:latest .
 ```
 
 You can then run the image with the following command:
@@ -65,5 +65,3 @@ You can then run the image with the following command:
 ```bash
 docker run -p 3000:3000 class-connect
 ```
-
-_TODO: add env and client_secret.json to the docker image with args_

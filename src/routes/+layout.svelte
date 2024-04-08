@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { initialize } from "svelte-google-auth/client";
+	import "../app.css";
 	import { invalidateAll } from "$app/navigation";
+	import { initialize } from "svelte-google-auth/client";
+	import type { LayoutData } from "./$types.js";
 	import Notification from "$lib/components/Notification.svelte";
-	import type { PageData } from "./$types.js";
 	import "../app.css";
 
-	export let data: PageData;
+	export let data: LayoutData;
 	initialize(data, invalidateAll);
 </script>
 

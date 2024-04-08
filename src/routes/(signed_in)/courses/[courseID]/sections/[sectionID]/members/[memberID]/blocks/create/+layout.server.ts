@@ -1,11 +1,11 @@
 import { verifyUserIsApartOfInstructionalTeam, verifyUserIsMember } from "$lib/auth";
 import type { LayoutServerLoad } from "./$types";
 import { error } from "@sveltejs/kit";
-import { loadFlash, setFlash } from "sveltekit-flash-message/server";
+import { loadFlash } from "sveltekit-flash-message/server";
 
 export const load: LayoutServerLoad = loadFlash(async ({ cookies, params, parent }) => {
 	const parentVals = await parent();
-	const userID: string | undefined = parentVals.userID;
+	const userID: string | undefined = parentVals["userID"];
 	const { sectionID, memberID } = params;
 	if (!userID || !sectionID || !memberID) {
 		const errorMessage =

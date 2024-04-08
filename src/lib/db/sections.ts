@@ -1,14 +1,14 @@
 import type { PartialSection, Section } from "$lib/types";
 import { withConnection } from ".";
+import { randomUUID } from "crypto";
 import type { QueryConfig } from "pg";
-import { v4 as uuidv4 } from "uuid";
 
 export async function createSection(partialSection: PartialSection): Promise<Section> {
 	return withConnection(async client => {
 		const newSection: Section = {
 			...partialSection,
 
-			id: uuidv4()
+			id: randomUUID()
 		};
 
 		const query: QueryConfig = {

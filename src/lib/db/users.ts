@@ -1,7 +1,7 @@
 import type { PartialUser, User } from "$lib/types";
 import { withConnection } from ".";
+import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
-import { v4 as uuidv4 } from "uuid";
 
 export async function getUsers(userIDS: string[]): Promise<User[]> {
 	const uniqueIds = Array.from(new Set(userIDS));
@@ -52,7 +52,7 @@ export async function createUser(partialUser: PartialUser): Promise<User> {
 		const newUser: User = {
 			...partialUser,
 
-			id: uuidv4()
+			id: randomUUID()
 		};
 
 		const query: QueryConfig = {

@@ -1,7 +1,7 @@
 import type { Appointment, PartialAppointment } from "$lib/types";
 import { withConnection } from ".";
+import { randomUUID } from "crypto";
 import type { QueryConfig } from "pg";
-import { v4 as uuidv4 } from "uuid";
 
 export async function createAppointment(
 	partialAppointment: PartialAppointment
@@ -10,7 +10,7 @@ export async function createAppointment(
 		const newAppointment: Appointment = {
 			...partialAppointment,
 
-			id: uuidv4()
+			id: randomUUID()
 		};
 
 		const query: QueryConfig = {

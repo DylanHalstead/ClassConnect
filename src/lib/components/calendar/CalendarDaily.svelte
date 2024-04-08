@@ -45,7 +45,7 @@
 				i < rowCount &&
 				normalizeDateByDay(appointment.appointment_day).getTime() == dateNormalized.getTime()
 			) {
-				cellAppointments[i].push(appointment);
+				cellAppointments[i]?.push(appointment);
 			}
 		});
 	}
