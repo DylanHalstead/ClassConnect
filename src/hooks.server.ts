@@ -1,4 +1,8 @@
-import { SECRET_GCP_CLIENT_ID, SECRET_GCP_CLIENT_SECRET, SECRET_NODE_ENV } from "$env/static/private";
+import {
+	SECRET_GCP_CLIENT_ID,
+	SECRET_GCP_CLIENT_SECRET,
+	SECRET_NODE_ENV
+} from "$env/static/private";
 import { withConnection } from "$lib/db";
 import { createAppointmentBlock } from "$lib/db/appointmentBlocks";
 import { createAppointment } from "$lib/db/appointments";
@@ -120,4 +124,4 @@ async function initializeDatabase() {
 
 if (SECRET_NODE_ENV === "development") {
 	initializeDatabase();
-} 
+}
