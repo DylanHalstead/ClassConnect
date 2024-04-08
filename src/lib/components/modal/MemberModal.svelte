@@ -8,10 +8,13 @@
 	export let isOpen: boolean;
 
 	const dispatch = createEventDispatcher<{ close: undefined }>();
-
 </script>
 
-<Modal isOpen={isOpen} on:close={() => { dispatch("close") }}>
+<Modal
+	{isOpen}
+	on:close={() => {
+		dispatch("close");
+	}}>
 	<div>
 		<h2 class="font-bold text-xl">{userName(member.user)}</h2>
 		<h3 class="text-sm text-gray-600">{member.id}</h3>
