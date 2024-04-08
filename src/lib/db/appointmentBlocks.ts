@@ -1,18 +1,26 @@
-import type { QueryConfig, QueryResult } from "pg";
-import { randomUUID } from "crypto";
 import type {
 	AppointmentBlock,
 	PartialAppointmentBlock,
 	PostgresAppointmentBlock
 } from "$lib/types";
-
 import { postgresAppointmentBlockToAppointmentBlock } from "../utils";
 import { withConnection } from "./index";
+import { randomUUID } from "crypto";
+import type { QueryConfig, QueryResult } from "pg";
 
 export async function getAppointmentBlock(id: string): Promise<AppointmentBlock | undefined> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
-			text: "SELECT ab.id, ab.start_time, ab.end_time, ab.notes FROM appointment_blocks ab WHERE id = $1",
+			text: `
+				SELECT
+					ab.id,
+					ab.instructional_member_id,
+					ab.week_day,
+					ab.start_time,
+					ab.duration
+				FROM appointment_blocks ab
+				WHERE id = $1
+			`,
 			values: [id]
 		};
 
@@ -32,7 +40,17 @@ export async function getSectionsAppointmentBlocks(
 ): Promise<AppointmentBlock[] | undefined> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
-			text: "SELECT ab.id, ab.instructional_member_id, ab.week_day, ab.start_time, ab.duration FROM appointment_blocks ab JOIN section_members sm ON ab.instructional_member_id = sm.id WHERE sm.section_id = $1",
+			text: `
+				SELECT ab.id,
+					ab.instructional_member_id,
+					ab.week_day,
+					ab.start_time,
+					ab.duration
+				FROM appointment_blocks ab 
+					JOIN section_members sm 
+							ON ab.instructional_member_id = sm.id
+				WHERE sm.section_id = $1
+			`,
 			values: [sectionId]
 		};
 
@@ -60,7 +78,15 @@ export async function getMembersAppointmentBlocks(
 ): Promise<AppointmentBlock[] | undefined> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
-			text: "SELECT ab.id, ab.instructional_member_id, ab.week_day, ab.start_time, ab.duration FROM appointment_blocks ab WHERE ab.instructional_member_id = $1",
+			text: `
+				SELECT ab.id,
+					ab.instructional_member_id,
+					ab.week_day,
+					ab.start_time,
+					ab.duration
+				FROM appointment_blocks ab
+				WHERE ab.instructional_member_id = $1
+			`,
 			values: [memberId]
 		};
 
@@ -95,8 +121,9 @@ export async function createAppointmentBlock(
 
 		const query: QueryConfig = {
 			text: `
-INSERT INTO appointment_blocks (id, instructional_member_id, week_day, start_time, duration)
-VALUES ($1, $2, $3, $4, $5)`,
+				INSERT INTO appointment_blocks (id, instructional_member_id, week_day, start_time, duration)
+				VALUES ($1, $2, $3, $4, $5)
+			`,
 			values: [
 				newAppointmentBlock.id,
 				newAppointmentBlock.instructional_member_id,
@@ -116,7 +143,7 @@ export async function deleteAppointmentBlocks(ids: string[]): Promise<boolean> {
 	return withConnection(async client => {
 		const uniqueIds = new Set(ids);
 		const query: QueryConfig = {
-			text: "DELETE FROM appointment_blocks WHERE id = ANY($1)",
+			text: `DELETE FROM appointment_blocks WHERE id = ANY($1)`,
 			values: [uniqueIds]
 		};
 
