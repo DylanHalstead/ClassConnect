@@ -7,7 +7,6 @@
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
-
 </script>
 
 <div class="flex">
