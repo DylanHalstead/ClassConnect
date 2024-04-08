@@ -14,8 +14,6 @@
 	<Nav data="data" />
 
 	<div class="flex-1 ml-16">
-		
-
 		<slot />
 	</div>
 </div>
