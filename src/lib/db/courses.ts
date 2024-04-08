@@ -7,14 +7,13 @@ export async function getCourse(courseID: string): Promise<Course | undefined> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
 			text: `
-      SELECT
-        c.id,
-        c.department_code,
-        c.course_code,
-        c.course_name
-      FROM courses c
-      WHERE c.id = $1
-      `,
+				SELECT
+					c.id,
+					c.department_code,
+					c.course_code,
+					c.course_name
+				FROM courses c
+				WHERE c.id = $1`,
 			values: [courseID]
 		};
 
@@ -35,9 +34,10 @@ export async function createCourse(partialCourse: PartialCourse): Promise<Course
 		};
 
 		await client.query({
-			text: `\
-INSERT INTO courses (id, department_code, course_code, course_name) VALUES ($1, $2, $3, $4)`,
-
+			text: `
+				INSERT INTO courses (id, department_code, course_code, course_name) 
+				VALUES ($1, $2, $3, $4)
+			`,
 			values: [
 				newCourse.id,
 				newCourse.department_code,

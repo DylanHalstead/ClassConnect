@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/datemanipulation";
+	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/dateManipulation";
 	import { CalendarMode } from "$lib/components/calendar";
 
 	export let date: Date;

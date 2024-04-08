@@ -1,7 +1,7 @@
 import type { Handle } from "@sveltejs/kit";
 import { SvelteGoogleAuthHook } from "svelte-google-auth/server";
 import type { QueryConfig } from "pg";
-import { createAppointmentBlock } from "$lib/db/appointmentblocks";
+import { createAppointmentBlock } from "$lib/db/appointmentBlocks";
 import { withConnection } from "$lib/db";
 import { createAppointment } from "$lib/db/appointments";
 import { createCourse } from "$lib/db/courses";

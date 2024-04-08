@@ -7,13 +7,13 @@ export async function getSection(sectionID: string): Promise<Section | undefined
 	return withConnection(async client => {
 		const query: QueryConfig = {
 			text: `
-      SELECT
-        s.id,
-        s.course_id,
-        s.section_number,
-        s.max_daily_bookable_hours
-      FROM sections s
-      WHERE s.id = $1
+				SELECT
+					s.id,
+					s.course_id,
+					s.section_number,
+					s.max_daily_bookable_hours
+				FROM sections s
+				WHERE s.id = $1
       `,
 			values: [sectionID]
 		};

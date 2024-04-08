@@ -18,8 +18,9 @@ export async function createSectionMember(
 
 		const query: QueryConfig = {
 			text: `
-INSERT INTO section_members (id, section_id, user_id, member_type, is_restricted)
-VALUES ($1, $2, $3, $4, $5)`,
+				INSERT INTO section_members (id, section_id, user_id, member_type, is_restricted)
+				VALUES ($1, $2, $3, $4, $5)
+			`,
 			values: [
 				newSectionMember.id,
 				newSectionMember.section_id,
@@ -38,7 +39,16 @@ VALUES ($1, $2, $3, $4, $5)`,
 export async function getUsersSectionMembers(userId: string): Promise<SectionMember[]> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
-			text: "SELECT sm.id, sm.section_id, sm.user_id, sm.member_type, sm.is_restricted FROM section_members sm WHERE sm.user_id = $1",
+			text: `
+				SELECT 
+					sm.id, 
+					sm.section_id, 
+					sm.user_id, 
+					sm.member_type, 
+					sm.is_restricted 
+				FROM section_members sm 
+				WHERE sm.user_id = $1
+			`,
 			values: [userId]
 		};
 
@@ -51,7 +61,16 @@ export async function getUsersSectionMembers(userId: string): Promise<SectionMem
 export async function getSectionMembers(sectionId: string): Promise<SectionMember[]> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
-			text: "SELECT sm.id, sm.section_id, sm.user_id, sm.member_type, sm.is_restricted FROM section_members sm WHERE sm.section_id = $1",
+			text: `
+				SELECT 
+					sm.id, 
+					sm.section_id, 
+					sm.user_id, 
+					sm.member_type, 
+					sm.is_restricted 
+				FROM section_members sm 
+				WHERE sm.section_id = $1
+			`,
 			values: [sectionId]
 		};
 

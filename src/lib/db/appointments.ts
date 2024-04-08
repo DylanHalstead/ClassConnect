@@ -15,8 +15,9 @@ export async function createAppointment(
 
 		const query: QueryConfig = {
 			text: `
-INSERT INTO appointments (id, appointment_day, appointment_block, student_id, cancelled, link)
-VALUES ($1, $2, $3, $4, $5, $6)`,
+				INSERT INTO appointments (id, appointment_day, appointment_block, student_id, cancelled, link)
+				VALUES ($1, $2, $3, $4, $5, $6)
+			`,
 			values: [
 				newAppointment.id,
 				newAppointment.appointment_day.toLocaleDateString(),

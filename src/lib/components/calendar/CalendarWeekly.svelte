@@ -11,7 +11,7 @@
 		normalizeDateByDay,
 		normalizeDateByTimeWithinDay,
 		normalizeDateByWeek
-	} from "$lib/datemanipulation";
+	} from "$lib/dateManipulation";
 
 	import type { ExtendedAppointment } from "$lib/types";
 

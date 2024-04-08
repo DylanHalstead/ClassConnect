@@ -4,7 +4,7 @@ import {
 	getMembersAppointmentBlocks,
 	createAppointmentBlock,
 	deleteAppointmentBlocks
-} from "$lib/db/appointmentblocks";
+} from "$lib/db/appointmentBlocks";
 import { formTimeToDate, getEnumValue } from "$lib/utils";
 import { redirect, error } from "@sveltejs/kit";
 import {
