@@ -1,7 +1,7 @@
+import { getCourse } from "$lib/db/courses";
+import type { ExtendedSection, Section } from "$lib/types";
 import { withConnection } from "./index";
 import type { QueryConfig, QueryResult } from "pg";
-import type { ExtendedSection, Section } from "$lib/types";
-import { getCourse } from "$lib/db/courses";
 
 export async function getSection(sectionID: string): Promise<Section | undefined> {
 	return withConnection(async client => {

@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from "uuid";
-import type { QueryConfig, QueryResult } from "pg";
 import type { Course, PartialCourse } from "$lib/types";
 import { withConnection } from ".";
+import type { QueryConfig, QueryResult } from "pg";
+import { v4 as uuidv4 } from "uuid";
 
 export async function getCourse(courseID: string): Promise<Course | undefined> {
 	return withConnection(async client => {

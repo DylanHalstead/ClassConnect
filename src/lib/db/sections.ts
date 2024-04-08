@@ -1,7 +1,7 @@
-import type { QueryConfig } from "pg";
-import { v4 as uuidv4 } from "uuid";
 import type { PartialSection, Section } from "$lib/types";
 import { withConnection } from ".";
+import type { QueryConfig } from "pg";
+import { v4 as uuidv4 } from "uuid";
 
 export async function createSection(partialSection: PartialSection): Promise<Section> {
 	return withConnection(async client => {

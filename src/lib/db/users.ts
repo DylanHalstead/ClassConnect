@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from "uuid";
-import type { QueryConfig, QueryResult } from "pg";
-import { withConnection } from ".";
 import type { PartialUser, User } from "$lib/types";
+import { withConnection } from ".";
+import type { QueryConfig, QueryResult } from "pg";
+import { v4 as uuidv4 } from "uuid";
 
 export async function getUsers(userIDS: string[]): Promise<User[]> {
 	const uniqueIds = Array.from(new Set(userIDS));

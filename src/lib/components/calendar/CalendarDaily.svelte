@@ -2,7 +2,7 @@
 	import {
 		calendarRowCount,
 		calendarStartAndEndTimes,
-		type CalendarConfiguration,
+		type CalendarConfiguration
 	} from "$lib/components/calendar";
 	import type { ExtendedAppointment } from "$lib/types";
 

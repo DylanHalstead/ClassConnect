@@ -1,13 +1,12 @@
-import type { QueryConfig, QueryResult } from "pg";
-import { v4 as uuidv4 } from "uuid";
 import type {
 	AppointmentBlock,
 	PartialAppointmentBlock,
 	PostgresAppointmentBlock
 } from "$lib/types";
-
 import { postgresAppointmentBlockToAppointmentBlock } from "../utils";
 import { withConnection } from "./index";
+import type { QueryConfig, QueryResult } from "pg";
+import { v4 as uuidv4 } from "uuid";
 
 export async function getAppointmentBlock(id: string): Promise<AppointmentBlock | undefined> {
 	return withConnection(async client => {

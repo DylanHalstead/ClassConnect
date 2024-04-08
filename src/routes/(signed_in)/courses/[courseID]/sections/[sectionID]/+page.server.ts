@@ -1,8 +1,8 @@
-import { error } from "@sveltejs/kit";
-import { getExtendedSectionMembers } from "$lib/db/sectionMembers";
-import { getExtendedSection } from "$lib/db/section";
 import { verifyAuthentication, verifyUserIsApartOfInstructionalTeam } from "$lib/auth";
+import { getExtendedSection } from "$lib/db/section";
+import { getExtendedSectionMembers } from "$lib/db/sectionMembers";
 import type { PageServerLoad, Actions } from "./$types";
+import { error } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 	const { sectionID } = params;

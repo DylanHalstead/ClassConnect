@@ -1,10 +1,10 @@
-import { v4 as uuidv4 } from "uuid";
-import type { QueryConfig, QueryResult } from "pg";
-import type { ExtendedSectionMember, SectionMember, PartialSectionMember } from "$lib/types";
-import { getUsers } from "$lib/db/users";
-import { getExtendedSection } from "$lib/db/section";
 import { getCourse } from "$lib/db/courses";
+import { getExtendedSection } from "$lib/db/section";
+import { getUsers } from "$lib/db/users";
+import type { ExtendedSectionMember, SectionMember, PartialSectionMember } from "$lib/types";
 import { withConnection } from "./index";
+import type { QueryConfig, QueryResult } from "pg";
+import { v4 as uuidv4 } from "uuid";
 
 export async function createSectionMember(
 	partialSectionMember: PartialSectionMember
