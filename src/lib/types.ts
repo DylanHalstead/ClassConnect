@@ -28,12 +28,15 @@ export type Section = PartialSection & {
 	id: string;
 };
 
+/**
+ * @description Note that the order of these enums is used their level of authority (student at top index0).
+ */
 export type ExtendedSection = Omit<Section, "course_id"> & { course: Course };
 
 export enum SectionMemberType {
-	Instructor = "instructor",
+	Student = "student",
 	TA = "ta",
-	Student = "student"
+	Instructor = "instructor"
 }
 
 export interface PartialSectionMember {

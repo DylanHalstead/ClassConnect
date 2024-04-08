@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from "svelte";
 	import { ArrowLeft, ArrowRight, Icon } from "svelte-hero-icons";
 	import { CalendarMode } from "$lib/components/calendar";
-	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/datemanipulation";
+	import { normalizeDateByDay, normalizeDateByWeek } from "$lib/dateManipulation";
 
 	/**
 	 * The date the calendar is currently focused on.

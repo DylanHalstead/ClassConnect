@@ -1,15 +1,15 @@
-import type { Handle } from "@sveltejs/kit";
-import { SvelteGoogleAuthHook } from "svelte-google-auth/server";
-import type { QueryConfig } from "pg";
-import { createAppointmentBlock } from "$lib/db/appointmentblocks";
 import { withConnection } from "$lib/db";
+import { createAppointmentBlock } from "$lib/db/appointmentBlocks";
 import { createAppointment } from "$lib/db/appointments";
 import { createCourse } from "$lib/db/courses";
-import { createSectionMember } from "$lib/db/sectionmembers";
+import { createSectionMember } from "$lib/db/sectionMembers";
 import { createSection } from "$lib/db/sections";
 import { createUser } from "$lib/db/users";
 import { SectionMemberType, WeekDay } from "$lib/types";
 import client_secret from "../client_secret.json";
+import type { Handle } from "@sveltejs/kit";
+import type { QueryConfig } from "pg";
+import { SvelteGoogleAuthHook } from "svelte-google-auth/server";
 
 const auth = new SvelteGoogleAuthHook(client_secret.web);
 

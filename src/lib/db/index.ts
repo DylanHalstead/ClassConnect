@@ -1,5 +1,3 @@
-import pg from "pg";
-import type { PoolClient } from "pg";
 import {
 	SECRET_DB_HOST,
 	SECRET_DB_PORT,
@@ -7,6 +5,8 @@ import {
 	SECRET_DB_USER,
 	SECRET_DB_PASSWORD
 } from "$env/static/private";
+import pg from "pg";
+import type { PoolClient } from "pg";
 
 export const pool = new pg.Pool({
 	host: SECRET_DB_HOST,
