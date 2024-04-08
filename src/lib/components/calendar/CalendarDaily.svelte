@@ -2,14 +2,14 @@
 	import {
 		calendarRowCount,
 		calendarStartAndEndTimes,
-		type CalendarConfiguration,
-		type ExtendedAppointment
+		type CalendarConfiguration
 	} from "$lib/components/calendar";
+	import type { ExtendedAppointment } from "$lib/types";
 
 	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
 	import CalendarDailyCursor from "$lib/components/calendar/CalendarDailyCursor.svelte";
 	import CalendarGutter from "$lib/components/calendar/CalendarGutter.svelte";
-	import { normalizeDateByDay, normalizeDateByTimeWithinDay } from "$lib/datemanipulation";
+	import { normalizeDateByDay, normalizeDateByTimeWithinDay } from "$lib/dateManipulation";
 	import { currentTime } from "$lib/stores";
 
 	export let configuration: CalendarConfiguration;

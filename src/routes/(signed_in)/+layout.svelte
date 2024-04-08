@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { getFlash } from "sveltekit-flash-message";
 	import { page } from "$app/stores";
-	import "../app.css";
 	import Nav from "$lib/components/Nav.svelte";
 	import { invalidateAll } from "$app/navigation";
 	import { initialize } from "svelte-google-auth/client";

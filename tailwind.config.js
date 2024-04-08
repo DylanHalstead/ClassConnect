@@ -1,6 +1,6 @@
+import aspectRatio from "@tailwindcss/aspect-ratio";
 import daisyui from "daisyui";
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
-import aspectRatio from "@tailwindcss/aspect-ratio";
 
 export default {
 	content: ["src/**/*.{html,svelte,ts}"],
