@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Header from "$lib/components/Header.svelte";
 	import { CalendarMode } from "$lib/components/calendar";
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";
 	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
+	import CalendarHeading from "$lib/components/calendar/CalendarHeading.svelte";
 	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
 	import {
 		SectionMemberType,
@@ -101,15 +101,18 @@
 
 <div class="flex flex-col h-screen">
 	<div class="px-6 py-2">
+		<div class="flex justify-between items-end">
 			<div>
-				<Header layout="calendar">
-					<CalendarControls
-						currentDate={calendarDate}
-						mode={calendarMode}
-						on:changeWeek={event => (calendarDate = event.detail)}
-						on:changeMode={event => (calendarMode = event.detail)} />
-				</Header>
+				<CalendarHeading date={calendarDate} mode={calendarMode} />
 			</div>
+
+			<CalendarControls
+				currentDate={calendarDate}
+				mode={calendarMode}
+				on:changeWeek={event => (calendarDate = event.detail)}
+				on:changeMode={event => (calendarMode = event.detail)} />
+		</div>
+		<div class="divider divider-neutral my-2"></div>
 	</div>
 
 	<div class="grow min-h-0 p-4">
