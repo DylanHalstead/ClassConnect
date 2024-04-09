@@ -71,7 +71,10 @@
 		</div>
 
 		<div class="mb-5">
-			<button on:click={() => signOut()}
+			<button on:click={async () => {
+					await signOut();
+					location.href = "/";
+				}}
 				><Icon src={ArrowLeftEndOnRectangle} size="32" class="text-white" /></button>
 		</div>
 	</div>
