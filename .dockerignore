@@ -3,8 +3,11 @@ Dockerfile
 .dockerignore
 .git
 .gitignore
+.github/
 README.md
+schema.sql
 .npmrc
+.prettierignore
 .prettierrc
 .eslintrc.cjs
 .svelte-kit
@@ -13,3 +16,5 @@ node_modules
 build
 package
 **/.env
+**/.env.*
+client_secret.json

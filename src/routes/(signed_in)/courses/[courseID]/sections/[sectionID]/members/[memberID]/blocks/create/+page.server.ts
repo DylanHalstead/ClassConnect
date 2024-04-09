@@ -1,28 +1,27 @@
-import type { Actions } from "./$types";
-import { type AppointmentBlock, WeekDay } from "$lib/types";
-import {
-	getMembersAppointmentBlocks,
-	createAppointmentBlock,
-	deleteAppointmentBlocks
-} from "$lib/db/appointmentblocks";
-import { formTimeToDate, getEnumValue } from "$lib/utils";
-import { redirect, error } from "@sveltejs/kit";
 import {
 	verifyAuthentication,
 	verifyUserIsInSection,
 	verifyUserIsApartOfInstructionalTeam,
 	verifyUserIsMember
 } from "$lib/auth";
+import {
+	getMembersAppointmentBlocks,
+	createAppointmentBlock,
+	deleteAppointmentBlocks
+} from "$lib/db/appointmentBlocks";
+import { type AppointmentBlock, WeekDay } from "$lib/types";
+import { formTimeToDate, getEnumValue } from "$lib/utils";
+import type { Actions } from "./$types";
+import { redirect, error } from "@sveltejs/kit";
 
 export const actions: Actions = {
 	default: async ({ locals, request, params, cookies }) => {
-		const userID: string | undefined = cookies.get("userID");
 		const { sectionID, memberID } = params;
-		if (!userID || !sectionID || !memberID) {
-			const errorMessage = "Internal server error: Failed to get user ID, section ID, or member ID";
+		if (!sectionID || !memberID) {
+			const errorMessage = "Internal server error: Failed to get section ID or member ID";
 			error(500, errorMessage);
 		}
-		verifyAuthentication(locals, cookies);
+		const userID = verifyAuthentication(locals, cookies);
 		await verifyUserIsInSection(cookies, userID, sectionID);
 		await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
 		await verifyUserIsMember(cookies, userID, memberID);

@@ -1,17 +1,24 @@
-import type { Handle } from "@sveltejs/kit";
-import { SvelteGoogleAuthHook } from "svelte-google-auth/server";
-import type { QueryConfig } from "pg";
-import { createAppointmentBlock } from "$lib/db/appointmentblocks";
+import {
+	SECRET_GCP_CLIENT_ID,
+	SECRET_GCP_CLIENT_SECRET,
+	SECRET_NODE_ENV
+} from "$env/static/private";
 import { withConnection } from "$lib/db";
+import { createAppointmentBlock } from "$lib/db/appointmentBlocks";
 import { createAppointment } from "$lib/db/appointments";
 import { createCourse } from "$lib/db/courses";
-import { createSectionMember } from "$lib/db/sectionmembers";
+import { createSectionMember } from "$lib/db/sectionMembers";
 import { createSection } from "$lib/db/sections";
 import { createUser } from "$lib/db/users";
 import { SectionMemberType, WeekDay } from "$lib/types";
-import client_secret from "../client_secret.json";
+import type { Handle } from "@sveltejs/kit";
+import type { QueryConfig } from "pg";
+import { SvelteGoogleAuthHook } from "svelte-google-auth/server";
 
-const auth = new SvelteGoogleAuthHook(client_secret.web);
+const auth = new SvelteGoogleAuthHook({
+	client_id: SECRET_GCP_CLIENT_ID,
+	client_secret: SECRET_GCP_CLIENT_SECRET
+});
 
 export const handle: Handle = async ({ event, resolve }) => {
 	return await auth.handleAuth({ event, resolve });
@@ -115,4 +122,6 @@ async function initializeDatabase() {
 	});
 }
 
-initializeDatabase();
+if (SECRET_NODE_ENV === "development") {
+	initializeDatabase();
+}

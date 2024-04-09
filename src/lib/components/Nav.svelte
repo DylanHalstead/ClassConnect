@@ -1,9 +1,42 @@
 <script lang="ts">
 	import { signOut } from "svelte-google-auth/client";
-	import { Icon, User, Calendar, BookOpen, ArrowLeftEndOnRectangle } from "svelte-hero-icons";
+	import {
+		Icon,
+		User as UserIcon,
+		Calendar,
+		BookOpen,
+		ArrowLeftEndOnRectangle
+	} from "svelte-hero-icons";
+	import type { User } from "$lib/types";
 
-	import type { PageData } from "./$types.js";
-	export let data: PageData;
+	export let data: {
+		db?: {
+			user: User;
+		};
+		// type built from svelte-google-auth/server types; cannot import to client
+		auth: {
+			client_id: string;
+			user?: {
+				iss: string;
+				azp: string;
+				aud: string;
+				sub: string;
+				hd: string;
+				email: string;
+				email_verified: string;
+				at_hash: string;
+				name: string;
+				picture: string;
+				given_name: string;
+				family_name: string;
+				locale: string;
+				iat: string;
+				exp: string;
+			};
+			access_token?: string;
+		};
+		userID: string | undefined;
+	};
 </script>
 
 <div class="fixed z-50">
@@ -13,7 +46,7 @@
 				<div class="bg-white w-3/5 m-5 h-12 rounded-xl flex items-center justify-center">
 					<div>
 						<!-- If not user show CC 'logo' -->
-						{#if !data.auth}
+						{#if !data.auth.user}
 							<a class="text-2xl font-bold" href="/">CC</a>
 							<!-- Else show CC user pfp -->
 						{:else}
@@ -24,7 +57,7 @@
 
 				<div class="space-y-14">
 					<div>
-						<a href="/profile/[profileID]"><Icon src={User} size="32" class="text-white" /></a>
+						<a href="/profile/[profileID]"><Icon src={UserIcon} size="32" class="text-white" /></a>
 					</div>
 					<div>
 						<a href="/calendar"><Icon src={Calendar} size="32" class="text-white" /></a>

@@ -1,10 +1,10 @@
+import { getUsersSectionMembers } from "$lib/db/sectionMembers";
+import { SectionMemberType } from "$lib/types";
 import { type Cookies, error } from "@sveltejs/kit";
 import { isSignedIn } from "svelte-google-auth/server";
 import { setFlash } from "sveltekit-flash-message/server";
-import { getUsersSectionMembers } from "$lib/db/sectionmembers";
-import { SectionMemberType } from "$lib/types";
 
-export function verifyAuthentication(locals: App.Locals, cookies: Cookies): void {
+export function verifyAuthentication(locals: App.Locals, cookies: Cookies): string | never {
 	const userID = cookies.get("userID");
 	if (!isSignedIn(locals) || !userID) {
 		const errorMessage = "You must be signed in to view this page.";
@@ -16,6 +16,8 @@ export function verifyAuthentication(locals: App.Locals, cookies: Cookies): void
 		setFlash(message, cookies);
 		error(401, errorMessage);
 	}
+
+	return userID;
 }
 
 export async function verifyUserIsInSection(
