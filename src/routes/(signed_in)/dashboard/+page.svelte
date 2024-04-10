@@ -5,7 +5,7 @@
 </script>
 
 <div class="px-12 py-2">
-	<Header layout="dashboard" />
+	<Header layout="" />
 
 	<div class="px-12 py-6 mx-auto flex flex-row justify-center">
 		<div class="appointment my-8 mx-auto">
