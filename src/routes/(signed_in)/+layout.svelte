@@ -1,4 +1,5 @@
 <script lang="ts">
+	import "../../app.css";
 	import Nav from "$lib/components/Nav.svelte";
 	import { invalidateAll } from "$app/navigation";
 	import { initialize } from "svelte-google-auth/client";
