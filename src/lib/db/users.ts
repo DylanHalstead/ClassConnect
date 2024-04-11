@@ -1,5 +1,6 @@
 import { withConnection } from "$lib/db";
 import type { PartialUser, User } from "$lib/types";
+import { bulkQuery } from "$lib/utils";
 import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
 
@@ -70,27 +71,24 @@ export async function getUserByEmail(email: string): Promise<User | undefined> {
 	});
 }
 
-export async function getUsers(userIDS: string[]): Promise<User[]> {
-	if (userIDS.length == 0) {
-		return [];
-	}
+export async function getUsers(userIDS: string[]): Promise<User[] | undefined> {
+	return bulkQuery(userIDS, () =>
+		withConnection(async client => {
+			const query: QueryConfig = {
+				text: `
+					SELECT
+						u.id,
+						u.email,
+						u.first_name,
+						u.last_name
+					FROM users u
+					WHERE u.id = ANY($1)
+				`,
+				values: [userIDS]
+			};
 
-	const uniqueIds = Array.from(new Set(userIDS));
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
-				SELECT
-					u.id,
-					u.email,
-					u.first_name,
-					u.last_name
-				FROM users u
-				WHERE u.id = ANY($1)
-			`,
-			values: [uniqueIds]
-		};
-
-		const res: QueryResult<User> = await client.query(query);
-		return res.rows;
-	});
+			const res: QueryResult<User> = await client.query(query);
+			return res.rows;
+		})
+	);
 }

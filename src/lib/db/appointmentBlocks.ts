@@ -3,11 +3,11 @@ import { extendSectionMembers, getSectionMembers } from "$lib/db/sectionMembers"
 import {
 	type AppointmentBlock,
 	type ExtendedAppointmentBlock,
-	isSectionMemberInstructionalMember,
 	type PartialAppointmentBlock,
-	type PostgresAppointmentBlock
+	type PostgresAppointmentBlock,
+	isSectionMemberInstructionalMember
 } from "$lib/types";
-import { postgresAppointmentBlockToAppointmentBlock } from "$lib/utils";
+import { bulkQuery, postgresAppointmentBlockToAppointmentBlock } from "$lib/utils";
 import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
 
@@ -105,47 +105,36 @@ export async function extendAppointmentBlocks(
 }
 
 export async function getAppointmentBlocks(ids: string[]): Promise<AppointmentBlock[] | Error> {
-	if (ids.length == 0) {
-		return [];
-	}
-
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
+	return (
+		(await bulkQuery(ids, () =>
+			withConnection(async client => {
+				const query: QueryConfig = {
+					text: `
 SELECT id, instructional_member_id, week_day, start_time, duration
 FROM appointment_blocks
 WHERE id = ANY($1)`,
 
-			values: [ids]
-		};
+					values: [ids]
+				};
 
-		const queryResult: QueryResult<PostgresAppointmentBlock> = await client.query(query);
-		const appointmentBlocks = new Map();
+				const queryResult: QueryResult<PostgresAppointmentBlock> = await client.query(query);
 
-		for (const row of queryResult.rows) {
-			const appointmentBlock = postgresAppointmentBlockToAppointmentBlock(row);
+				const result: AppointmentBlock[] = [];
 
-			if (appointmentBlock instanceof Error) {
-				return appointmentBlock;
-			}
+				for (const row of queryResult.rows) {
+					const appointmentBlock = postgresAppointmentBlockToAppointmentBlock(row);
 
-			appointmentBlocks.set(appointmentBlock.id, appointmentBlock);
-		}
+					if (appointmentBlock instanceof Error) {
+						return appointmentBlock;
+					}
 
-		const result: AppointmentBlock[] = [];
+					result.push(appointmentBlock);
+				}
 
-		for (const id of ids) {
-			const appointmentBlock = appointmentBlocks.get(id);
-
-			if (appointmentBlock == undefined) {
-				return new Error(`I didn't get back an appointment block with the ID ${id}`);
-			}
-
-			result.push(appointmentBlock);
-		}
-
-		return result;
-	});
+				return result;
+			})
+		)) ?? new Error(`Couldn't find appointment blocks with the IDs ${ids}`)
+	);
 }
 
 export async function getSectionMembersAppointmentBlocks(

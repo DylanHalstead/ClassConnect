@@ -1,5 +1,6 @@
 import { withConnection } from "$lib/db";
 import type { Course, PartialCourse } from "$lib/types";
+import { bulkQuery } from "$lib/utils";
 import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
 
@@ -28,19 +29,21 @@ export async function createCourse(partialCourse: PartialCourse): Promise<Course
 	});
 }
 
-export async function getCourses(ids: string[]): Promise<Course[]> {
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
+export async function getCourses(ids: string[]): Promise<Course[] | undefined> {
+	return bulkQuery(ids, () =>
+		withConnection(async client => {
+			const query: QueryConfig = {
+				text: `
 SELECT id, department_code, course_code, course_name
 FROM courses
 WHERE id = ANY($1)`,
 
-			values: [ids]
-		};
+				values: [ids]
+			};
 
-		const result: QueryResult<Course> = await client.query(query);
+			const result: QueryResult<Course> = await client.query(query);
 
-		return result.rows;
-	});
+			return result.rows;
+		})
+	);
 }

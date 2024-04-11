@@ -1,6 +1,7 @@
 import { withConnection } from "$lib/db";
 import { getCourses } from "$lib/db/courses";
 import type { ExtendedSection, PartialSection, Section } from "$lib/types";
+import { bulkQuery } from "$lib/utils";
 import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
 
@@ -32,7 +33,13 @@ export async function createSection(partialSection: PartialSection): Promise<Sec
 }
 
 export async function extendSections(sections: Section[]): Promise<ExtendedSection[] | Error> {
-	const courses = await getCourses(sections.map(section => section.course_id));
+	const courseIds = sections.map(section => section.course_id);
+	const courses = await getCourses(courseIds);
+
+	if (courses == undefined) {
+		return new Error(`Couldn't find courses with the IDs ${courseIds}`);
+	}
+
 	const result: ExtendedSection[] = [];
 
 	for (const [i, section] of sections.entries()) {
@@ -52,23 +59,31 @@ export async function extendSections(sections: Section[]): Promise<ExtendedSecti
 	return result;
 }
 
-export async function getSections(ids: string[]): Promise<Section[]> {
-	if (ids.length == 0) {
-		return [];
+export async function getSection(id: string): Promise<Section | undefined> {
+	const sections = await getSections([id]);
+
+	if (sections == undefined) {
+		return;
 	}
 
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
+	return sections[0];
+}
+
+export async function getSections(ids: string[]): Promise<Section[] | undefined> {
+	return bulkQuery(ids, () =>
+		withConnection(async client => {
+			const query: QueryConfig = {
+				text: `
 SELECT id, course_id, section_number, max_daily_bookable_hours
 FROM sections
 WHERE id = ANY($1)`,
 
-			values: [ids]
-		};
+				values: [ids]
+			};
 
-		const result: QueryResult<Section> = await client.query(query);
+			const result: QueryResult<Section> = await client.query(query);
 
-		return result.rows;
-	});
+			return result.rows;
+		})
+	);
 }

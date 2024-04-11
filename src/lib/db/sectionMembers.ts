@@ -2,6 +2,7 @@ import { withConnection } from "$lib/db";
 import { extendSections, getSections } from "$lib/db/sections";
 import { getUsers } from "$lib/db/users";
 import type { ExtendedSectionMember, SectionMember, PartialSectionMember } from "$lib/types";
+import { bulkQuery } from "$lib/utils";
 import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
 
@@ -38,14 +39,26 @@ export async function createSectionMember(
 export async function extendSectionMembers(
 	sectionMembers: SectionMember[]
 ): Promise<ExtendedSectionMember[] | Error> {
-	const sections = await getSections(sectionMembers.map(sectionMember => sectionMember.section_id));
+	const sectionIds = sectionMembers.map(sectionMember => sectionMember.section_id);
+	const sections = await getSections(sectionIds);
+
+	if (sections == undefined) {
+		return new Error(`Couldn't find sections with the IDs ${sectionIds}`);
+	}
+
 	const extendedSections = await extendSections(sections);
 
 	if (extendedSections instanceof Error) {
 		return extendedSections;
 	}
 
-	const users = await getUsers(sectionMembers.map(sectionMember => sectionMember.user_id));
+	const userIds = sectionMembers.map(sectionMember => sectionMember.user_id);
+	const users = await getUsers(userIds);
+
+	if (users == undefined) {
+		return new Error(`Couldn't find users with the IDs ${userIds}`);
+	}
+
 	const result: ExtendedSectionMember[] = [];
 
 	for (const [i, sectionMember] of sectionMembers.entries()) {
@@ -73,39 +86,22 @@ export async function extendSectionMembers(
 }
 
 export async function getSectionMembers(ids: string[]): Promise<SectionMember[] | undefined> {
-	if (ids.length == 0) {
-		return [];
-	}
-
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
+	return bulkQuery(ids, () =>
+		withConnection(async client => {
+			const query: QueryConfig = {
+				text: `
 SELECT id, section_id, user_id, member_type, is_restricted
 FROM section_members
 WHERE id = ANY($1)`,
 
-			values: [ids]
-		};
+				values: [ids]
+			};
 
-		const queryResult: QueryResult<SectionMember> = await client.query(query);
-		const sectionMembers = new Map(
-			queryResult.rows.map(sectionMember => [sectionMember.id, sectionMember])
-		);
+			const result: QueryResult<SectionMember> = await client.query(query);
 
-		const result: SectionMember[] = [];
-
-		for (const id of ids) {
-			const sectionMember = sectionMembers.get(id);
-
-			if (sectionMember == undefined) {
-				return;
-			}
-
-			result.push(sectionMember);
-		}
-
-		return result;
-	});
+			return result.rows;
+		})
+	);
 }
 
 export async function getSectionSectionMembers(sectionId: string): Promise<SectionMember[]> {

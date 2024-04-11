@@ -1,6 +1,6 @@
 import { verifyAuthentication, verifyUserIsApartOfInstructionalTeam } from "$lib/auth";
 import { extendSectionMembers, getSectionSectionMembers } from "$lib/db/sectionMembers";
-import { extendSections, getSections } from "$lib/db/sections";
+import { extendSections, getSection } from "$lib/db/sections";
 import type { PageServerLoad, Actions } from "./$types";
 import { error } from "@sveltejs/kit";
 
@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 
 	await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
 
-	const section = (await getSections([sectionID]))[0];
+	const section = await getSection(sectionID);
 
 	if (section == undefined) {
 		error(404, "Section not found.");

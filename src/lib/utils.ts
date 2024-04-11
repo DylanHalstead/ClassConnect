@@ -105,3 +105,53 @@ export function sectionName(section: ExtendedSection): string {
 export function userName(user: User): string {
 	return `${user.first_name} ${user.last_name}`;
 }
+
+/**
+ * Postgres makes performing bulk queries (i.e. `WHERE ... = ANY($1)`) difficult for three reasons:
+ * 1. If `$1` is empty, the query will fail.
+ * 2. The order of the values returned isn't guaranteed to match the order of `$1`.
+ * 2. If `$1` contains duplicates, less values will be returned than `$1`'s length.
+ *
+ * This helper function addresses those problems in a streamlined way, specifically in the context
+ * of fetching resources according to their IDs. This function guarantees that if we're issuing a
+ * query with n IDs, n rows will be returned (otherwise, we'll return `undefined`).
+ *
+ * Search the codebase for examples of how this function is used.
+ *
+ * @typeParam Resource The resource being fetched.
+ * @typeParam ErrorLike An error that may be returned while those resources are being fetched.
+ * @param queryIds The IDs of the resources being fetched.
+ * @param getResources A function to fetch the resources in bulk.
+ * @returns The fetched resources, sorted to match the order of the IDs going in, with two caveats:
+ *   - If we didn't get a resource for a particular ID, we return `undefined`.
+ *   - If `getResources` returned an error, we return that error.
+ */
+export async function bulkQuery<Resource extends { id: string }, ErrorLike = never>(
+	queryIds: string[],
+	getResources: () => Promise<Resource[] | ErrorLike>
+): Promise<Resource[] | ErrorLike | undefined> {
+	if (queryIds.length == 0) {
+		return [];
+	}
+
+	const resources = await getResources();
+
+	if (!(resources instanceof Array)) {
+		return resources;
+	}
+
+	const resourcesById = new Map(resources.map(resource => [resource.id, resource]));
+	const result: Resource[] = [];
+
+	for (const id of queryIds) {
+		const resource = resourcesById.get(id);
+
+		if (resource == undefined) {
+			return;
+		}
+
+		result.push(resource);
+	}
+
+	return result;
+}
