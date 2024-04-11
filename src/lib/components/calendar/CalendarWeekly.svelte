@@ -140,9 +140,11 @@
 							class:border-b={i < rowCount - 1}
 							class:border-e={j == 6}>
 							<div class="overflow-y-scroll p-2" style:height={configuration.gutterCellHeight}>
-								<CalendarCardCarousel
-									appointments={getAppointments(i, j)}
-									on:appointmentClicked={event => dispatch("appointmentClicked", event.detail)} />
+								{#key configuration}
+									<CalendarCardCarousel
+										appointments={getAppointments(i, j)}
+										on:appointmentClicked={event => dispatch("appointmentClicked", event.detail)} />
+								{/key}
 							</div>
 						</td>
 					{/each}
