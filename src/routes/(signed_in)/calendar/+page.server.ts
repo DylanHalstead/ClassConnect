@@ -18,14 +18,14 @@ export const load: PageServerLoad = async ({ cookies }: { cookies: Cookies }) =>
 	const sectionMemberIds = sectionMembers.map(sectionMember => sectionMember.id);
 	const appointmentBlocks = await getSectionMembersAppointmentBlocks(sectionMemberIds);
 
-	if (appointmentBlocks == undefined) {
-		throw new Error("Error fetching appointment blocks from the database.");
+	if (appointmentBlocks instanceof Error) {
+		throw appointmentBlocks;
 	}
 
 	const extendedAppointmentBlocks = await extendAppointmentBlocks(appointmentBlocks);
 
-	if (extendedAppointmentBlocks == undefined) {
-		throw new Error("Error extending appointment blocks.");
+	if (extendedAppointmentBlocks instanceof Error) {
+		throw extendedAppointmentBlocks;
 	}
 
 	const appointments = [
@@ -38,8 +38,8 @@ export const load: PageServerLoad = async ({ cookies }: { cookies: Cookies }) =>
 
 	const extendedAppointments = await extendAppointments(appointments);
 
-	if (extendedAppointments == undefined) {
-		throw new Error("Error extending appointments.");
+	if (extendedAppointments instanceof Error) {
+		throw extendedAppointments;
 	}
 
 	return {

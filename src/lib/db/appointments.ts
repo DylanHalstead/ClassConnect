@@ -43,31 +43,32 @@ export async function createAppointment(
 
 export async function extendAppointments(
 	appointments: Appointment[]
-): Promise<ExtendedAppointment[] | undefined> {
+): Promise<ExtendedAppointment[] | Error> {
 	const appointmentBlocks = await getAppointmentBlocks(
 		appointments.map(appointment => appointment.appointment_block)
 	);
 
-	if (appointmentBlocks == undefined) {
-		return;
+	if (appointmentBlocks instanceof Error) {
+		return appointmentBlocks;
 	}
 
 	const extendedAppointmentBlocks = await extendAppointmentBlocks(appointmentBlocks);
 
-	if (extendedAppointmentBlocks == undefined) {
-		return;
+	if (extendedAppointmentBlocks instanceof Error) {
+		return extendedAppointmentBlocks;
 	}
 
-	const students = await getSectionMembers(appointments.map(appointment => appointment.student_id));
+	const studentIds = appointments.map(appointment => appointment.student_id);
+	const students = await getSectionMembers(studentIds);
 
 	if (students == undefined) {
-		return;
+		return new Error(`Couldn't find the students with the IDs ${studentIds}`);
 	}
 
 	const extendedStudents = await extendSectionMembers(students);
 
-	if (extendedStudents == undefined) {
-		return;
+	if (extendedStudents instanceof Error) {
+		return extendedStudents;
 	}
 
 	const result: ExtendedAppointment[] = [];
@@ -77,7 +78,7 @@ export async function extendAppointments(
 		const student = extendedStudents[i];
 
 		if (appointmentBlock == undefined || student == undefined || !isSectionMemberStudent(student)) {
-			return;
+			return new Error(`I didn't get back a student with the ID ${appointment.student_id}`);
 		}
 
 		result.push({

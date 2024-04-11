@@ -12,23 +12,33 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
-export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date | undefined {
+export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date | Error {
 	const [time, timeZoneOffset] = timeWithZone.split("-");
-	if (!time || !timeZoneOffset) {
-		return undefined;
+
+	if (time == undefined || timeZoneOffset == undefined) {
+		return new Error(`This PostgreSQL timestamp doesn't contain a \"-\": ${timeWithZone}`);
 	}
 
 	const [hours, minutes] = time.split(":").map(num => parseInt(num));
-	if (hours == undefined || minutes == undefined || isNaN(hours) || isNaN(minutes)) {
-		return undefined;
+
+	if (hours == undefined || minutes == undefined) {
+		return new Error(`This PostgreSQL timestamp doesn't contain a \":\": ${timeWithZone}`);
+	}
+
+	if (isNaN(hours) || isNaN(minutes)) {
+		return new Error(
+			`This PostgreSQL timestamp's hours and minutes aren't numeric: ${timeWithZone}`
+		);
 	}
 
 	const parsedTimeZoneOffset = parseInt(timeZoneOffset);
+
 	if (isNaN(parsedTimeZoneOffset)) {
-		return undefined;
+		return new Error(`This PostgreSQL timestamp's timezone offset isn't numeric: ${timeWithZone}`);
 	}
 
 	const date = new Date(0);
+
 	date.setHours(hours - parsedTimeZoneOffset);
 	date.setMinutes(minutes);
 
@@ -70,18 +80,21 @@ export function intervalToMilliseconds(interval: Interval): number {
 
 export function postgresAppointmentBlockToAppointmentBlock(
 	postgresAppointmentBlock: PostgresAppointmentBlock
-): AppointmentBlock | undefined {
-	const start_time = postgresTimeWithTimeZoneToDate(postgresAppointmentBlock.start_time);
-	if (!start_time) {
-		return undefined;
+): AppointmentBlock | Error {
+	const startTime = postgresTimeWithTimeZoneToDate(postgresAppointmentBlock.start_time);
+
+	if (startTime instanceof Error) {
+		return startTime;
 	}
+
 	const appointmentBlock: AppointmentBlock = {
 		id: postgresAppointmentBlock.id,
 		instructional_member_id: postgresAppointmentBlock.instructional_member_id,
 		week_day: postgresAppointmentBlock.week_day,
-		start_time: start_time,
+		start_time: startTime,
 		duration: intervalToMilliseconds(postgresAppointmentBlock.duration)
 	};
+
 	return appointmentBlock;
 }
 

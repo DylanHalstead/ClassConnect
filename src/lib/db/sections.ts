@@ -31,20 +31,15 @@ export async function createSection(partialSection: PartialSection): Promise<Sec
 	});
 }
 
-export async function extendSections(sections: Section[]): Promise<ExtendedSection[] | undefined> {
-	const courses = await getCourses(sections.map(section => section.id));
-
-	if (courses == undefined) {
-		return;
-	}
-
+export async function extendSections(sections: Section[]): Promise<ExtendedSection[] | Error> {
+	const courses = await getCourses(sections.map(section => section.course_id));
 	const result: ExtendedSection[] = [];
 
 	for (const [i, section] of sections.entries()) {
 		const course = courses[i];
 
 		if (course == undefined) {
-			return;
+			return new Error(`I didn't get back a course with the ID ${section.course_id}`);
 		}
 
 		result.push({
@@ -76,20 +71,4 @@ WHERE id = ANY($1)`,
 
 		return result.rows;
 	});
-}
-
-export async function getExtendedSection(sectionId: string): Promise<ExtendedSection | undefined> {
-	const sections = await getSections([sectionId]);
-
-	if (sections == undefined || sections[0] == undefined) {
-		return;
-	}
-
-	const extendedSections = await extendSections([sections[0]]);
-
-	if (extendedSections == undefined || extendedSections[0] == undefined) {
-		return;
-	}
-
-	return extendedSections[0];
 }

@@ -53,8 +53,8 @@ export const actions: Actions = {
 		let duration = end.getTime() - start.getTime();
 		// Validate that the start-time and end-time aren't conflicting with existing appointment blocks
 		const membersBlocks = await getSectionMembersAppointmentBlocks([params.memberID]);
-		if (!membersBlocks) {
-			error(500, "Internal server error: Failed to get appointment blocks");
+		if (membersBlocks instanceof Error) {
+			throw membersBlocks;
 		}
 		const possiblyConflictingBlocks = membersBlocks.filter(block => block.week_day === dayOfWeek);
 		const mergeableBlocks: AppointmentBlock[] = [];

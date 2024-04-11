@@ -61,19 +61,23 @@ export async function deleteAppointmentBlocks(ids: string[]): Promise<boolean> {
 
 export async function extendAppointmentBlocks(
 	appointmentBlocks: AppointmentBlock[]
-): Promise<ExtendedAppointmentBlock[] | undefined> {
-	const instructionalMembers = await getSectionMembers(
-		appointmentBlocks.map(appointmentBlock => appointmentBlock.id)
+): Promise<ExtendedAppointmentBlock[] | Error> {
+	const instructionalMemberIds = appointmentBlocks.map(
+		appointmentBlock => appointmentBlock.instructional_member_id
 	);
 
+	const instructionalMembers = await getSectionMembers(instructionalMemberIds);
+
 	if (instructionalMembers == undefined) {
-		return;
+		return new Error(
+			`Couldn't find the instructional members with the IDs ${instructionalMemberIds}`
+		);
 	}
 
 	const extendedInstructionalMembers = await extendSectionMembers(instructionalMembers);
 
-	if (extendedInstructionalMembers == undefined) {
-		return;
+	if (extendedInstructionalMembers instanceof Error) {
+		return extendedInstructionalMembers;
 	}
 
 	const result: ExtendedAppointmentBlock[] = [];
@@ -85,7 +89,9 @@ export async function extendAppointmentBlocks(
 			instructionalMember == undefined ||
 			!isSectionMemberInstructionalMember(instructionalMember)
 		) {
-			return;
+			return new Error(
+				`I didn't get back an instructional member with the ID ${appointmentBlock.instructional_member_id}`
+			);
 		}
 
 		result.push({
@@ -98,7 +104,7 @@ export async function extendAppointmentBlocks(
 	return result;
 }
 
-export async function getAppointmentBlocks(ids: string[]): Promise<AppointmentBlock[] | undefined> {
+export async function getAppointmentBlocks(ids: string[]): Promise<AppointmentBlock[] | Error> {
 	if (ids.length == 0) {
 		return [];
 	}
@@ -119,8 +125,8 @@ WHERE id = ANY($1)`,
 		for (const row of queryResult.rows) {
 			const appointmentBlock = postgresAppointmentBlockToAppointmentBlock(row);
 
-			if (appointmentBlock == undefined) {
-				return;
+			if (appointmentBlock instanceof Error) {
+				return appointmentBlock;
 			}
 
 			appointmentBlocks.set(appointmentBlock.id, appointmentBlock);
@@ -132,7 +138,7 @@ WHERE id = ANY($1)`,
 			const appointmentBlock = appointmentBlocks.get(id);
 
 			if (appointmentBlock == undefined) {
-				return;
+				return new Error(`I didn't get back an appointment block with the ID ${id}`);
 			}
 
 			result.push(appointmentBlock);
@@ -144,7 +150,7 @@ WHERE id = ANY($1)`,
 
 export async function getSectionMembersAppointmentBlocks(
 	ids: string[]
-): Promise<AppointmentBlock[] | undefined> {
+): Promise<AppointmentBlock[] | Error> {
 	if (ids.length == 0) {
 		return [];
 	}
@@ -166,8 +172,8 @@ WHERE instructional_member_id = ANY($1)`,
 		const filtered: AppointmentBlock[] = [];
 
 		for (const appointmentBlock of appointmentBlocks) {
-			if (appointmentBlock == undefined) {
-				return;
+			if (appointmentBlock instanceof Error) {
+				return appointmentBlock;
 			}
 
 			filtered.push(appointmentBlock);
@@ -179,7 +185,7 @@ WHERE instructional_member_id = ANY($1)`,
 
 export async function getSectionsAppointmentBlocks(
 	sectionId: string
-): Promise<AppointmentBlock[] | undefined> {
+): Promise<AppointmentBlock[] | Error> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
 			text: `
@@ -204,8 +210,8 @@ export async function getSectionsAppointmentBlocks(
 		const filtered: AppointmentBlock[] = [];
 
 		for (const appointmentBlock of appointmentBlocks) {
-			if (appointmentBlock == undefined) {
-				return;
+			if (appointmentBlock instanceof Error) {
+				return appointmentBlock;
 			}
 
 			filtered.push(appointmentBlock);
