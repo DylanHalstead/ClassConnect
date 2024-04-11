@@ -1,29 +1,7 @@
+import { withConnection } from "$lib/db";
 import type { Course, PartialCourse } from "$lib/types";
-import { withConnection } from ".";
 import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
-
-export async function getCourse(courseID: string): Promise<Course | undefined> {
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
-				SELECT
-					c.id,
-					c.department_code,
-					c.course_code,
-					c.course_name
-				FROM courses c
-				WHERE c.id = $1`,
-			values: [courseID]
-		};
-
-		const res: QueryResult<Course> = await client.query(query);
-		if (res.rows.length === 0) {
-			return undefined;
-		}
-		return res.rows[0];
-	});
-}
 
 export async function createCourse(partialCourse: PartialCourse): Promise<Course> {
 	return await withConnection(async client => {
@@ -35,7 +13,7 @@ export async function createCourse(partialCourse: PartialCourse): Promise<Course
 
 		await client.query({
 			text: `
-				INSERT INTO courses (id, department_code, course_code, course_name) 
+				INSERT INTO courses (id, department_code, course_code, course_name)
 				VALUES ($1, $2, $3, $4)
 			`,
 			values: [
@@ -47,5 +25,22 @@ export async function createCourse(partialCourse: PartialCourse): Promise<Course
 		});
 
 		return newCourse;
+	});
+}
+
+export async function getCourses(ids: string[]): Promise<Course[]> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+SELECT id, department_code, course_code, course_name
+FROM courses
+WHERE id = ANY($1)`,
+
+			values: [ids]
+		};
+
+		const result: QueryResult<Course> = await client.query(query);
+
+		return result.rows;
 	});
 }

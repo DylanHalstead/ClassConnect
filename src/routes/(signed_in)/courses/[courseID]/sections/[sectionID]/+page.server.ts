@@ -1,6 +1,6 @@
 import { verifyAuthentication, verifyUserIsApartOfInstructionalTeam } from "$lib/auth";
-import { getExtendedSection } from "$lib/db/section";
 import { getExtendedSectionMembers } from "$lib/db/sectionMembers";
+import { getExtendedSection } from "$lib/db/sections";
 import type { PageServerLoad, Actions } from "./$types";
 import { error } from "@sveltejs/kit";
 
