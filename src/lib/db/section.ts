@@ -42,3 +42,42 @@ export async function getExtendedSection(sectionID: string): Promise<ExtendedSec
 		course
 	};
 }
+
+export async function updateSection(sectionID: string, sectionNumber: number, maxDailyBookableHours: number): Promise<Section | undefined> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+				UPDATE sections s
+				SET section_number = $2, max_daily_bookable_hours = $3
+				WHERE id = $1
+				RETURNING s.id, s.course_id, s.section_number, s.max_daily_bookable_hours
+			`,
+			values: [sectionID, sectionNumber, maxDailyBookableHours]
+		};
+
+		const res: QueryResult<Section> = await client.query(query);
+		if (res.rows.length === 0) {
+			return undefined;
+		}
+		return res.rows[0];
+	});
+}
+
+export async function deleteSection(sectionID: string): Promise<boolean> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+				DELETE FROM sections
+				WHERE id = $1
+			`,
+			values: [sectionID]
+		};
+
+		try {
+			await client.query(query);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	});
+}
