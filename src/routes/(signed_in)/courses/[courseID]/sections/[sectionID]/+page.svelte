@@ -53,11 +53,12 @@
 			<h2 class="font-bold text-xl mb-1">Settings</h2>
 			<h3 class="text-sm text-gray-600">ID: {data.section.id}</h3>
 		</div>
-		<form method="POST" action="?/updateSection" id="setting-form" >
+		<form method="POST" action="?/updateSection" id="setting-form">
 			<div class="flow-root my-5">
 				<dl class="-my-3 divide-y divide-gray-400 text-sm">
 					<div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 items-center">
-						<label for="max_daily_bookable_hours" class="font-medium text-gray-900">Maximum Daily Bookable Hours</label>
+						<label for="max_daily_bookable_hours" class="font-medium text-gray-900"
+							>Maximum Daily Bookable Hours</label>
 						<dd class="text-gray-700 sm:col-span-2">
 							<input
 								type="number"
@@ -88,7 +89,8 @@
 			<form action="?/deleteSection" method="POST" on:submit={confirmDeletion}>
 				<button type="submit" class="btn btn-error">Delete</button>
 			</form>
-			<button type="submit" class="btn btn-primary text-white" form="setting-form">Save Changes</button>
+			<button type="submit" class="btn btn-primary text-white" form="setting-form"
+				>Save Changes</button>
 		</div>
 	</Modal>
 

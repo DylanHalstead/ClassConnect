@@ -1,7 +1,12 @@
 import { getCourse } from "$lib/db/courses";
 import { getExtendedSection } from "$lib/db/section";
 import { getUsers } from "$lib/db/users";
-import type { ExtendedSectionMember, SectionMember, PartialSectionMember, SectionMemberType } from "$lib/types";
+import type {
+	ExtendedSectionMember,
+	SectionMember,
+	PartialSectionMember,
+	SectionMemberType
+} from "$lib/types";
 import { withConnection } from "./index";
 import type { QueryConfig, QueryResult } from "pg";
 import { v4 as uuidv4 } from "uuid";
@@ -36,7 +41,11 @@ export async function createSectionMember(
 	});
 }
 
-export async function updateSectionMember(memberID: string, memberType: SectionMemberType, isRestricted: boolean): Promise<SectionMember | undefined> {
+export async function updateSectionMember(
+	memberID: string,
+	memberType: SectionMemberType,
+	isRestricted: boolean
+): Promise<SectionMember | undefined> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
 			text: `
@@ -101,7 +110,6 @@ export async function getSectionMember(memberId: string): Promise<SectionMember 
 
 		return result.rows[0];
 	});
-
 }
 
 export async function getSectionMembers(sectionId: string): Promise<SectionMember[]> {

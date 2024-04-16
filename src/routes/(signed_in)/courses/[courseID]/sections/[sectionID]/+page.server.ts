@@ -1,12 +1,16 @@
-import { verifyAuthentication, verifyUserIsMember, verifyUserIsApartOfInstructionalTeam } from "$lib/auth";
+import {
+	verifyAuthentication,
+	verifyUserIsMember,
+	verifyUserIsApartOfInstructionalTeam
+} from "$lib/auth";
 import { deleteSection, updateSection, getExtendedSection } from "$lib/db/section";
 import { getExtendedSectionMembers } from "$lib/db/sectionMembers";
-import { setFlash } from "sveltekit-flash-message/server";
+import { deleteSectionMember, updateSectionMember, getSectionMember } from "$lib/db/sectionMembers";
+import { SectionMemberType } from "$lib/types";
+import { getEnumValue } from "$lib/utils";
 import type { PageServerLoad, Actions } from "./$types";
 import { error, redirect, json, fail } from "@sveltejs/kit";
-import { deleteSectionMember, updateSectionMember, getSectionMember } from '$lib/db/sectionMembers';
-import { SectionMemberType } from '$lib/types';
-import { getEnumValue } from '$lib/utils';
+import { setFlash } from "sveltekit-flash-message/server";
 
 export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 	const { sectionID } = params;
@@ -31,7 +35,7 @@ export const actions: Actions = {
 		const { courseID, sectionID } = params;
 		const userID = verifyAuthentication(locals, cookies);
 		await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
-		
+
 		const data: FormData = await request.formData();
 		const formMaxDailyBookableHours = data.get("max_daily_bookable_hours");
 		if (!formMaxDailyBookableHours) {
@@ -92,38 +96,38 @@ export const actions: Actions = {
 		await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
 
 		const data = await request.formData();
-		const memberID = data.get('member-id');
+		const memberID = data.get("member-id");
 		if (!memberID) {
-			return fail(400, {memberID, missing: true});
+			return fail(400, { memberID, missing: true });
 		}
-		if (typeof memberID !== 'string') {
-			return fail(400, {memberID, invalid: true});
+		if (typeof memberID !== "string") {
+			return fail(400, { memberID, invalid: true });
 		}
 
 		const member = await getSectionMember(memberID);
 		if (!member) {
-			return fail(404, {memberID, notFound: true})
+			return fail(404, { memberID, notFound: true });
 		}
 
-		const formSectionMemberType = data.get('section-member-type');
-		if (!formSectionMemberType ){
-			return fail(400, {sectionMemberType: formSectionMemberType, missing: true});
+		const formSectionMemberType = data.get("section-member-type");
+		if (!formSectionMemberType) {
+			return fail(400, { sectionMemberType: formSectionMemberType, missing: true });
 		}
-		if (typeof formSectionMemberType !== 'string') {
-			return fail(400, {sectionMemberType: formSectionMemberType, invalid: true});
+		if (typeof formSectionMemberType !== "string") {
+			return fail(400, { sectionMemberType: formSectionMemberType, invalid: true });
 		}
-		const formIsRestricted = data.get('is-restricted');
-		if (formIsRestricted && formIsRestricted !== 'on') {
-			return fail(400, {isRestricted: formIsRestricted, invalid: true});
+		const formIsRestricted = data.get("is-restricted");
+		if (formIsRestricted && formIsRestricted !== "on") {
+			return fail(400, { isRestricted: formIsRestricted, invalid: true });
 		}
-		if (formIsRestricted && member.member_type !== 'student') {
-			return fail(400, {isRestricted: formIsRestricted, invalid: true});
+		if (formIsRestricted && member.member_type !== "student") {
+			return fail(400, { isRestricted: formIsRestricted, invalid: true });
 		}
 		const sectionMemberType = getEnumValue(formSectionMemberType, SectionMemberType);
 		if (!sectionMemberType) {
-			return fail(400, {sectionMemberType: formSectionMemberType, invalid: true});
+			return fail(400, { sectionMemberType: formSectionMemberType, invalid: true });
 		}
-		let isRestricted = formIsRestricted === 'on';
+		let isRestricted = formIsRestricted === "on";
 
 		const updatedMember = await updateSectionMember(memberID, sectionMemberType, isRestricted);
 		if (!updatedMember) {
@@ -135,18 +139,18 @@ export const actions: Actions = {
 		const { courseID, sectionID } = params;
 		const userID = verifyAuthentication(locals, cookies);
 		await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
-		
+
 		const data = await request.formData();
-		const memberID = data.get('member-id');
+		const memberID = data.get("member-id");
 		if (!memberID) {
-			return fail(400, {memberID, missing: true});
+			return fail(400, { memberID, missing: true });
 		}
-		if (typeof memberID !== 'string') {
-			return fail(400, {memberID, invalid: true});
+		if (typeof memberID !== "string") {
+			return fail(400, { memberID, invalid: true });
 		}
 		const member = await getSectionMember(memberID);
 		if (!member) {
-			return fail(404, {memberID, notFound: true});
+			return fail(404, { memberID, notFound: true });
 		}
 
 		const isDeleted = await deleteSectionMember(memberID);
