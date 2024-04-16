@@ -26,7 +26,7 @@
 		isMemberModalOpen = true;
 	}
 
-	async function confirmDeletion(e: Event) {
+	function confirmDeletion(e: Event) {
 		const isConfirmed = confirm("Are you sure you want to delete this section?");
 		if (!isConfirmed) {
 			e.preventDefault();
@@ -53,7 +53,7 @@
 			<h2 class="font-bold text-xl mb-1">Settings</h2>
 			<h3 class="text-sm text-gray-600">ID: {data.section.id}</h3>
 		</div>
-		<form method="POST" action="?/update" id="setting-form" >
+		<form method="POST" action="?/updateSection" id="setting-form" >
 			<div class="flow-root my-5">
 				<dl class="-my-3 divide-y divide-gray-400 text-sm">
 					<div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 items-center">
@@ -85,9 +85,8 @@
 			</div>
 		</form>
 		<div class="flex justify-between">
-			<form action="?/delete" method="post" on:submit={confirmDeletion}>
-				<input type="hidden" id="sectionID" name="sectionID" value={data.section.id}>
-				<button type="submit" class="btn btn-error" formaction="?/deleteSection">Delete</button>
+			<form action="?/deleteSection" method="POST" on:submit={confirmDeletion}>
+				<button type="submit" class="btn btn-error">Delete</button>
 			</form>
 			<button type="submit" class="btn btn-primary text-white" form="setting-form">Save Changes</button>
 		</div>
