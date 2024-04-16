@@ -1,5 +1,5 @@
 import { verifyAuthentication, verifyUserIsApartOfInstructionalTeam } from "$lib/auth";
-import { extendSectionMembers, getSectionSectionMembers } from "$lib/db/sectionMembers";
+import { extendSectionMembers, getSectionsSectionMembers } from "$lib/db/sectionMembers";
 import { extendSections, getSection } from "$lib/db/sections";
 import type { PageServerLoad, Actions } from "./$types";
 import { error } from "@sveltejs/kit";
@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 		throw new Error(`I didn't get back a section with the ID ${section.id}`);
 	}
 
-	const sectionMembers = await getSectionSectionMembers(sectionID);
+	const sectionMembers = await getSectionsSectionMembers([sectionID]);
 
 	if (sectionMembers.length === 0) {
 		error(400, "Must have section members to view this page.");
