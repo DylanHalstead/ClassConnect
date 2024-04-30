@@ -1,9 +1,9 @@
 <script lang="ts">
 
-    import type { ExtendedAppointment } from "$lib/types";
+    import type { PartialAppointment } from "$lib/types";
     import { sectionName, userName } from "$lib/utils";
 
-    let appointment: ExtendedAppointment;
+    export let appointment: PartialAppointment
 
     $: appointmentBlock = appointment.appointment_block;
 	$: instructionalMember = appointmentBlock.instructional_member;

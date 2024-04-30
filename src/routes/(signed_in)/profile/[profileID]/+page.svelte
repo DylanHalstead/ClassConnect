@@ -2,7 +2,9 @@
     import Appointment from "$lib/components/profile/Appointment.svelte";
     import Class from "$lib/components/profile/Class.svelte";
     import type { PartialAppointment } from "$lib/types";
+    import type { ExtendedAppointment } from "$lib/types";
     import type { User } from "$lib/types";
+    import type { PartialCourse } from "$lib/types";
 
     import { type ExtendedSectionMember, SectionMemberType } from "$lib/types";
 
@@ -11,6 +13,7 @@
     export let member: ExtendedSectionMember;
     export let data: PageData;
 
+    let course: Array<PartialCourse>;
     let appointment: Array<PartialAppointment>;
     let associated: User['id'];
 </script>
@@ -30,10 +33,6 @@
                 <div>
                     <h1 class="text-2xl font-bold">{data.auth.user.name}</h1>
                 </div>
-                <!-- <div>
-                    <h1 class="text-2xl font-bold">{data.auth.user.last_name}</h1> -->
-                    <!-- <h1 class="text-2xl font-bold">Finberg</h1> -->
-                <!-- </div> -->
             </div>
             <div>
                 <h3 class="text-lg">{data.auth.user.email}</h3>
@@ -68,7 +67,7 @@
             {#each appointment as apt}
                 {#if apt.student_id == associated}
                     <div>
-                        <Appointment />
+                        <Appointment appointment={apt}/>
                     </div>
                 {/if}
             {/each}
@@ -121,12 +120,13 @@
         <!-- Appointemnt Components -->
 
         <div class="flex flex-wrap space-x-7">
-            <div>
-                <Appointment />
-            </div>
-            <div>
-                <Appointment />
-            </div>
+            {#each appointment as apt}
+                {#if apt.student_id == associated}
+                    <div>
+                        <Appointment />
+                    </div>
+                {/if}
+            {/each}
         </div>
 
     </div>
@@ -152,9 +152,11 @@
         <!-- Class Components -->
 
         <div class="flex flex-wrap space-x-7">
-            <div>
-                <Class />
-            </div>
+            {#each course as crs}
+                <div>
+                    <Class departmentCode={crs.department_code} className={crs.course_name}/>
+                </div>
+            {/each}
         </div>
 
     </div>
@@ -178,9 +180,11 @@
         <!-- Class Components | TODO: Loop TA TA classes -->
 
         <div class="flex flex-wrap space-x-7">
-            <div>
-                <Class />
-            </div>
+            {#each course as crs}
+                <div>
+                    <Class departmentCode={crs.department_code} className={crs.course_name}/>
+                </div>
+            {/each}
         </div>
 
     </div>
@@ -199,9 +203,11 @@
         <!-- Class Components | TODO: Loop TA Student Classes -->
 
         <div class="flex flex-wrap space-x-7">
-            <div>
-                <Class />
-            </div>
+            {#each course as crs}
+                <div>
+                    <Class departmentCode={crs.department_code} className={crs.course_name}/>
+                </div>
+            {/each}
         </div>
 
     </div>
@@ -225,9 +231,11 @@
         <!-- Class Components TODO: Loop classes instructor teaches -->
 
         <div class="flex flex-wrap space-x-7">
-            <div>
-                <Class />
-            </div>
+            {#each course as crs}
+                <div>
+                    <Class departmentCode={crs.department_code} className={crs.course_name}/>
+                </div>
+            {/each}
         </div>
 
     </div>

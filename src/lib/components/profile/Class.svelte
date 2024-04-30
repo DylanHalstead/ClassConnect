@@ -1,8 +1,10 @@
 <script lang="ts">
 
-    import type { PartialCourse } from "$lib/types";
+    //import type { PartialCourse } from "$lib/types";
 
-    let course: PartialCourse;
+    //let course: PartialCourse;
+    export let departmentCode = "DC";
+    export let className = 'unknown';
 
 </script>
 
@@ -15,10 +17,10 @@
         <!-- Dynamic: Name of Class and its Department Code -->
         <div class="flex space-x-2">
             <div>
-                <p class="p-1">{course.department_code}</p>
+                <p class="p-1">{departmentCode}</p>
             </div>
             <div>
-                <p class="p-1">{course.course_name}</p>
+                <p class="p-1">{className}</p>
             </div>
         </div>
 
