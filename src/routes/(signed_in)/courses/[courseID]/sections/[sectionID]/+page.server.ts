@@ -1,10 +1,12 @@
+import { verifyAuthentication, verifyUserIsApartOfInstructionalTeam, getUserID } from "$lib/auth";
 import {
-	getUserID,
-	verifyAuthentication,
-	verifyUserIsApartOfInstructionalTeam
-} from "$lib/auth";
+	deleteSectionMember,
+	updateSectionMember,
+	getSectionMembers,
+	getSectionsSectionMembers,
+	extendSectionMembers
+} from "$lib/db/sectionMembers";
 import { deleteSection, getSections, updateSection, extendSections } from "$lib/db/sections";
-import { deleteSectionMember, updateSectionMember, getSectionMembers, getSectionsSectionMembers, extendSectionMembers } from "$lib/db/sectionMembers";
 import { SectionMemberType, type PartialSection, type PartialSectionMember } from "$lib/types";
 import { getEnumValue } from "$lib/utils";
 import type { PageServerLoad, Actions } from "./$types";
