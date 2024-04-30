@@ -13,7 +13,6 @@
 		const isConfirmed = confirm("Are you sure you want to remove this member?");
 		if (!isConfirmed) {
 			e.preventDefault();
-			return;
 		}
 	}
 </script>
