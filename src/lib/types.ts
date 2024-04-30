@@ -112,3 +112,18 @@ export type ExtendedAppointment = Omit<Appointment, "appointment_block" | "stude
 	appointment_block: ExtendedAppointmentBlock;
 	student: Student;
 };
+
+export function isSectionMemberInstructionalMember(
+	sectionMember: ExtendedSectionMember
+): sectionMember is InstructionalMember {
+	return (
+		sectionMember.member_type == SectionMemberType.Instructor ||
+		sectionMember.member_type == SectionMemberType.TA
+	);
+}
+
+export function isSectionMemberStudent(
+	sectionMember: ExtendedSectionMember
+): sectionMember is Student {
+	return sectionMember.member_type == SectionMemberType.Student;
+}

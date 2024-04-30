@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { createEventDispatcher } from "svelte";
 	import type { ExtendedAppointment } from "$lib/types";
 	import { sectionName, userName } from "$lib/utils";
 
@@ -15,9 +16,17 @@
 		endTime = new Date(startTime);
 		endTime.setTime(endTime.getTime() + appointmentBlock.duration);
 	}
+
+	const dispatch = createEventDispatcher<{
+		click: undefined;
+	}>();
 </script>
 
-<div class="card bg-primary shadow" class:calendar-card-collapsed={collapsed}>
+<button
+	type="button"
+	class="card bg-primary shadow text-left"
+	class:calendar-card-collapsed={collapsed}
+	on:click={() => dispatch("click")}>
 	<div class="card-body gap-0 p-4">
 		<h3 class="calendar-card-section font-medium text-sm">
 			{sectionName(instructionalMember.section)}
@@ -39,7 +48,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</button>
 
 <style>
 	* {
