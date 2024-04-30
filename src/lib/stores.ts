@@ -10,19 +10,18 @@ export const currentTime = readable(new Date(), set => {
 	return () => clearInterval(interval);
 });
 
-
 function createTitle() {
-	const {subscribe, set} = writable('');
-	
+	const { subscribe, set } = writable("");
+
 	return {
 		subscribe,
 		set: (value: string) => {
-			set(`${value}`)
+			set(`${value}`);
 		},
 		clear: () => {
-			set('Home');
+			set("Home");
 		}
-	}
+	};
 }
 
 export const title = createTitle();

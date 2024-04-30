@@ -10,11 +10,10 @@
 	import { error } from "@sveltejs/kit";
 	import { title } from "$lib/stores";
 
-	
 	export let data: PageData;
 	initialize(data, invalidateAll);
-  title.set(`${data.section.course.course_name}`);
-	
+	title.set(`${data.section.course.course_name}`);
+
 	if (!data.sectionMembers[0]) {
 		error(400, "Must have section members to view this page.");
 	}

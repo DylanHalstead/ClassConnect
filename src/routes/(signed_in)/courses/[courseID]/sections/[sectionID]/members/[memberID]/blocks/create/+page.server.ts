@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 		error(500, `Internal server error: ${extendSection.message}`);
 	}
 	return {
-		'section': extendSection[0],
+		section: extendSection[0]
 	};
 };
 

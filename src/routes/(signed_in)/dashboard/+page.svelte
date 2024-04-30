@@ -4,7 +4,7 @@
 	import Header from "$lib/components/Header.svelte";
 	import { title } from "$lib/stores";
 
-  title.set('Dashboard');
+	title.set("Dashboard");
 </script>
 
 <div class="px-12 py-2">

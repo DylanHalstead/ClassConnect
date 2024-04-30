@@ -7,11 +7,10 @@
 	import Notification from "$lib/components/Notification.svelte";
 
 	title.clear();
-	
+
 	export let data: LayoutData;
 	initialize(data, invalidateAll);
 </script>
-
 
 <svelte:head>
 	<title>{$title}</title>

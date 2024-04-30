@@ -8,7 +8,9 @@
 	export let data: PageData;
 	initialize(data, invalidateAll);
 
-  title.set(`${data.section.course.department_code} ${data.section.course.course_code}-${data.section.section_number} | Create Appointment Block`);
+	title.set(
+		`${data.section.course.department_code} ${data.section.course.course_code}-${data.section.section_number} | Create Appointment Block`
+	);
 
 	let selectedWeekday: WeekDay | null = null;
 	let startTime: string = "";

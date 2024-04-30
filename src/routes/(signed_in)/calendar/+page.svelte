@@ -14,7 +14,7 @@
 	} from "$lib/types";
 	import { title } from "$lib/stores";
 
-  title.set('Calendar');
+	title.set("Calendar");
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
