@@ -1,113 +1,15 @@
-import type {
-	AppointmentBlock,
-	PartialAppointmentBlock,
-	PostgresAppointmentBlock
+import { withConnection } from "$lib/db";
+import { extendSectionMembers, getSectionMembers } from "$lib/db/sectionMembers";
+import {
+	type AppointmentBlock,
+	type ExtendedAppointmentBlock,
+	type PartialAppointmentBlock,
+	type PostgresAppointmentBlock,
+	isSectionMemberInstructionalMember
 } from "$lib/types";
-import { postgresAppointmentBlockToAppointmentBlock } from "../utils";
-import { withConnection } from "./index";
+import { bulkQuery, postgresAppointmentBlockToAppointmentBlock } from "$lib/utils";
 import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
-
-export async function getAppointmentBlock(id: string): Promise<AppointmentBlock | undefined> {
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
-				SELECT
-					ab.id,
-					ab.instructional_member_id,
-					ab.week_day,
-					ab.start_time,
-					ab.duration
-				FROM appointment_blocks ab
-				WHERE id = $1
-			`,
-			values: [id]
-		};
-
-		const result: QueryResult<PostgresAppointmentBlock> = await client.query(query);
-		const row = result.rows[0];
-
-		if (row == undefined) {
-			return undefined;
-		}
-
-		return postgresAppointmentBlockToAppointmentBlock(row);
-	});
-}
-
-export async function getSectionsAppointmentBlocks(
-	sectionId: string
-): Promise<AppointmentBlock[] | undefined> {
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
-				SELECT ab.id,
-					ab.instructional_member_id,
-					ab.week_day,
-					ab.start_time,
-					ab.duration
-				FROM appointment_blocks ab 
-					JOIN section_members sm 
-							ON ab.instructional_member_id = sm.id
-				WHERE sm.section_id = $1
-			`,
-			values: [sectionId]
-		};
-
-		const result: QueryResult<PostgresAppointmentBlock> = await client.query(query);
-		const appointmentBlocks = result.rows.map(row =>
-			postgresAppointmentBlockToAppointmentBlock(row)
-		);
-
-		const filtered: AppointmentBlock[] = [];
-
-		for (const appointmentBlock of appointmentBlocks) {
-			if (appointmentBlock == undefined) {
-				return;
-			}
-
-			filtered.push(appointmentBlock);
-		}
-
-		return filtered;
-	});
-}
-
-export async function getMembersAppointmentBlocks(
-	memberId: string
-): Promise<AppointmentBlock[] | undefined> {
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
-				SELECT ab.id,
-					ab.instructional_member_id,
-					ab.week_day,
-					ab.start_time,
-					ab.duration
-				FROM appointment_blocks ab
-				WHERE ab.instructional_member_id = $1
-			`,
-			values: [memberId]
-		};
-
-		const result: QueryResult<PostgresAppointmentBlock> = await client.query(query);
-		const appointmentBlocks = result.rows.map(row => {
-			return postgresAppointmentBlockToAppointmentBlock(row);
-		});
-
-		const filtered: AppointmentBlock[] = [];
-
-		for (const appointmentBlock of appointmentBlocks) {
-			if (appointmentBlock == undefined) {
-				return;
-			}
-
-			filtered.push(appointmentBlock);
-		}
-
-		return filtered;
-	});
-}
 
 export async function createAppointmentBlock(
 	partialAppointmentBlock: PartialAppointmentBlock
@@ -140,6 +42,10 @@ export async function createAppointmentBlock(
 }
 
 export async function deleteAppointmentBlocks(ids: string[]): Promise<boolean> {
+	if (ids.length == 0) {
+		return true;
+	}
+
 	return withConnection(async client => {
 		const uniqueIds = new Set(ids);
 		const query: QueryConfig = {
@@ -150,5 +56,156 @@ export async function deleteAppointmentBlocks(ids: string[]): Promise<boolean> {
 		const result = await client.query(query);
 
 		return result.rowCount == uniqueIds.size;
+	});
+}
+
+export async function extendAppointmentBlocks(
+	appointmentBlocks: AppointmentBlock[]
+): Promise<ExtendedAppointmentBlock[] | Error> {
+	const instructionalMemberIds = appointmentBlocks.map(
+		appointmentBlock => appointmentBlock.instructional_member_id
+	);
+
+	const instructionalMembers = await getSectionMembers(instructionalMemberIds);
+
+	if (instructionalMembers == undefined) {
+		return new Error(
+			`Couldn't find the instructional members with the IDs ${instructionalMemberIds}`
+		);
+	}
+
+	const extendedInstructionalMembers = await extendSectionMembers(instructionalMembers);
+
+	if (extendedInstructionalMembers instanceof Error) {
+		return extendedInstructionalMembers;
+	}
+
+	const result: ExtendedAppointmentBlock[] = [];
+
+	for (const [i, appointmentBlock] of appointmentBlocks.entries()) {
+		const instructionalMember = extendedInstructionalMembers[i];
+
+		if (
+			instructionalMember == undefined ||
+			!isSectionMemberInstructionalMember(instructionalMember)
+		) {
+			return new Error(
+				`I didn't get back an instructional member with the ID ${appointmentBlock.instructional_member_id}`
+			);
+		}
+
+		result.push({
+			...appointmentBlock,
+
+			instructional_member: instructionalMember
+		});
+	}
+
+	return result;
+}
+
+export async function getAppointmentBlocks(ids: string[]): Promise<AppointmentBlock[] | Error> {
+	return (
+		(await bulkQuery(ids, () =>
+			withConnection(async client => {
+				const query: QueryConfig = {
+					text: `
+SELECT id, instructional_member_id, week_day, start_time, duration
+FROM appointment_blocks
+WHERE id = ANY($1)`,
+
+					values: [ids]
+				};
+
+				const queryResult: QueryResult<PostgresAppointmentBlock> = await client.query(query);
+
+				const result: AppointmentBlock[] = [];
+
+				for (const row of queryResult.rows) {
+					const appointmentBlock = postgresAppointmentBlockToAppointmentBlock(row);
+
+					if (appointmentBlock instanceof Error) {
+						return appointmentBlock;
+					}
+
+					result.push(appointmentBlock);
+				}
+
+				return result;
+			})
+		)) ?? new Error(`Couldn't find appointment blocks with the IDs ${ids}`)
+	);
+}
+
+export async function getSectionMembersAppointmentBlocks(
+	ids: string[]
+): Promise<AppointmentBlock[] | Error> {
+	if (ids.length == 0) {
+		return [];
+	}
+
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+SELECT id, instructional_member_id, week_day, start_time, duration
+FROM appointment_blocks
+WHERE instructional_member_id = ANY($1)`,
+			values: [ids]
+		};
+
+		const result: QueryResult<PostgresAppointmentBlock> = await client.query(query);
+		const appointmentBlocks = result.rows.map(row =>
+			postgresAppointmentBlockToAppointmentBlock(row)
+		);
+
+		const filtered: AppointmentBlock[] = [];
+
+		for (const appointmentBlock of appointmentBlocks) {
+			if (appointmentBlock instanceof Error) {
+				return appointmentBlock;
+			}
+
+			filtered.push(appointmentBlock);
+		}
+
+		return filtered;
+	});
+}
+
+export async function getSectionsAppointmentBlocks(
+	sectionId: string
+): Promise<AppointmentBlock[] | Error> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+				SELECT ab.id,
+					ab.instructional_member_id,
+					ab.week_day,
+					ab.start_time,
+					ab.duration
+				FROM appointment_blocks ab
+					JOIN section_members sm
+							ON ab.instructional_member_id = sm.id
+				WHERE sm.section_id = $1
+			`,
+			values: [sectionId]
+		};
+
+		const result: QueryResult<PostgresAppointmentBlock> = await client.query(query);
+		const appointmentBlocks = result.rows.map(row =>
+			postgresAppointmentBlockToAppointmentBlock(row)
+		);
+
+		const filtered: AppointmentBlock[] = [];
+
+		for (const appointmentBlock of appointmentBlocks) {
+			if (appointmentBlock instanceof Error) {
+				return appointmentBlock;
+			}
+
+			filtered.push(appointmentBlock);
+		}
+
+		return filtered;
 	});
 }
