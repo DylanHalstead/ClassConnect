@@ -174,31 +174,6 @@ export async function getUsersSectionMembers(userId: string): Promise<SectionMem
 	});
 }
 
-export async function getSectionMember(memberId: string): Promise<SectionMember | undefined> {
-	return withConnection(async client => {
-		const query: QueryConfig = {
-			text: `
-				SELECT 
-					sm.id, 
-					sm.section_id, 
-					sm.user_id, 
-					sm.member_type, 
-					sm.is_restricted 
-				FROM section_members sm 
-				WHERE sm.id = $1
-			`,
-			values: [memberId]
-		};
-
-		const result: QueryResult<SectionMember> = await client.query(query);
-		if (result.rows.length === 0) {
-			return undefined;
-		}
-
-		return result.rows[0];
-	});
-}
-
 export async function getExtendedSectionMembers(
 	sectionId: string
 ): Promise<ExtendedSectionMember[]> {
