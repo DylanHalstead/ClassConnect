@@ -5,7 +5,8 @@
 		User as UserIcon,
 		Calendar,
 		BookOpen,
-		ArrowLeftEndOnRectangle
+		ArrowLeftEndOnRectangle,
+		Squares2x2 as DashboardIcon
 	} from "svelte-hero-icons";
 	import type { User } from "$lib/types";
 
@@ -56,6 +57,9 @@
 				</div>
 
 				<div class="space-y-14">
+					<div>
+						<a href="/dashboard"><Icon src={DashboardIcon} size="32" class="text-white" /></a>
+					</div>
 					<div>
 						<a href="/profile/[profileID]"><Icon src={UserIcon} size="32" class="text-white" /></a>
 					</div>
