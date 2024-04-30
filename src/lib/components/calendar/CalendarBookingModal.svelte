@@ -12,7 +12,7 @@
 
 	export let isOpen: boolean;
 
-	const dispatch = createEventDispatcher<{ close: undefined }>();
+	const dispatch = createEventDispatcher<{ close: boolean }>();
 
 	function appointmentDateFormatted(appointmentDate: Date): string {
 		return appointmentDate.toLocaleString("en-US", {
@@ -44,7 +44,7 @@
 <Modal
 	{isOpen}
 	on:close={() => {
-		dispatch("close");
+		dispatch("close", false);
 	}}>
 	{#if data != undefined}
 		<h2 class="font-bold text-xl">
@@ -65,7 +65,7 @@
 			type="button"
 			class="btn btn-primary"
 			on:click={() => {
-				dispatch("close");
+				dispatch("close", true);
 			}}>
 			Submit
 		</button>

@@ -5,7 +5,7 @@
 	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
 	import Header from "$lib/components/Header.svelte";
 	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
-	import { type ExtendedAppointmentBlock } from "$lib/types";
+	import { AppointmentBlockBooking, type ExtendedAppointmentBlock } from "$lib/types";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
@@ -62,11 +62,11 @@
 		{#if calendarMode == CalendarMode.Daily}
 			<CalendarDaily
 				configuration={calendarConfiguration}
-				on:appointmentBlockClick={event => handleAppointmentClick(event)} />
+				on:click={event => handleAppointmentClick(event)} />
 		{:else}
 			<CalendarWeekly
 				configuration={calendarConfiguration}
-				on:appointmentBlockClick={event => handleAppointmentClick(event)} />
+				on:click={event => handleAppointmentClick(event)} />
 		{/if}
 	</div>
 </div>
@@ -74,6 +74,29 @@
 <CalendarBookingModal
 	data={bookingModalData}
 	isOpen={bookingModalOpen}
-	on:close={() => {
+	on:close={async booked => {
 		bookingModalOpen = false;
+
+		if (!booked || bookingModalData == undefined) {
+			return;
+		}
+
+		const section = bookingModalData.appointmentBlock.instructional_member.section;
+
+		await fetch(`/courses/${section.course.id}/sections/${section.id}/appointments`, {
+			body: JSON.stringify(
+				AppointmentBlockBooking.encode({
+					appointmentBlockId: bookingModalData.appointmentBlock.id,
+					appointmentDate: bookingModalData.appointmentDate
+				})
+			),
+
+			headers: {
+				"Content-Type": "application/json"
+			},
+
+			method: "POST"
+		});
+
+		window.location.reload();
 	}} />

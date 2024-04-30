@@ -59,6 +59,22 @@ export async function deleteAppointmentBlocks(ids: string[]): Promise<boolean> {
 	});
 }
 
+export async function extendAppointmentBlock(
+	appointmentBlock: AppointmentBlock
+): Promise<ExtendedAppointmentBlock | Error> {
+	const extended = await extendAppointmentBlocks([appointmentBlock]);
+
+	if (extended instanceof Error) {
+		return extended;
+	}
+
+	if (extended[0] == undefined) {
+		return new Error(`I didn't get back an appointment block with the ID ${appointmentBlock.id}`);
+	}
+
+	return extended[0];
+}
+
 export async function extendAppointmentBlocks(
 	appointmentBlocks: AppointmentBlock[]
 ): Promise<ExtendedAppointmentBlock[] | Error> {
@@ -102,6 +118,20 @@ export async function extendAppointmentBlocks(
 	}
 
 	return result;
+}
+
+export async function getAppointmentBlock(id: string): Promise<AppointmentBlock | Error> {
+	const result = await getAppointmentBlocks([id]);
+
+	if (result instanceof Error) {
+		return result;
+	}
+
+	if (result[0] == undefined) {
+		return new Error(`Couldn't find appointment block with the ID ${id}`);
+	}
+
+	return result[0];
 }
 
 export async function getAppointmentBlocks(ids: string[]): Promise<AppointmentBlock[] | Error> {

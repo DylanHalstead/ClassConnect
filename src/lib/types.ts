@@ -1,3 +1,6 @@
+import * as ioTs from "io-ts";
+import * as ioTsTypes from "io-ts-types";
+
 export interface PartialCourse {
 	department_code: string;
 	course_code: string;
@@ -95,6 +98,13 @@ export type PartialAppointmentBlock = Omit<AppointmentBlock, "id">;
 export type ExtendedAppointmentBlock = Omit<AppointmentBlock, "instructional_member_id"> & {
 	instructional_member: InstructionalMember;
 };
+
+export const AppointmentBlockBooking = ioTs.type({
+	appointmentBlockId: ioTs.string,
+	appointmentDate: ioTsTypes.DateFromISOString
+});
+
+export type AppointmentBlockBooking = ioTs.TypeOf<typeof AppointmentBlockBooking>;
 
 export interface PartialAppointment {
 	appointment_day: Date;

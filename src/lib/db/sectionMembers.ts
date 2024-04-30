@@ -1,6 +1,5 @@
 import { withConnection } from "$lib/db";
-import { getCourse } from "$lib/db/courses";
-import { getSection, getSections, extendSections } from "$lib/db/sections";
+import { getSections, extendSections } from "$lib/db/sections";
 import { getUsers } from "$lib/db/users";
 import type { ExtendedSectionMember, SectionMember, PartialSectionMember } from "$lib/types";
 import { bulkQuery } from "$lib/utils";
@@ -37,26 +36,22 @@ export async function createSectionMember(
 	});
 }
 
-export async function updateSectionMember(
-	memberID: string,
-	partialSectionMember: PartialSectionMember
-): Promise<SectionMember | undefined> {
+export async function deleteSectionMember(memberID: string): Promise<boolean> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
 			text: `
-				UPDATE section_members sm
-				SET member_type = $1, is_restricted = $2
-				WHERE id = $3
-				RETURNING sm.id, sm.section_id, sm.user_id, sm.member_type, sm.is_restricted
+				DELETE FROM section_members
+				WHERE id = $1
 			`,
-			values: [partialSectionMember.member_type, partialSectionMember.is_restricted, memberID]
+			values: [memberID]
 		};
 
-		const result: QueryResult<SectionMember> = await client.query(query);
-		if (result.rows.length === 0) {
-			return undefined;
+		try {
+			await client.query(query);
+			return true;
+		} catch (e) {
+			return false;
 		}
-		return result.rows[0];
 	});
 }
 
@@ -180,67 +175,44 @@ export async function getUsersSectionMembers(userId: string): Promise<SectionMem
 	});
 }
 
-export async function getExtendedSectionMembers(
+export async function getUsersSectionMembersInSection(
+	userId: string,
 	sectionId: string
-): Promise<ExtendedSectionMember[]> {
-	const sectionMembers = await getSectionMembers([sectionId]);
-	try {
-		if (!sectionMembers || sectionMembers.length === 0) {
-			throw Error("No section members found");
-		}
-		const users = await getUsers(sectionMembers.map(sm => sm.user_id));
-		if (!users || users.length === 0) {
-			throw Error("No users found");
-		}
-		const section = await getSection(sectionId);
-		if (!section) {
-			throw Error("No section found");
-		}
-		const extendedSections = await extendSections([section]);
-		if (extendedSections instanceof Error) {
-			throw extendedSections;
-		}
-		if (extendedSections[0] === undefined) {
-			throw Error("No extended sections found");
-		}
-		const course = await getCourse(extendedSections[0].course.id);
-		if (!course) {
-			throw Error("No course found");
-		}
-		const extendedSection = extendedSections[0];
-
-		return sectionMembers.map(sm => {
-			const user = users.find(u => u.id === sm.user_id);
-			if (!user) {
-				throw new Error(`User ${sm.user_id} not found`);
-			}
-			return {
-				...sm,
-				user,
-				section: extendedSection
-			};
-		});
-	} catch (error) {
-		console.error(error);
-		return [];
-	}
-}
-
-export async function deleteSectionMember(memberID: string): Promise<boolean> {
+): Promise<SectionMember[]> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
 			text: `
-				DELETE FROM section_members
-				WHERE id = $1
-			`,
-			values: [memberID]
+SELECT id, section_id, user_id, member_type, is_restricted
+FROM section_members
+WHERE user_id = $1 AND section_id = $2`,
+			values: [userId, sectionId]
 		};
 
-		try {
-			await client.query(query);
-			return true;
-		} catch (e) {
-			return false;
+		const result: QueryResult<SectionMember> = await client.query(query);
+
+		return result.rows;
+	});
+}
+
+export async function updateSectionMember(
+	memberID: string,
+	partialSectionMember: PartialSectionMember
+): Promise<SectionMember | undefined> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+				UPDATE section_members sm
+				SET member_type = $1, is_restricted = $2
+				WHERE id = $3
+				RETURNING sm.id, sm.section_id, sm.user_id, sm.member_type, sm.is_restricted
+			`,
+			values: [partialSectionMember.member_type, partialSectionMember.is_restricted, memberID]
+		};
+
+		const result: QueryResult<SectionMember> = await client.query(query);
+		if (result.rows.length === 0) {
+			return undefined;
 		}
+		return result.rows[0];
 	});
 }
