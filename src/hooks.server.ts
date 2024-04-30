@@ -90,7 +90,7 @@ async function initializeDatabase() {
 
 	const appointmentBlock2Time = new Date(appointmentBlock1Time);
 
-	appointmentBlock2Time.setDate(appointmentBlock1Time.getDate() + 1);
+	appointmentBlock2Time.setDate(appointmentBlock1Time.getDate() + 2);
 
 	const appointmentBlock1 = await createAppointmentBlock({
 		instructional_member_id: instructionalMember.id,

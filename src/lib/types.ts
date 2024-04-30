@@ -127,3 +127,22 @@ export function isSectionMemberStudent(
 ): sectionMember is Student {
 	return sectionMember.member_type == SectionMemberType.Student;
 }
+
+export function weekDayIndex(weekDay: WeekDay): number {
+	switch (weekDay) {
+		case WeekDay.Sunday:
+			return 0;
+		case WeekDay.Monday:
+			return 1;
+		case WeekDay.Tuesday:
+			return 2;
+		case WeekDay.Wednesday:
+			return 3;
+		case WeekDay.Thursday:
+			return 4;
+		case WeekDay.Friday:
+			return 5;
+		case WeekDay.Saturday:
+			return 6;
+	}
+}

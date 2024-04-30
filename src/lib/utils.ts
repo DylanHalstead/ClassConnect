@@ -31,15 +31,9 @@ export function postgresTimeWithTimeZoneToDate(timeWithZone: string): Date | Err
 		);
 	}
 
-	const parsedTimeZoneOffset = parseInt(timeZoneOffset);
-
-	if (isNaN(parsedTimeZoneOffset)) {
-		return new Error(`This PostgreSQL timestamp's timezone offset isn't numeric: ${timeWithZone}`);
-	}
-
 	const date = new Date(0);
 
-	date.setHours(hours - parsedTimeZoneOffset);
+	date.setHours(hours);
 	date.setMinutes(minutes);
 
 	return date;
