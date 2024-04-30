@@ -1,5 +1,5 @@
 import { getCourse } from "$lib/db/courses";
-import type { ExtendedSection, Section } from "$lib/types";
+import type { ExtendedSection, PartialSection, Section } from "$lib/types";
 import { withConnection } from "./index";
 import type { QueryConfig, QueryResult } from "pg";
 
@@ -45,8 +45,7 @@ export async function getExtendedSection(sectionID: string): Promise<ExtendedSec
 
 export async function updateSection(
 	sectionID: string,
-	sectionNumber: number,
-	maxDailyBookableHours: number
+	partialSection: PartialSection
 ): Promise<Section | undefined> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
@@ -56,7 +55,7 @@ export async function updateSection(
 				WHERE id = $1
 				RETURNING s.id, s.course_id, s.section_number, s.max_daily_bookable_hours
 			`,
-			values: [sectionID, sectionNumber, maxDailyBookableHours]
+			values: [sectionID, partialSection.section_number, partialSection.max_daily_bookable_hours]
 		};
 
 		const res: QueryResult<Section> = await client.query(query);

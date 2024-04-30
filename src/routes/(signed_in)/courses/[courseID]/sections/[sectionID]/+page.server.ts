@@ -6,7 +6,7 @@ import {
 import { deleteSection, updateSection, getExtendedSection } from "$lib/db/section";
 import { getExtendedSectionMembers } from "$lib/db/sectionMembers";
 import { deleteSectionMember, updateSectionMember, getSectionMember } from "$lib/db/sectionMembers";
-import { SectionMemberType } from "$lib/types";
+import { SectionMemberType, type PartialSection } from "$lib/types";
 import { getEnumValue } from "$lib/utils";
 import type { PageServerLoad, Actions } from "./$types";
 import { error, redirect, json, fail } from "@sveltejs/kit";
@@ -61,7 +61,12 @@ export const actions: Actions = {
 			return fail(400, { sectionNumber, invalid: true });
 		}
 
-		const section = await updateSection(sectionID, sectionNumber, maxDailyBookableHours);
+		const partialSection: PartialSection = {
+			'max_daily_bookable_hours': maxDailyBookableHours,
+			'section_number': sectionNumber,
+			'course_id': courseID
+		};
+		const section = await updateSection(sectionID, partialSection);
 		if (!section) {
 			error(500, `Internal server error: Failed to update section with ID: ${sectionID}`);
 		}
