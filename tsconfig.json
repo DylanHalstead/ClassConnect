@@ -23,5 +23,5 @@
 		"strict": true
 	},
 
-	"include": ["src/**/*"]
+	"include": ["src/**/*", ".svelte-kit/ambient.d.ts"]
 }

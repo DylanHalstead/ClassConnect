@@ -1,4 +1,5 @@
 import {
+	getUserID,
 	verifyAuthentication,
 	verifyUserIsApartOfInstructionalTeam,
 	verifyUserIsInSection,
@@ -9,26 +10,32 @@ import {
 	deleteAppointmentBlocks,
 	getSectionMembersAppointmentBlocks
 } from "$lib/db/appointmentBlocks";
-import { extendSections, getSection } from "$lib/db/sections";
+import { extendSection, getSection } from "$lib/db/sections";
 import { type AppointmentBlock, WeekDay } from "$lib/types";
 import { formTimeToDate, getEnumValue } from "$lib/utils";
 import type { PageServerLoad, Actions } from "./$types";
 import { error, redirect } from "@sveltejs/kit";
 
-export const load: PageServerLoad = async ({ locals, cookies, params }) => {
+export const load: PageServerLoad = async ({ cookies, params }) => {
+	const userID = getUserID(cookies);
 	const { sectionID } = params;
-	const userID = verifyAuthentication(locals, cookies);
+
 	await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
+
 	const section = await getSection(sectionID);
-	if (!section) {
+
+	if (section == undefined) {
 		error(404, "Section not found.");
 	}
-	const extendSection = await extendSections([section]);
-	if (extendSection instanceof Error) {
-		error(500, `Internal server error: ${extendSection.message}`);
+
+	const extendedSection = await extendSection(section);
+
+	if (extendedSection instanceof Error) {
+		throw extendedSection;
 	}
+
 	return {
-		section: extendSection[0]
+		section: extendedSection
 	};
 };
 
