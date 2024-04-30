@@ -1,9 +1,12 @@
+import { verifyAuthentication, verifyUserIsApartOfInstructionalTeam } from "$lib/auth";
 import {
-	verifyAuthentication,
-	verifyUserIsApartOfInstructionalTeam
-} from "$lib/auth";
+	deleteSectionMember,
+	updateSectionMember,
+	getSectionMember,
+	getSectionsSectionMembers,
+	extendSectionMembers
+} from "$lib/db/sectionMembers";
 import { deleteSection, getSections, updateSection, extendSections } from "$lib/db/sections";
-import { deleteSectionMember, updateSectionMember, getSectionMember, getSectionsSectionMembers, extendSectionMembers } from "$lib/db/sectionMembers";
 import { SectionMemberType, type PartialSection, type PartialSectionMember } from "$lib/types";
 import { getEnumValue } from "$lib/utils";
 import type { PageServerLoad, Actions } from "./$types";
@@ -161,7 +164,7 @@ export const actions: Actions = {
 			is_restricted: isRestricted,
 			section_id: sectionID,
 			user_id: member.user_id
-		}
+		};
 		const updatedMember = await updateSectionMember(memberID, partialSectionMember);
 		if (!updatedMember) {
 			error(500, "Failed to update member");

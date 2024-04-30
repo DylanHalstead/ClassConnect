@@ -1,12 +1,8 @@
+import { withConnection } from "$lib/db";
 import { getCourses } from "$lib/db/courses";
 import { getSections, extendSections } from "$lib/db/sections";
 import { getUsers } from "$lib/db/users";
-import type {
-	ExtendedSectionMember,
-	SectionMember,
-	PartialSectionMember,
-} from "$lib/types";
-import { withConnection } from "$lib/db";
+import type { ExtendedSectionMember, SectionMember, PartialSectionMember } from "$lib/types";
 import { bulkQuery } from "$lib/utils";
 import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";

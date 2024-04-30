@@ -1,8 +1,8 @@
-import { randomUUID } from "crypto";
 import { getCourses } from "$lib/db/courses";
 import type { ExtendedSection, PartialSection, Section } from "$lib/types";
 import { bulkQuery } from "$lib/utils";
 import { withConnection } from "./index";
+import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
 
 export async function getExtendedSection(sectionID: string): Promise<ExtendedSection | undefined> {
@@ -63,7 +63,6 @@ export async function deleteSection(sectionID: string): Promise<boolean> {
 		}
 	});
 }
-
 
 export async function createSection(partialSection: PartialSection): Promise<Section> {
 	return withConnection(async client => {
