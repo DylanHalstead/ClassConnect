@@ -5,7 +5,16 @@
 	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
 	import Header from "$lib/components/Header.svelte";
 	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
-	import { type ExtendedAppointment } from "$lib/types";
+	import {
+		SectionMemberType,
+		WeekDay,
+		type InstructionalMember,
+		type Student,
+		type ExtendedAppointment
+	} from "$lib/types";
+	import { title } from "$lib/stores";
+
+	title.set("Calendar");
 	import type { PageData } from "./$types";
 
 	export let data: PageData;

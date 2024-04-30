@@ -9,10 +9,28 @@ import {
 	deleteAppointmentBlocks,
 	getSectionMembersAppointmentBlocks
 } from "$lib/db/appointmentBlocks";
+import { extendSections, getSection } from "$lib/db/sections";
 import { type AppointmentBlock, WeekDay } from "$lib/types";
 import { formTimeToDate, getEnumValue } from "$lib/utils";
-import type { Actions } from "./$types";
+import type { PageServerLoad, Actions } from "./$types";
 import { error, redirect } from "@sveltejs/kit";
+
+export const load: PageServerLoad = async ({ locals, cookies, params }) => {
+	const { sectionID } = params;
+	const userID = verifyAuthentication(locals, cookies);
+	await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
+	const section = await getSection(sectionID);
+	if (!section) {
+		error(404, "Section not found.");
+	}
+	const extendSection = await extendSections([section]);
+	if (extendSection instanceof Error) {
+		error(500, `Internal server error: ${extendSection.message}`);
+	}
+	return {
+		section: extendSection[0]
+	};
+};
 
 export const actions: Actions = {
 	default: async ({ locals, request, params, cookies }) => {
