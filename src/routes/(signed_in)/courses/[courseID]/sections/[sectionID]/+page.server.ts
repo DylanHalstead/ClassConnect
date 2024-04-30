@@ -2,7 +2,7 @@ import { verifyAuthentication, verifyUserIsApartOfInstructionalTeam, getUserID }
 import {
 	deleteSectionMember,
 	updateSectionMember,
-	getSectionMembers,
+	getSectionMember,
 	getSectionsSectionMembers,
 	extendSectionMembers
 } from "$lib/db/sectionMembers";
@@ -134,8 +134,8 @@ export const actions: Actions = {
 			return fail(400, { memberID, invalid: true });
 		}
 
-		const member = await getSectionMembers([memberID]);
-		if (!member || !member[0]) {
+		const member = await getSectionMember(memberID);
+		if (!member) {
 			return fail(404, { memberID, notFound: true });
 		}
 
@@ -150,7 +150,7 @@ export const actions: Actions = {
 		if (formIsRestricted && formIsRestricted !== "on") {
 			return fail(400, { isRestricted: formIsRestricted, invalid: true });
 		}
-		if (formIsRestricted && member[0].member_type !== "student") {
+		if (formIsRestricted && member.member_type !== "student") {
 			return fail(400, { isRestricted: formIsRestricted, invalid: true });
 		}
 		const sectionMemberType = getEnumValue(formSectionMemberType, SectionMemberType);
@@ -163,7 +163,7 @@ export const actions: Actions = {
 			member_type: sectionMemberType,
 			is_restricted: isRestricted,
 			section_id: sectionID,
-			user_id: member[0].user_id
+			user_id: member.user_id
 		};
 		const updatedMember = await updateSectionMember(memberID, partialSectionMember);
 		if (!updatedMember) {
@@ -184,8 +184,8 @@ export const actions: Actions = {
 		if (typeof memberID !== "string") {
 			return fail(400, { memberID, invalid: true });
 		}
-		const member = await getSectionMembers([memberID]);
-		if (!member || !member[0]) {
+		const member = await getSectionMember(memberID);
+		if (!member) {
 			return fail(404, { memberID, notFound: true });
 		}
 

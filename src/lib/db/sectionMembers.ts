@@ -1,6 +1,6 @@
 import { withConnection } from "$lib/db";
-import { getCourses } from "$lib/db/courses";
-import { getSections, extendSections } from "$lib/db/sections";
+import { getCourse } from "$lib/db/courses";
+import { getSection, getSections, extendSections } from "$lib/db/sections";
 import { getUsers } from "$lib/db/users";
 import type { ExtendedSectionMember, SectionMember, PartialSectionMember } from "$lib/types";
 import { bulkQuery } from "$lib/utils";
@@ -128,6 +128,16 @@ WHERE id = ANY($1)`,
 	);
 }
 
+export async function getSectionMember(id: string): Promise<SectionMember | undefined> {
+	const sectionMembers = await getSectionMembers([id]);
+
+	if (sectionMembers == undefined) {
+		return;
+	}
+
+	return sectionMembers[0];
+}
+
 export async function getSectionsSectionMembers(sectionIds: string[]): Promise<SectionMember[]> {
 	if (sectionIds.length == 0) {
 		return [];
@@ -179,29 +189,27 @@ export async function getExtendedSectionMembers(
 			throw Error("No section members found");
 		}
 		const users = await getUsers(sectionMembers.map(sm => sm.user_id));
-		if (users.length === 0) {
+		if (!users || users.length === 0) {
 			throw Error("No users found");
 		}
-		const section = await getSections([sectionId]);
+		const section = await getSection(sectionId);
 		if (!section) {
 			throw Error("No section found");
 		}
-		const extendedSection = await extendSections(section);
-		if (extendedSection instanceof Error) {
-			throw extendedSection;
+		const extendedSections = await extendSections([section]);
+		if (extendedSections instanceof Error) {
+			throw extendedSections;
 		}
-		if (extendedSection[0] === undefined) {
+		if (extendedSections[0] === undefined) {
 			throw Error("No extended sections found");
 		}
-		const course = await getCourses([extendedSection[0].course.id]);
+		const course = await getCourse(extendedSections[0].course.id);
 		if (!course) {
 			throw Error("No course found");
 		}
+		const extendedSection = extendedSections[0];
 
 		return sectionMembers.map(sm => {
-			if (extendedSection[0] === undefined) {
-				throw Error("No extended sections found");
-			}
 			const user = users.find(u => u.id === sm.user_id);
 			if (!user) {
 				throw new Error(`User ${sm.user_id} not found`);
@@ -209,7 +217,7 @@ export async function getExtendedSectionMembers(
 			return {
 				...sm,
 				user,
-				section: extendedSection[0]
+				section: extendedSection
 			};
 		});
 	} catch (error) {

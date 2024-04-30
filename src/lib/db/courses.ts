@@ -47,3 +47,13 @@ WHERE id = ANY($1)`,
 		})
 	);
 }
+
+export async function getCourse(courseID: string): Promise<Course | undefined> {
+	const courses = await getCourses([courseID]);
+
+	if (courses == undefined) {
+		return;
+	}
+
+	return courses[0];
+}
