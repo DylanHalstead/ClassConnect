@@ -93,7 +93,7 @@ export const actions: Actions = {
 		};
 		const section = await updateSection(sectionID, partialSection);
 		if (!section) {
-			error(500, `Internal server error: Failed to update section with ID: ${sectionID}`);
+			throw new Error(`Internal server error: Failed to update section with ID: ${sectionID}`);
 		}
 
 		const message = {
@@ -110,7 +110,7 @@ export const actions: Actions = {
 
 		const deleted = await deleteSection(sectionID);
 		if (!deleted) {
-			error(500, `Internal server error: Failed to delete section with ID: ${sectionID}`);
+			throw new Error(`Internal server error: Failed to delete section with ID: ${sectionID}`);
 		}
 
 		const message = {
@@ -167,7 +167,7 @@ export const actions: Actions = {
 		};
 		const updatedMember = await updateSectionMember(memberID, partialSectionMember);
 		if (!updatedMember) {
-			error(500, "Failed to update member");
+			throw new Error("Failed to update member");
 		}
 		redirect(302, `/courses/${courseID}/sections/${sectionID}`);
 	},
@@ -193,7 +193,7 @@ export const actions: Actions = {
 		if (isDeleted) {
 			redirect(302, `/courses/${courseID}/sections/${sectionID}`);
 		} else {
-			error(500, "Failed to delete member");
+			throw new Error("Failed to delete member");
 		}
 	}
 };
