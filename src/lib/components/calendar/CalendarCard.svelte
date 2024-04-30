@@ -63,7 +63,10 @@
 	class="card bg-primary shadow text-left"
 	class:calendar-card-collapsed={collapsed}
 	on:click={() => {
-		if (isCalendarEventAppointmentBlock(event.underlying)) {
+		if (
+			isCalendarEventAppointmentBlock(event.underlying) &&
+			event.underlying.instructional_member.user.id != userID
+		) {
 			dispatch("click", event.underlying);
 		}
 	}}>
