@@ -24,14 +24,14 @@ export async function createAppointmentBlock(
 		const query: QueryConfig = {
 			text: `
 				INSERT INTO appointment_blocks (id, instructional_member_id, week_day, start_time, duration)
-				VALUES ($1, $2, $3, $4, $5)
+				VALUES ($1, $2, $3, $4, $5::interval)
 			`,
 			values: [
 				newAppointmentBlock.id,
 				newAppointmentBlock.instructional_member_id,
 				newAppointmentBlock.week_day,
 				newAppointmentBlock.start_time.toLocaleTimeString(),
-				newAppointmentBlock.duration
+				`${newAppointmentBlock.duration} milliseconds`
 			]
 		};
 

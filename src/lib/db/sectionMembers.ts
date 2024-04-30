@@ -104,25 +104,23 @@ WHERE id = ANY($1)`,
 	);
 }
 
-export async function getSectionSectionMembers(sectionId: string): Promise<SectionMember[]> {
+export async function getSectionsSectionMembers(sectionIds: string[]): Promise<SectionMember[]> {
+	if (sectionIds.length == 0) {
+		return [];
+	}
+
 	return withConnection(async client => {
 		const query: QueryConfig = {
 			text: `
-				SELECT
-					sm.id,
-					sm.section_id,
-					sm.user_id,
-					sm.member_type,
-					sm.is_restricted
-				FROM section_members sm
-				WHERE sm.section_id = $1
-			`,
-			values: [sectionId]
+SELECT id, section_id, user_id, member_type, is_restricted
+FROM section_members
+WHERE section_id = ANY($1)`,
+			values: [sectionIds]
 		};
 
-		const res: QueryResult<SectionMember> = await client.query(query);
-		const sectionMembers = res.rows;
-		return sectionMembers;
+		const result: QueryResult<SectionMember> = await client.query(query);
+
+		return result.rows;
 	});
 }
 

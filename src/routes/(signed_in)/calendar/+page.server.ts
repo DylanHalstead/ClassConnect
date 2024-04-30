@@ -1,4 +1,3 @@
-import { getUserID } from "$lib/auth";
 import {
 	extendAppointmentBlocks,
 	getSectionMembersAppointmentBlocks
@@ -8,42 +7,104 @@ import {
 	getAppointmentBlocksAppointments,
 	getStudentsAppointments
 } from "$lib/db/appointments";
-import { getUsersSectionMembers } from "$lib/db/sectionMembers";
+import { getSectionsSectionMembers, getUsersSectionMembers } from "$lib/db/sectionMembers";
+import {
+	type ExtendedAppointment,
+	type ExtendedAppointmentBlock,
+	type SectionMember
+} from "$lib/types";
 import type { PageServerLoad } from "./$types";
 import type { Cookies } from "@sveltejs/kit";
 
-export const load: PageServerLoad = async ({ cookies }: { cookies: Cookies }) => {
-	const userID = getUserID(cookies);
-	const sectionMembers = await getUsersSectionMembers(userID);
-	const sectionMemberIds = sectionMembers.map(sectionMember => sectionMember.id);
+async function getUserAppointmentBlocks(
+	sectionMembers: SectionMember[]
+): Promise<ExtendedAppointmentBlock[] | Error> {
+	const sectionSectionMemberIds = (
+		await getSectionsSectionMembers(sectionMembers.map(sectionMember => sectionMember.section_id))
+	).map(sectionMember => sectionMember.id);
+
+	const appointmentBlocks = await getSectionMembersAppointmentBlocks(sectionSectionMemberIds);
+
+	if (appointmentBlocks instanceof Error) {
+		return appointmentBlocks;
+	}
+
+	const sectionMembersIds = new Set(sectionMembers.map(sectionMember => sectionMember.id));
+	const appointmentBlocksExcludingOwn = appointmentBlocks.filter(
+		appointmentBlock => !sectionMembersIds.has(appointmentBlock.instructional_member_id)
+	);
+
+	return await extendAppointmentBlocks(appointmentBlocksExcludingOwn);
+}
+
+async function getUserAppointments(
+	sectionMemberIds: string[]
+): Promise<ExtendedAppointment[] | Error> {
+	const appointments = await getStudentsAppointments(sectionMemberIds);
+
+	return await extendAppointments(appointments);
+}
+
+async function getUserTAAppointmentBlocks(
+	sectionMemberIds: string[]
+): Promise<ExtendedAppointmentBlock[] | Error> {
 	const appointmentBlocks = await getSectionMembersAppointmentBlocks(sectionMemberIds);
 
 	if (appointmentBlocks instanceof Error) {
-		throw appointmentBlocks;
+		return appointmentBlocks;
 	}
 
-	const extendedAppointmentBlocks = await extendAppointmentBlocks(appointmentBlocks);
+	return await extendAppointmentBlocks(appointmentBlocks);
+}
 
-	if (extendedAppointmentBlocks instanceof Error) {
-		throw extendedAppointmentBlocks;
+async function getUserTAAppointments(
+	appointmentBlocks: ExtendedAppointmentBlock[]
+): Promise<ExtendedAppointment[] | Error> {
+	const appointments = await getAppointmentBlocksAppointments(
+		appointmentBlocks.map(appointmentBlock => appointmentBlock.id)
+	);
+
+	return await extendAppointments(appointments);
+}
+
+export const load: PageServerLoad = async ({ cookies }: { cookies: Cookies }) => {
+	const userId = cookies.get("userID");
+
+	if (userId == undefined) {
+		return {
+			appointments: [],
+			appointmentBlocks: []
+		};
 	}
 
-	const appointments = [
-		...(await getAppointmentBlocksAppointments(
-			extendedAppointmentBlocks.map(appointmentBlock => appointmentBlock.id)
-		)),
+	const sectionMembers = await getUsersSectionMembers(userId);
+	const sectionMemberIds = sectionMembers.map(sectionMember => sectionMember.id);
+	const userAppointmentBlocks = await getUserAppointmentBlocks(sectionMembers);
 
-		...(await getStudentsAppointments(sectionMemberIds))
-	];
+	if (userAppointmentBlocks instanceof Error) {
+		throw userAppointmentBlocks;
+	}
 
-	const extendedAppointments = await extendAppointments(appointments);
+	const userAppointments = await getUserAppointments(sectionMemberIds);
 
-	if (extendedAppointments instanceof Error) {
-		throw extendedAppointments;
+	if (userAppointments instanceof Error) {
+		throw userAppointments;
+	}
+
+	const userTAAppointmentBlocks = await getUserTAAppointmentBlocks(sectionMemberIds);
+
+	if (userTAAppointmentBlocks instanceof Error) {
+		throw userTAAppointmentBlocks;
+	}
+
+	const userTAAppointments = await getUserTAAppointments(userTAAppointmentBlocks);
+
+	if (userTAAppointments instanceof Error) {
+		throw userTAAppointments;
 	}
 
 	return {
-		appointments: extendedAppointments,
-		appointmentBlocks: extendedAppointmentBlocks
+		appointments: [...userAppointments, ...userTAAppointments],
+		appointmentBlocks: [...userAppointmentBlocks, ...userTAAppointmentBlocks]
 	};
 };
