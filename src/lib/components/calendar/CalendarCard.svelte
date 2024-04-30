@@ -1,34 +1,77 @@
 <script lang="ts">
-	import type { ExtendedAppointment } from "$lib/types";
-	import { sectionName, userName } from "$lib/utils";
+	import { createEventDispatcher } from "svelte";
+	import { isCalendarEventAppointmentBlock, type CalendarEvent } from "$lib/components/calendar";
+	import type { ExtendedAppointmentBlock, ExtendedSectionMember } from "$lib/types";
+	import { sectionName } from "$lib/utils";
 
-	export let appointment: ExtendedAppointment;
+	export let event: CalendarEvent;
+	export let userID: string;
 	export let collapsed: boolean;
 
-	$: appointmentBlock = appointment.appointment_block;
-	$: instructionalMember = appointmentBlock.instructional_member;
-	$: startTime = appointment.appointment_block.start_time;
+	$: startTime = event.startTime;
 
 	let endTime: Date;
 
 	$: {
 		endTime = new Date(startTime);
-		endTime.setTime(endTime.getTime() + appointmentBlock.duration);
+		endTime.setTime(endTime.getTime() + event.duration);
 	}
+
+	let title: string;
+
+	$: {
+		let sectionMember: ExtendedSectionMember;
+
+		if (isCalendarEventAppointmentBlock(event.underlying)) {
+			sectionMember = event.underlying.instructional_member;
+		} else {
+			sectionMember = event.underlying.student;
+		}
+
+		title = sectionName(sectionMember.section);
+	}
+
+	let subtitle: string;
+
+	$: {
+		if (isCalendarEventAppointmentBlock(event.underlying)) {
+			const instructionalMemberUser = event.underlying.instructional_member.user;
+
+			if (instructionalMemberUser.id == userID) {
+				subtitle = "Your office hours";
+			} else {
+				subtitle = `${instructionalMemberUser.first_name} ${instructionalMemberUser.last_name}'s office hours`;
+			}
+		} else if (event.underlying.student.user.id == userID) {
+			const instructionalMemberUser = event.underlying.appointment_block.instructional_member.user;
+
+			subtitle = `Your booked appointment with ${instructionalMemberUser.first_name} ${instructionalMemberUser.last_name}`;
+		} else {
+			const studentUser = event.underlying.student.user;
+
+			subtitle = `${studentUser.first_name} ${studentUser.last_name}'s booked appointment with you`;
+		}
+	}
+
+	const dispatch = createEventDispatcher<{
+		click: ExtendedAppointmentBlock;
+	}>();
 </script>
 
-<div class="card bg-primary shadow" class:calendar-card-collapsed={collapsed}>
+<button
+	type="button"
+	class="card bg-primary shadow text-left"
+	class:calendar-card-collapsed={collapsed}
+	on:click={() => {
+		if (isCalendarEventAppointmentBlock(event.underlying)) {
+			dispatch("click", event.underlying);
+		}
+	}}>
 	<div class="card-body gap-0 p-4">
-		<h3 class="calendar-card-section font-medium text-sm">
-			{sectionName(instructionalMember.section)}
-		</h3>
-
+		<h3 class="calendar-card-section font-medium text-sm">{title}</h3>
 		<div class="calendar-card-additional-container">
 			<div class="calendar-card-additional">
-				<h2 class="card-title text-sm">
-					Office Hours with {userName(instructionalMember.user)}
-				</h2>
-
+				<h2 class="card-title text-sm">{subtitle}</h2>
 				<p class="text-sm">
 					{startTime.toLocaleString("en-US", {
 						timeStyle: "short"
@@ -39,7 +82,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</button>
 
 <style>
 	* {

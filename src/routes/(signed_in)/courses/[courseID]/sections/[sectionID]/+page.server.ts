@@ -1,32 +1,54 @@
 import {
 	verifyAuthentication,
-	verifyUserIsMember,
 	verifyUserIsApartOfInstructionalTeam
 } from "$lib/auth";
-import { deleteSection, updateSection, getExtendedSection } from "$lib/db/sections";
-import { getExtendedSectionMembers } from "$lib/db/sectionMembers";
-import { deleteSectionMember, updateSectionMember, getSectionMember } from "$lib/db/sectionMembers";
+import { deleteSection, getSections, updateSection, extendSections } from "$lib/db/sections";
+import { deleteSectionMember, updateSectionMember, getSectionMember, getSectionsSectionMembers, extendSectionMembers } from "$lib/db/sectionMembers";
 import { SectionMemberType, type PartialSection, type PartialSectionMember } from "$lib/types";
 import { getEnumValue } from "$lib/utils";
 import type { PageServerLoad, Actions } from "./$types";
-import { error, redirect, json, fail } from "@sveltejs/kit";
+import { error, redirect, fail } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 
 export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 	const { sectionID } = params;
 	const userID = verifyAuthentication(locals, cookies);
+
 	await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
-	let section = await getExtendedSection(sectionID);
-	let sectionMembers = await getExtendedSectionMembers(sectionID);
-	if (!section) {
+
+	const section = await getSections([sectionID]);
+
+	if (section == undefined) {
 		error(404, "Section not found.");
 	}
+
+	const extendedSections = await extendSections(section);
+
+	if (extendedSections instanceof Error) {
+		throw section;
+	}
+
+	const extendedSection = extendedSections[0];
+
+	if (extendedSection == undefined) {
+		throw new Error(`I didn't get back a section with the ID ${sectionID}`);
+	}
+
+	const sectionMembers = await getSectionsSectionMembers([sectionID]);
+
 	if (sectionMembers.length === 0) {
 		error(400, "Must have section members to view this page.");
 	}
+
+	const extendedSectionMembers = await extendSectionMembers(sectionMembers);
+
+	if (extendedSectionMembers instanceof Error) {
+		throw extendedSectionMembers;
+	}
+
 	return {
-		section,
-		sectionMembers
+		section: extendedSection,
+		sectionMembers: extendedSectionMembers
 	};
 };
 
