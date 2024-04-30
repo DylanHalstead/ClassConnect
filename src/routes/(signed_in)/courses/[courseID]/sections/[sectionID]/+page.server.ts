@@ -1,4 +1,5 @@
 import {
+	getUserID,
 	verifyAuthentication,
 	verifyUserIsApartOfInstructionalTeam
 } from "$lib/auth";
@@ -53,9 +54,9 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 };
 
 export const actions: Actions = {
-	updateSection: async ({ locals, request, cookies, params }) => {
+	updateSection: async ({ request, cookies, params }) => {
 		const { courseID, sectionID } = params;
-		const userID = verifyAuthentication(locals, cookies);
+		const userID = getUserID(cookies);
 		await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
 
 		const data: FormData = await request.formData();
@@ -100,9 +101,9 @@ export const actions: Actions = {
 		setFlash(message, cookies);
 		redirect(302, `/courses/${courseID}/sections/${sectionID}`);
 	},
-	deleteSection: async ({ cookies, params, locals }) => {
+	deleteSection: async ({ cookies, params }) => {
 		const { sectionID } = params;
-		const userID = verifyAuthentication(locals, cookies);
+		const userID = getUserID(cookies);
 		await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
 
 		const deleted = await deleteSection(sectionID);
@@ -117,9 +118,9 @@ export const actions: Actions = {
 		setFlash(message, cookies);
 		redirect(302, "/dashboard");
 	},
-	updateSectionMember: async ({ locals, request, cookies, params }) => {
+	updateSectionMember: async ({ request, cookies, params }) => {
 		const { courseID, sectionID } = params;
-		const userID = verifyAuthentication(locals, cookies);
+		const userID = getUserID(cookies);
 		await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
 
 		const data = await request.formData();
@@ -168,9 +169,9 @@ export const actions: Actions = {
 		}
 		redirect(302, `/courses/${courseID}/sections/${sectionID}`);
 	},
-	deleteSectionMember: async ({ locals, request, cookies, params }) => {
+	deleteSectionMember: async ({ request, cookies, params }) => {
 		const { courseID, sectionID } = params;
-		const userID = verifyAuthentication(locals, cookies);
+		const userID = getUserID(cookies);
 		await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
 
 		const data = await request.formData();
