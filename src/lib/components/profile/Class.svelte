@@ -1,9 +1,9 @@
 <script lang="ts">
 
     //import type { PartialCourse } from "$lib/types";
-
     //let course: PartialCourse;
-    export let departmentCode = "DC";
+
+    export let departmentCode = "unknown";
     export let className = 'unknown';
 
 </script>

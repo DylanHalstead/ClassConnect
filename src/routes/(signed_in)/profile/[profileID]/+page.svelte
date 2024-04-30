@@ -1,9 +1,7 @@
 <script lang="ts">
     import Appointment from "$lib/components/profile/Appointment.svelte";
     import Class from "$lib/components/profile/Class.svelte";
-    import type { PartialAppointment } from "$lib/types";
     import type { ExtendedAppointment } from "$lib/types";
-    import type { User } from "$lib/types";
     import type { PartialCourse } from "$lib/types";
 
     import { type ExtendedSectionMember, SectionMemberType } from "$lib/types";
@@ -14,8 +12,7 @@
     export let data: PageData;
 
     let course: Array<PartialCourse>;
-    let appointment: Array<PartialAppointment>;
-    let associated: User['id'];
+    let appointment: Array<ExtendedAppointment>;
 </script>
 
 <div class="flex flex-col m-12 space-y-14">
@@ -65,7 +62,7 @@
 
         <div class="flex flex-wrap space-x-7">
             {#each appointment as apt}
-                {#if apt.student_id == associated}
+                {#if apt.student}
                     <div>
                         <Appointment appointment={apt}/>
                     </div>
@@ -95,9 +92,9 @@
 
         <div class="flex flex-wrap space-x-7">
             {#each appointment as apt}
-                {#if apt.student_id == associated}
+                {#if apt.student}
                     <div>
-                        <Appointment />
+                        <Appointment appointment={apt}/>
                     </div>
                 {/if}
             {/each}
@@ -121,9 +118,9 @@
 
         <div class="flex flex-wrap space-x-7">
             {#each appointment as apt}
-                {#if apt.student_id == associated}
+                {#if apt.student}
                     <div>
-                        <Appointment />
+                        <Appointment appointment={apt}/>
                     </div>
                 {/if}
             {/each}
