@@ -164,7 +164,7 @@ export const actions: Actions = {
 			is_restricted: isRestricted,
 			section_id: sectionID,
 			user_id: member[0].user_id
-		}
+		};
 		const updatedMember = await updateSectionMember(memberID, partialSectionMember);
 		if (!updatedMember) {
 			error(500, "Failed to update member");
