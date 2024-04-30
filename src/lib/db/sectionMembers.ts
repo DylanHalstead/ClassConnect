@@ -1,5 +1,5 @@
 import { getCourse } from "$lib/db/courses";
-import { getExtendedSection } from "$lib/db/section";
+import { getExtendedSection } from "$lib/db/sections";
 import { getUsers } from "$lib/db/users";
 import type {
 	ExtendedSectionMember,
@@ -43,8 +43,7 @@ export async function createSectionMember(
 
 export async function updateSectionMember(
 	memberID: string,
-	memberType: SectionMemberType,
-	isRestricted: boolean
+	partialSectionMember: PartialSectionMember
 ): Promise<SectionMember | undefined> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
@@ -54,7 +53,7 @@ export async function updateSectionMember(
 				WHERE id = $3
 				RETURNING sm.id, sm.section_id, sm.user_id, sm.member_type, sm.is_restricted
 			`,
-			values: [memberType, isRestricted, memberID]
+			values: [partialSectionMember.member_type, partialSectionMember.is_restricted, memberID]
 		};
 
 		const result: QueryResult<SectionMember> = await client.query(query);

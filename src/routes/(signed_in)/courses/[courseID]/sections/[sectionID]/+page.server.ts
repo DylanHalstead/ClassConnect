@@ -3,10 +3,10 @@ import {
 	verifyUserIsMember,
 	verifyUserIsApartOfInstructionalTeam
 } from "$lib/auth";
-import { deleteSection, updateSection, getExtendedSection } from "$lib/db/section";
+import { deleteSection, updateSection, getExtendedSection } from "$lib/db/sections";
 import { getExtendedSectionMembers } from "$lib/db/sectionMembers";
 import { deleteSectionMember, updateSectionMember, getSectionMember } from "$lib/db/sectionMembers";
-import { SectionMemberType, type PartialSection } from "$lib/types";
+import { SectionMemberType, type PartialSection, type PartialSectionMember } from "$lib/types";
 import { getEnumValue } from "$lib/utils";
 import type { PageServerLoad, Actions } from "./$types";
 import { error, redirect, json, fail } from "@sveltejs/kit";
@@ -62,9 +62,9 @@ export const actions: Actions = {
 		}
 
 		const partialSection: PartialSection = {
-			'max_daily_bookable_hours': maxDailyBookableHours,
-			'section_number': sectionNumber,
-			'course_id': courseID
+			max_daily_bookable_hours: maxDailyBookableHours,
+			section_number: sectionNumber,
+			course_id: courseID
 		};
 		const section = await updateSection(sectionID, partialSection);
 		if (!section) {
@@ -134,7 +134,13 @@ export const actions: Actions = {
 		}
 		let isRestricted = formIsRestricted === "on";
 
-		const updatedMember = await updateSectionMember(memberID, sectionMemberType, isRestricted);
+		const partialSectionMember: PartialSectionMember = {
+			member_type: sectionMemberType,
+			is_restricted: isRestricted,
+			section_id: sectionID,
+			user_id: member.user_id
+		}
+		const updatedMember = await updateSectionMember(memberID, partialSectionMember);
 		if (!updatedMember) {
 			error(500, "Failed to update member");
 		}
