@@ -31,7 +31,7 @@ $$;
 
 CREATE TABLE IF NOT EXISTS section_members (
 	id UUID PRIMARY KEY,
-	section_id UUID NOT NULL REFERENCES sections(id),
+	section_id UUID NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
 	user_id UUID NOT NULL REFERENCES users(id),
 	member_type section_member_type NOT NULL,
 	is_restricted BOOLEAN NOT NULL DEFAULT FALSE,
@@ -49,7 +49,7 @@ $$;
 
 CREATE TABLE IF NOT EXISTS appointment_blocks (
 	id UUID PRIMARY KEY,
-	instructional_member_id UUID NOT NULL REFERENCES section_members(id),
+	instructional_member_id UUID NOT NULL REFERENCES section_members(id) ON DELETE CASCADE,
 	week_day week_day NOT NULL,
 	start_time TIME WITH TIME ZONE NOT NULL,
 	duration INTERVAL NOT NULL
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS appointment_blocks (
 CREATE TABLE IF NOT EXISTS appointments (
 	id UUID PRIMARY KEY,
 	appointment_day DATE NOT NULL,
-	appointment_block UUID NOT NULL REFERENCES appointment_blocks(id),
+	appointment_block UUID NOT NULL REFERENCES appointment_blocks(id) ON DELETE CASCADE,
 	student_id UUID NOT NULL REFERENCES section_members(id),
 	cancelled BOOLEAN NOT NULL DEFAULT FALSE,
 	link VARCHAR(255) NOT NULL,

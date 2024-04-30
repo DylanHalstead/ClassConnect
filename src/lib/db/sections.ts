@@ -1,9 +1,68 @@
-import { withConnection } from "$lib/db";
 import { getCourses } from "$lib/db/courses";
 import type { ExtendedSection, PartialSection, Section } from "$lib/types";
 import { bulkQuery } from "$lib/utils";
+import { withConnection } from "./index";
 import { randomUUID } from "crypto";
 import type { QueryConfig, QueryResult } from "pg";
+
+export async function getExtendedSection(sectionID: string): Promise<ExtendedSection | undefined> {
+	const section = await getSection(sectionID);
+	if (!section) {
+		return undefined;
+	}
+
+	const course = await getCourses([section.course_id]);
+	if (!course || !course[0]) {
+		return undefined;
+	}
+
+	return {
+		...section,
+		course: course[0]
+	};
+}
+
+export async function updateSection(
+	sectionID: string,
+	partialSection: PartialSection
+): Promise<Section | undefined> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+				UPDATE sections s
+				SET section_number = $2, max_daily_bookable_hours = $3
+				WHERE id = $1
+				RETURNING s.id, s.course_id, s.section_number, s.max_daily_bookable_hours
+			`,
+			values: [sectionID, partialSection.section_number, partialSection.max_daily_bookable_hours]
+		};
+
+		const res: QueryResult<Section> = await client.query(query);
+		if (res.rows.length === 0) {
+			return undefined;
+		}
+		return res.rows[0];
+	});
+}
+
+export async function deleteSection(sectionID: string): Promise<boolean> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+				DELETE FROM sections
+				WHERE id = $1
+			`,
+			values: [sectionID]
+		};
+
+		try {
+			await client.query(query);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	});
+}
 
 export async function createSection(partialSection: PartialSection): Promise<Section> {
 	return withConnection(async client => {
