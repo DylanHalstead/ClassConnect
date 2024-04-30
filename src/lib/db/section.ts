@@ -43,7 +43,11 @@ export async function getExtendedSection(sectionID: string): Promise<ExtendedSec
 	};
 }
 
-export async function updateSection(sectionID: string, sectionNumber: number, maxDailyBookableHours: number): Promise<Section | undefined> {
+export async function updateSection(
+	sectionID: string,
+	sectionNumber: number,
+	maxDailyBookableHours: number
+): Promise<Section | undefined> {
 	return withConnection(async client => {
 		const query: QueryConfig = {
 			text: `
