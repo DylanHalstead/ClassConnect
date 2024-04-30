@@ -3,9 +3,12 @@
 	import { invalidateAll } from "$app/navigation";
 	import { initialize } from "svelte-google-auth/client";
 	import type { PageData } from "./$types.js";
+	import { title } from "$lib/stores";
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
+
+  title.set(`${data.section.course.department_code} ${data.section.course.course_code}-${data.section.section_number} | Create Appointment Block`);
 
 	let selectedWeekday: WeekDay | null = null;
 	let startTime: string = "";

@@ -11,6 +11,9 @@
 		type Student,
 		type ExtendedAppointment
 	} from "$lib/types";
+	import { title } from "$lib/stores";
+
+  title.set('Calendar');
 
 	const calendarStartTime = new Date();
 

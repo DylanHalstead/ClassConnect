@@ -1,3 +1,8 @@
+<script>
+  import { title } from "$lib/stores";
+  title.set('Profile');
+</script>
+
 <h1>Profile</h1>
 
 <a href="/dashboard">Dashboard</a>
