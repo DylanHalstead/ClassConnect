@@ -1,18 +1,18 @@
 import {
 	verifyAuthentication,
-	verifyUserIsInSection,
 	verifyUserIsApartOfInstructionalTeam,
+	verifyUserIsInSection,
 	verifyUserIsMember
 } from "$lib/auth";
 import {
-	getMembersAppointmentBlocks,
 	createAppointmentBlock,
-	deleteAppointmentBlocks
+	deleteAppointmentBlocks,
+	getSectionMembersAppointmentBlocks
 } from "$lib/db/appointmentBlocks";
 import { type AppointmentBlock, WeekDay } from "$lib/types";
 import { formTimeToDate, getEnumValue } from "$lib/utils";
 import type { Actions } from "./$types";
-import { redirect, error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 
 export const actions: Actions = {
 	default: async ({ locals, request, params, cookies }) => {
@@ -52,9 +52,9 @@ export const actions: Actions = {
 
 		let duration = end.getTime() - start.getTime();
 		// Validate that the start-time and end-time aren't conflicting with existing appointment blocks
-		const membersBlocks = await getMembersAppointmentBlocks(params.memberID);
-		if (!membersBlocks) {
-			error(500, "Internal server error: Failed to get appointment blocks");
+		const membersBlocks = await getSectionMembersAppointmentBlocks([params.memberID]);
+		if (membersBlocks instanceof Error) {
+			throw membersBlocks;
 		}
 		const possiblyConflictingBlocks = membersBlocks.filter(block => block.week_day === dayOfWeek);
 		const mergeableBlocks: AppointmentBlock[] = [];

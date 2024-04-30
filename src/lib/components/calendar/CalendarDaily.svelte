@@ -1,16 +1,17 @@
 <script lang="ts">
+	import { createEventDispatcher } from "svelte";
 	import {
 		calendarRowCount,
 		calendarStartAndEndTimes,
 		type CalendarConfiguration
 	} from "$lib/components/calendar";
-	import type { ExtendedAppointment } from "$lib/types";
 
 	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
 	import CalendarDailyCursor from "$lib/components/calendar/CalendarDailyCursor.svelte";
 	import CalendarGutter from "$lib/components/calendar/CalendarGutter.svelte";
 	import { normalizeDateByDay, normalizeDateByTimeWithinDay } from "$lib/dateManipulation";
 	import { currentTime } from "$lib/stores";
+	import type { ExtendedAppointment } from "$lib/types";
 
 	export let configuration: CalendarConfiguration;
 
@@ -52,6 +53,10 @@
 
 	$: currentTimeNormalized = normalizeDateByTimeWithinDay($currentTime);
 
+	const dispatch = createEventDispatcher<{
+		appointmentClicked: ExtendedAppointment;
+	}>();
+
 	const gutterTopMargin = "1rem";
 </script>
 
@@ -75,7 +80,9 @@
 						<div
 							class="overflow-y-scroll p-2 relative z-10"
 							style:height={configuration.gutterCellHeight}>
-							<CalendarCardCarousel {appointments} />
+							<CalendarCardCarousel
+								{appointments}
+								on:appointmentClicked={event => dispatch("appointmentClicked", event.detail)} />
 						</div>
 					</td>
 				</tr>
