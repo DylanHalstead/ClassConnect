@@ -32,7 +32,6 @@
 		const isConfirmed = confirm("Are you sure you want to delete this section?");
 		if (!isConfirmed) {
 			e.preventDefault();
-			return;
 		}
 	}
 </script>
