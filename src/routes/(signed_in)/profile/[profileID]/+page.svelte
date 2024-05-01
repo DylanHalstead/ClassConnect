@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <!-- Appointemnt Components -->
+        <!-- {{ Appointemnt Components }} -->
 
         <div class="flex flex-wrap space-x-7">
             {#each appointment as apt}
