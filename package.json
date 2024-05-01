@@ -40,6 +40,7 @@
 	"type": "module",
 	"dependencies": {
 		"pg": "^8.11.3",
-		"tslib": "^2.4.1"
+		"tslib": "^2.4.1",
+		"yarn": "^1.22.22"
 	}
 }
