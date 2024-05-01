@@ -1,35 +1,41 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import Modal from "$lib/components/modal/Modal.svelte";
-	import type { ExtendedAppointment, User } from "$lib/types";
+	import type { ExtendedAppointmentBlock, User } from "$lib/types";
 
-	export let appointment: ExtendedAppointment | undefined;
+	export let data:
+		| {
+				appointmentBlock: ExtendedAppointmentBlock;
+				appointmentDate: Date;
+		  }
+		| undefined;
+
 	export let isOpen: boolean;
 
-	const dispatch = createEventDispatcher<{ close: undefined }>();
+	const dispatch = createEventDispatcher<{ close: boolean }>();
 
-	function appointmentDateFormatted(appointment: ExtendedAppointment): string {
-		return appointment.appointment_day.toLocaleString("en-US", {
+	function appointmentDateFormatted(appointmentDate: Date): string {
+		return appointmentDate.toLocaleString("en-US", {
 			dateStyle: "long"
 		});
 	}
 
-	function appointmentEndTimeFormatted(appointment: ExtendedAppointment): string {
-		const endTime = new Date(appointment.appointment_block.start_time);
+	function appointmentBlockEndTimeFormatted(appointmentBlock: ExtendedAppointmentBlock): string {
+		const endTime = new Date(appointmentBlock.start_time);
 
-		endTime.setTime(endTime.getTime() + appointment.appointment_block.duration);
+		endTime.setTime(endTime.getTime() + appointmentBlock.duration);
 
 		return endTime.toLocaleString("en-US", {
 			timeStyle: "short"
 		});
 	}
 
-	function appointmentInstructionalMember(appointment: ExtendedAppointment): User {
-		return appointment.appointment_block.instructional_member.user;
+	function appointmentBlockInstructionalMember(appointmentBlock: ExtendedAppointmentBlock): User {
+		return appointmentBlock.instructional_member.user;
 	}
 
-	function appointmentStartTimeFormatted(appointment: ExtendedAppointment): string {
-		return appointment.appointment_block.start_time.toLocaleString("en-US", {
+	function appointmentBlockStartTimeFormatted(appointmentBlock: ExtendedAppointmentBlock): string {
+		return appointmentBlock.start_time.toLocaleString("en-US", {
 			timeStyle: "short"
 		});
 	}
@@ -38,18 +44,19 @@
 <Modal
 	{isOpen}
 	on:close={() => {
-		dispatch("close");
+		dispatch("close", false);
 	}}>
-	{#if appointment != undefined}
+	{#if data != undefined}
 		<h2 class="font-bold text-xl">
-			Book an Appointment with {appointmentInstructionalMember(appointment).first_name}
-			{appointmentInstructionalMember(appointment).last_name}
+			Book an Appointment with {appointmentBlockInstructionalMember(data.appointmentBlock)
+				.first_name}
+			{appointmentBlockInstructionalMember(data.appointmentBlock).last_name}
 		</h2>
 
 		<h3 class="text-sm text-gray-600">
-			{appointmentDateFormatted(appointment)} from {appointmentStartTimeFormatted(appointment)} to {appointmentEndTimeFormatted(
-				appointment
-			)}
+			{appointmentDateFormatted(data.appointmentDate)} from {appointmentBlockStartTimeFormatted(
+				data.appointmentBlock
+			)} to {appointmentBlockEndTimeFormatted(data.appointmentBlock)}
 		</h3>
 	{/if}
 
@@ -58,7 +65,7 @@
 			type="button"
 			class="btn btn-primary"
 			on:click={() => {
-				dispatch("close");
+				dispatch("close", true);
 			}}>
 			Submit
 		</button>

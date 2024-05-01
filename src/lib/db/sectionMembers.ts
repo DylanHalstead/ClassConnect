@@ -1,5 +1,5 @@
 import { withConnection } from "$lib/db";
-import { extendSections, getSections } from "$lib/db/sections";
+import { getSections, extendSections } from "$lib/db/sections";
 import { getUsers } from "$lib/db/users";
 import type { ExtendedSectionMember, SectionMember, PartialSectionMember } from "$lib/types";
 import { bulkQuery } from "$lib/utils";
@@ -33,6 +33,25 @@ export async function createSectionMember(
 		await client.query(query);
 
 		return newSectionMember;
+	});
+}
+
+export async function deleteSectionMember(memberID: string): Promise<boolean> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+				DELETE FROM section_members
+				WHERE id = $1
+			`,
+			values: [memberID]
+		};
+
+		try {
+			await client.query(query);
+			return true;
+		} catch (e) {
+			return false;
+		}
 	});
 }
 
@@ -104,25 +123,33 @@ WHERE id = ANY($1)`,
 	);
 }
 
-export async function getSectionSectionMembers(sectionId: string): Promise<SectionMember[]> {
+export async function getSectionMember(id: string): Promise<SectionMember | undefined> {
+	const sectionMembers = await getSectionMembers([id]);
+
+	if (sectionMembers == undefined) {
+		return;
+	}
+
+	return sectionMembers[0];
+}
+
+export async function getSectionsSectionMembers(sectionIds: string[]): Promise<SectionMember[]> {
+	if (sectionIds.length == 0) {
+		return [];
+	}
+
 	return withConnection(async client => {
 		const query: QueryConfig = {
 			text: `
-				SELECT
-					sm.id,
-					sm.section_id,
-					sm.user_id,
-					sm.member_type,
-					sm.is_restricted
-				FROM section_members sm
-				WHERE sm.section_id = $1
-			`,
-			values: [sectionId]
+SELECT id, section_id, user_id, member_type, is_restricted
+FROM section_members
+WHERE section_id = ANY($1)`,
+			values: [sectionIds]
 		};
 
-		const res: QueryResult<SectionMember> = await client.query(query);
-		const sectionMembers = res.rows;
-		return sectionMembers;
+		const result: QueryResult<SectionMember> = await client.query(query);
+
+		return result.rows;
 	});
 }
 
@@ -145,5 +172,47 @@ export async function getUsersSectionMembers(userId: string): Promise<SectionMem
 		const result: QueryResult<SectionMember> = await client.query(query);
 
 		return result.rows;
+	});
+}
+
+export async function getUsersSectionMembersInSection(
+	userId: string,
+	sectionId: string
+): Promise<SectionMember[]> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+SELECT id, section_id, user_id, member_type, is_restricted
+FROM section_members
+WHERE user_id = $1 AND section_id = $2`,
+			values: [userId, sectionId]
+		};
+
+		const result: QueryResult<SectionMember> = await client.query(query);
+
+		return result.rows;
+	});
+}
+
+export async function updateSectionMember(
+	memberID: string,
+	partialSectionMember: PartialSectionMember
+): Promise<SectionMember | undefined> {
+	return withConnection(async client => {
+		const query: QueryConfig = {
+			text: `
+				UPDATE section_members sm
+				SET member_type = $1, is_restricted = $2
+				WHERE id = $3
+				RETURNING sm.id, sm.section_id, sm.user_id, sm.member_type, sm.is_restricted
+			`,
+			values: [partialSectionMember.member_type, partialSectionMember.is_restricted, memberID]
+		};
+
+		const result: QueryResult<SectionMember> = await client.query(query);
+		if (result.rows.length === 0) {
+			return undefined;
+		}
+		return result.rows[0];
 	});
 }

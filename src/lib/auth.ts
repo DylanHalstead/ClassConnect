@@ -4,13 +4,13 @@ import { type Cookies, error } from "@sveltejs/kit";
 import { isSignedIn } from "svelte-google-auth/server";
 import { setFlash } from "sveltekit-flash-message/server";
 
-const unauthenticatedErrorMessage = "You must be signed in to view this page."
+const unauthenticatedErrorMessage = "You must be signed in to view this page.";
 
 export function getUserID(cookies: Cookies): string {
 	const result = cookies.get("userID");
 
 	if (result == undefined) {
-		error(401, unauthenticatedErrorMessage)
+		error(401, unauthenticatedErrorMessage);
 	}
 
 	return result;

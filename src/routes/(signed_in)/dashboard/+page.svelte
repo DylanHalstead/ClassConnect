@@ -5,11 +5,13 @@
 	import { initialize } from "svelte-google-auth/client";
 	import type { PageData } from "./$types.js";
 	import { invalidateAll } from "$app/navigation";
+	import { title } from "$lib/stores";
+
+	title.set("Dashboard");
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
 	let studentAppointments = data.studentAppointments;
-
 </script>
 
 <div class="px-12 py-2">
@@ -39,12 +41,6 @@
 	.main-text {
 		font-family: "Kaisei HarunoUmi", serif;
 		font-size: 1rem;
-	}
-
-	.header,
-	.header-year {
-		font-weight: bold;
-		font-size: 2.5rem;
 	}
 
 	.subheading {

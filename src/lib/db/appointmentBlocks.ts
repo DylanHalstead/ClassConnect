@@ -24,14 +24,14 @@ export async function createAppointmentBlock(
 		const query: QueryConfig = {
 			text: `
 				INSERT INTO appointment_blocks (id, instructional_member_id, week_day, start_time, duration)
-				VALUES ($1, $2, $3, $4, $5)
+				VALUES ($1, $2, $3, $4, $5::interval)
 			`,
 			values: [
 				newAppointmentBlock.id,
 				newAppointmentBlock.instructional_member_id,
 				newAppointmentBlock.week_day,
 				newAppointmentBlock.start_time.toLocaleTimeString(),
-				newAppointmentBlock.duration
+				`${newAppointmentBlock.duration} milliseconds`
 			]
 		};
 
@@ -57,6 +57,22 @@ export async function deleteAppointmentBlocks(ids: string[]): Promise<boolean> {
 
 		return result.rowCount == uniqueIds.size;
 	});
+}
+
+export async function extendAppointmentBlock(
+	appointmentBlock: AppointmentBlock
+): Promise<ExtendedAppointmentBlock | Error> {
+	const extended = await extendAppointmentBlocks([appointmentBlock]);
+
+	if (extended instanceof Error) {
+		return extended;
+	}
+
+	if (extended[0] == undefined) {
+		return new Error(`I didn't get back an appointment block with the ID ${appointmentBlock.id}`);
+	}
+
+	return extended[0];
 }
 
 export async function extendAppointmentBlocks(
@@ -102,6 +118,20 @@ export async function extendAppointmentBlocks(
 	}
 
 	return result;
+}
+
+export async function getAppointmentBlock(id: string): Promise<AppointmentBlock | Error> {
+	const result = await getAppointmentBlocks([id]);
+
+	if (result instanceof Error) {
+		return result;
+	}
+
+	if (result[0] == undefined) {
+		return new Error(`Couldn't find appointment block with the ID ${id}`);
+	}
+
+	return result[0];
 }
 
 export async function getAppointmentBlocks(ids: string[]): Promise<AppointmentBlock[] | Error> {

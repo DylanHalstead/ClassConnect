@@ -83,7 +83,7 @@ async function initializeDatabase() {
 
 	const section = await createSection({
 		course_id: course.id,
-		section_number: 3155,
+		section_number: 1,
 		max_daily_bookable_hours: Infinity
 	});
 
@@ -142,7 +142,7 @@ async function initializeDatabase() {
 
 	const appointmentBlock2Time = new Date(appointmentBlock1Time);
 
-	appointmentBlock2Time.setDate(appointmentBlock1Time.getDate() + 1);
+	appointmentBlock2Time.setDate(appointmentBlock1Time.getDate() + 2);
 
 	const appointmentBlock3Time = new Date(appointmentBlock2Time);
 	appointmentBlock3Time.setDate(appointmentBlock2Time.getDate() + 2);
