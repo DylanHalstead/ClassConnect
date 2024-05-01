@@ -91,6 +91,20 @@ export async function createSection(partialSection: PartialSection): Promise<Sec
 	});
 }
 
+export async function extendSection(section: Section): Promise<ExtendedSection | Error> {
+	const extended = await extendSections([section]);
+
+	if (extended instanceof Error) {
+		return extended;
+	}
+
+	if (extended[0] == undefined) {
+		return new Error(`I didn't get back a section with the ID ${section.id}`);
+	}
+
+	return extended[0];
+}
+
 export async function extendSections(sections: Section[]): Promise<ExtendedSection[] | Error> {
 	const courseIds = sections.map(section => section.course_id);
 	const courses = await getCourses(courseIds);
