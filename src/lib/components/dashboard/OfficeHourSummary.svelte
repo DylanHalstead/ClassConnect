@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { WeekDay, type ExtendedAppointment } from '$lib/types';
-	import { userName } from '$lib/utils';
+	import { WeekDay, type ExtendedAppointment } from "$lib/types";
+	import { userName } from "$lib/utils";
 
 	export let appointment: ExtendedAppointment;
 	export let userID: string;
@@ -18,10 +18,10 @@
 		endTime = new Date(startTime);
 		endTime.setTime(endTime.getTime() + appointmentBlock.duration);
 	}
-	
+
 	let date: string | Date;
 	let currentDate = new Date();
-	
+
 	if (currentDate.getDay() == appointment.appointment_day.getDay()) {
 		date = "Today";
 	} else {
@@ -32,7 +32,7 @@
 			year: "numeric"
 		});
 	}
-	
+
 	let subheadingDate = appointment.appointment_day;
 
 	function getNumSuffix(i: number): string {
@@ -59,9 +59,6 @@
 	const dateSuffix = getNumSuffix(subheadingDate.getDate());
 	const weekdays = Object.values(WeekDay);
 	const DayOfWeek = weekdays[subheadingDate.getDay()];
-	
-	
-
 </script>
 
 <div class="px-12">
@@ -74,7 +71,10 @@
 		{/if}
 		<div class="px-2">
 			{#if userID == instructionalMember.user.id}
-				<p class="main-text font-kaisei">Your Office Hours with {appointment.student.user.first_name} {appointment.student.user.last_name}</p>
+				<p class="main-text font-kaisei">
+					Your Office Hours with {appointment.student.user.first_name}
+					{appointment.student.user.last_name}
+				</p>
 			{:else}
 				<p class="main-text font-kaisei">Office Hours with {userName(instructionalMember.user)}</p>
 			{/if}

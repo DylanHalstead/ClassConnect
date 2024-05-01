@@ -13,16 +13,12 @@
 	initialize(data, invalidateAll);
 	$: appointments = {
 		studentAppointments: data.studentAppointments,
-		taAppointments: data.taAppointments,
+		taAppointments: data.taAppointments
 	};
 
 	let userID: string;
 
 	userID = data.userID;
-
-
-
-	
 </script>
 
 <div class="px-12 py-2">
@@ -31,13 +27,13 @@
 	<div class="px-12 py-6 mx-auto flex flex-row justify-center">
 		<div class="appointment my-8 mx-auto">
 			<h2 class="subheading main-text font-kaisei">Upcoming Appointments</h2>
-				{#each appointments.studentAppointments as appointment}
-					<OfficeHourSummary appointment={appointment} userID = {userID} />
-				{/each}
+			{#each appointments.studentAppointments as appointment}
+				<OfficeHourSummary {appointment} {userID} />
+			{/each}
 			<div class="mt-12">
 				<h2 class="subheading main-text font-kaisei">TA Meetings:</h2>
 				{#each appointments.taAppointments as appointment}
-					<OfficeHourSummary appointment={appointment} userID = {userID} />
+					<OfficeHourSummary {appointment} {userID} />
 				{/each}
 			</div>
 		</div>
