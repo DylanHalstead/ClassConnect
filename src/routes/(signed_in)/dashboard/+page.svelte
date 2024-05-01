@@ -36,12 +36,6 @@
 		font-size: 1rem;
 	}
 
-	.header,
-	.header-year {
-		font-weight: bold;
-		font-size: 2.5rem;
-	}
-
 	.subheading {
 		font-weight: bold;
 		font-size: 1.75rem;
