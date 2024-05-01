@@ -1,18 +1,20 @@
 import { getUserID } from "$lib/auth";
-import { extendAppointments, getStudentsAppointments } from "$lib/db/appointments";
+import { extendAppointments, getAppointmentBlocksAppointments, getStudentsAppointments } from "$lib/db/appointments";
 import { getUsersSectionMembers } from "$lib/db/sectionMembers";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
+import { extendAppointmentBlocks, getSectionMembersAppointmentBlocks } from "$lib/db/appointmentBlocks";
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const userID = getUserID(cookies);
-    const usersMembers = await getUsersSectionMembers(userID);
+    const sectionMembers = await getUsersSectionMembers(userID);
+    const sectionMembersIDs = sectionMembers.map(sectionMember => sectionMember.id);
 
-    if (usersMembers == undefined) {
+    if (sectionMembersIDs == undefined) {
         error(404, "User not found.");
     }
     
-    const studentAppointments = await getStudentsAppointments(usersMembers.map(user => user.id));
+    const studentAppointments = await getStudentsAppointments(sectionMembersIDs);
 
     const extendedStudentAppointments = await extendAppointments(studentAppointments);
     if (extendedStudentAppointments instanceof Error) {
@@ -23,11 +25,27 @@ export const load: PageServerLoad = async ({ cookies }) => {
         return a.appointment_day.getTime() - b.appointment_day.getTime();
     });
 
-    // const instructionalMemberAppointments = await;
-    
+    const appointmentBlocks = await getSectionMembersAppointmentBlocks(sectionMembersIDs);
+
+    if (appointmentBlocks instanceof Error) {
+        throw appointmentBlocks;
+    }
+    const extendedAppointmentBlocks = await extendAppointmentBlocks(appointmentBlocks);
+    if (extendedAppointmentBlocks instanceof Error) {
+        throw extendedAppointmentBlocks;
+    }
+
+    const appointmentBlockAppointments = await getAppointmentBlocksAppointments(extendedAppointmentBlocks.map(extendAppointmentBlock => extendAppointmentBlock.id));
+
+    const extendedAppointments = await extendAppointments(appointmentBlockAppointments);
+
+    if (extendedAppointments instanceof Error) {
+        throw extendedAppointments;
+    }
 
     return {
-        studentAppointments: extendedStudentAppointments
+        studentAppointments: extendedStudentAppointments,
+        taAppointments: extendedAppointments
     };
 
 };

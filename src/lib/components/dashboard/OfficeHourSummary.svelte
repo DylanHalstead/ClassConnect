@@ -3,10 +3,14 @@
 	import { userName } from '$lib/utils';
 
 	export let appointment: ExtendedAppointment;
+	export let userID: string;
 
 	$: appointmentBlock = appointment.appointment_block;
 	$: instructionalMember = appointmentBlock.instructional_member;
 	$: startTime = appointment.appointment_block.start_time;
+
+	// console.log("instructional: " + appointment.appointment_block.instructional_member.user.id);
+	// console.log("student: " + appointment.student.user.id);
 
 	let endTime: Date;
 
@@ -56,15 +60,24 @@
 	const weekdays = Object.values(WeekDay);
 	const DayOfWeek = weekdays[subheadingDate.getDay()];
 	
+	
 
 </script>
 
 <div class="px-12">
 	<p class="main-text font-kaisei pt-6">{date}:</p>
 	<div class="flex flex-row py-4 items-center">
-		<div class="h-7 w-7 bg-calendar-card-2 rounded-lg"></div>
+		{#if userID == instructionalMember.user.id}
+			<div class="h-7 w-7 bg-calendar-card-3 rounded-lg"></div>
+		{:else}
+			<div class="h-7 w-7 bg-calendar-card-2 rounded-lg"></div>
+		{/if}
 		<div class="px-2">
-			<p class="main-text font-kaisei">Office Hours with {userName(instructionalMember.user)}</p>
+			{#if userID == instructionalMember.user.id}
+				<p class="main-text font-kaisei">Your Office Hours with {appointment.student.user.first_name} {appointment.student.user.last_name}</p>
+			{:else}
+				<p class="main-text font-kaisei">Office Hours with {userName(instructionalMember.user)}</p>
+			{/if}
 			<p class="main-text font-kaisei subtext capitalize">
 				{DayOfWeek}, {subheadingDate.toLocaleDateString("en-US", {
 					month: "long",
