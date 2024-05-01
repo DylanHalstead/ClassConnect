@@ -2,8 +2,13 @@
 	import BookingForm from "$lib/components/dashboard/BookingForm.svelte";
 	import OfficeHourSummary from "$lib/components/dashboard/OfficeHourSummary.svelte";
 	import Header from "$lib/components/Header.svelte";
+	import { initialize } from "svelte-google-auth/client";
+	import type { PageData } from "./$types.js";
+	import { invalidateAll } from "$app/navigation";
 
-	let officeHours = [1,2,3,4,5];
+	export let data: PageData;
+	initialize(data, invalidateAll);
+	let studentAppointments = data.studentAppointments;
 
 </script>
 
@@ -13,12 +18,12 @@
 	<div class="px-12 py-6 mx-auto flex flex-row justify-center">
 		<div class="appointment my-8 mx-auto">
 			<h2 class="subheading main-text font-kaisei">Upcoming Appointments</h2>
-			{#each officeHours as officeHour}
-				<OfficeHourSummary />
-			{/each}
+				{#each studentAppointments as appointment}
+					<OfficeHourSummary appointment={appointment}/>
+				{/each}
 			<div class="mt-12">
 				<h2 class="subheading main-text font-kaisei">TA Meetings:</h2>
-				<OfficeHourSummary />
+				<!-- <OfficeHourSummary /> -->
 			</div>
 		</div>
 
