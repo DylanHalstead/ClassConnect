@@ -15,7 +15,7 @@
 			};
 
 			modal.addEventListener("close", closeHandler);
-			modal.addEventListener("close", closeHandler);
+
 			onDestroy(() => {
 				modal.removeEventListener("close", closeHandler);
 			});

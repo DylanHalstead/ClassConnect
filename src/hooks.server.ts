@@ -65,7 +65,7 @@ async function initializeDatabase() {
 
 	const section = await createSection({
 		course_id: course.id,
-		section_number: 3155,
+		section_number: 1,
 		max_daily_bookable_hours: Infinity
 	});
 
