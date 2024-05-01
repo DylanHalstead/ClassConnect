@@ -64,7 +64,7 @@ async function initializeDatabase() {
 	});
 
 	const instructionalMemberUser2 = await createUser({
-		email: "dhalstea1@uncc.edu",
+		email: "dylanhalstea11@gmail.com",
 		first_name: "Dylan",
 		last_name: "Halstead"
 	});
