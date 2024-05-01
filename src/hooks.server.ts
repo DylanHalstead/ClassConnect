@@ -51,6 +51,12 @@ async function initializeDatabase() {
 		course_name: "Software Engineering"
 	});
 
+	const course2 = await createCourse({
+		department_code: "ITSC",
+		course_code: "2202",
+		course_name: "Computer Programming II"
+	});
+
 	const instructionalMemberUser = await createUser({
 		email: "jadenpeterson150@gmail.com",
 		first_name: "Jaden",
@@ -81,6 +87,12 @@ async function initializeDatabase() {
 		max_daily_bookable_hours: Infinity
 	});
 
+	const section2 = await createSection({
+		course_id: course2.id,
+		section_number: 2202,
+		max_daily_bookable_hours: Infinity
+	});
+
 	const instructionalMember = await createSectionMember({
 		section_id: section.id,
 		user_id: instructionalMemberUser.id,
@@ -91,6 +103,13 @@ async function initializeDatabase() {
 	const instructionalMember2 = await createSectionMember({
 		section_id: section.id,
 		user_id: instructionalMemberUser2.id,
+		member_type: SectionMemberType.TA,
+		is_restricted: false
+	});
+
+	const instructionalMember3 = await createSectionMember({
+		section_id: section2.id,
+		user_id: studentUser2.id,
 		member_type: SectionMemberType.TA,
 		is_restricted: false
 	});
@@ -109,6 +128,13 @@ async function initializeDatabase() {
 		is_restricted: false
 	});
 
+	const student3 = await createSectionMember({
+		section_id: section2.id,
+		user_id: studentUser.id,
+		member_type: SectionMemberType.Student,
+		is_restricted: false
+	});
+
 	const appointmentBlock1Time = new Date();
 
 	appointmentBlock1Time.setDate(appointmentBlock1Time.getDate() - appointmentBlock1Time.getDay());
@@ -123,6 +149,9 @@ async function initializeDatabase() {
 
 	const appointmentBlock4Time = new Date(appointmentBlock3Time);
 	appointmentBlock4Time.setDate(appointmentBlock3Time.getDate() + 1);
+
+	const appointmentBlock5Time = new Date(appointmentBlock1Time);
+	appointmentBlock5Time.setDate(appointmentBlock1Time.getDate());
 
 	const appointmentBlock1 = await createAppointmentBlock({
 		instructional_member_id: instructionalMember.id,
@@ -149,6 +178,13 @@ async function initializeDatabase() {
 		instructional_member_id: instructionalMember2.id,
 		week_day: WeekDay.Friday,
 		start_time: appointmentBlock2Time,
+		duration: 1000 * 60 * 30
+	});
+
+	const appointmentBlock5 = await createAppointmentBlock({
+		instructional_member_id: instructionalMember3.id,
+		week_day: WeekDay.Wednesday,
+		start_time: appointmentBlock5Time,
 		duration: 1000 * 60 * 30
 	});
 
@@ -180,6 +216,14 @@ async function initializeDatabase() {
 
 		appointment_day: appointmentBlock4Time,
 		appointment_block: appointmentBlock4.id
+	});
+
+	await createAppointment({
+		appointment_day: appointmentBlock5Time,
+		appointment_block: appointmentBlock5.id,
+		student_id: student3.id,
+		cancelled: false,
+		link: ""
 	});
 }
 

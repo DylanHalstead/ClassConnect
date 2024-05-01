@@ -23,6 +23,9 @@ export const load: PageServerLoad = async ({ cookies }) => {
         return a.appointment_day.getTime() - b.appointment_day.getTime();
     });
 
+    // const instructionalMemberAppointments = await;
+    
+
     return {
         studentAppointments: extendedStudentAppointments
     };
