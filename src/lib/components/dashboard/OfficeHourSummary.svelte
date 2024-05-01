@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { WeekDay, type ExtendedAppointment } from '$lib/types';
-	import { userName } from '$lib/utils';
-	import { getNumSuffix } from '$lib/utils';
+	import { WeekDay, type ExtendedAppointment } from "$lib/types";
+	import { userName } from "$lib/utils";
+	import { getNumSuffix } from "$lib/utils";
 
 	export let appointment: ExtendedAppointment;
 	export let userID: string;
@@ -36,7 +36,6 @@
 
 	let subheadingDate = appointment.appointment_day;
 
-
 	const dateSuffix = getNumSuffix(subheadingDate.getDate());
 	const weekdays = Object.values(WeekDay);
 	const DayOfWeek = weekdays[subheadingDate.getDay()];
@@ -52,7 +51,9 @@
 		{/if}
 		<div class="px-2">
 			{#if userID == instructionalMember.user.id}
-				<p class="main-text font-kaisei">Your Office Hours with {userName(appointment.student.user)}</p>
+				<p class="main-text font-kaisei">
+					Your Office Hours with {userName(appointment.student.user)}
+				</p>
 			{:else}
 				<p class="main-text font-kaisei">Office Hours with {userName(instructionalMember.user)}</p>
 			{/if}
