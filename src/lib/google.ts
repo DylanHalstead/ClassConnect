@@ -1,14 +1,16 @@
 import type { OAuth2Client } from 'google-auth-library';
 import { randomUUID } from 'crypto';
+import type { User } from './types';
 
-export async function createOfficeHourAppointment(auth: OAuth2Client, title: string, start: Date, end: Date, recepientEmails: string[]): Promise<Error | undefined> {
+export async function createOfficeHourAppointment(auth: OAuth2Client, title: string, description: string, start: Date, end: Date, recepients: User[]): Promise<Error | string> {
   const payload = {
     calendarId: 'primary',
-    attendees: recepientEmails.map(email => ({ email })),
+    attendees: recepients.map(recepient => ({ email: recepient.email, responseStatus: 'needsAction'})),
     start: { dateTime: start.toISOString(), timeZone: 'America/New_York' },
     end: { dateTime: end.toISOString(), timeZone: 'America/New_York' },
     kind: 'calendar#event',
     summary: title,
+    description: description,
     conferenceData: {
       createRequest: {
           requestId: randomUUID(),
@@ -34,9 +36,13 @@ export async function createOfficeHourAppointment(auth: OAuth2Client, title: str
 	});
 
 	if (!res.ok) {
-		return new Error(`Failed to create calendar event: ${res.statusText}, ${await res.text()}`);
+		return new Error(`Failed to create calendar event: ${await res.text()}`);
 	}
 
-	console.log(res);
-  return;
+  const data = await res.json();
+  if (!data || !data.hangoutLink) {
+    return new Error('Failed to create calendar event');
+  }
+
+  return data.hangoutLink;
 }
