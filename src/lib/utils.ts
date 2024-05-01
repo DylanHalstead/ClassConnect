@@ -149,3 +149,24 @@ export async function bulkQuery<Resource extends { id: string }, ErrorLike = nev
 
 	return result;
 }
+
+export function getNumSuffix(i: number): string {
+	let selected;
+
+	if ((i > 3 && i < 21) || i % 10 > 3) {
+		selected = 0;
+	} else {
+		selected = i % 10;
+	}
+
+	switch (selected) {
+		case 0:
+			return "th";
+		case 1:
+			return "st";
+		case 2:
+			return "nd";
+		default:
+			return "rd";
+	}
+}
