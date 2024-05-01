@@ -1,6 +1,7 @@
 <script lang="ts">
     import Appointment from "$lib/components/profile/Appointment.svelte";
     import Class from "$lib/components/profile/Class.svelte";
+    import InstructorClass from "$lib/components/profile/Class.svelte";
     import type { ExtendedAppointment } from "$lib/types";
     import type { PartialCourse } from "$lib/types";
 
@@ -174,7 +175,7 @@
             </div>
         </div>
 
-        <!-- Class Components | TODO: Loop TA TA classes -->
+        <!-- Class Components -->
 
         <div class="flex flex-wrap space-x-7">
             {#each course as crs}
@@ -197,7 +198,7 @@
             </div>
         </div>
 
-        <!-- Class Components | TODO: Loop TA Student Classes -->
+        <!-- Class Components -->
 
         <div class="flex flex-wrap space-x-7">
             {#each course as crs}
@@ -230,7 +231,7 @@
         <div class="flex flex-wrap space-x-7">
             {#each course as crs}
                 <div>
-                    <Class departmentCode={crs.department_code} className={crs.course_name}/>
+                    <InstructorClass insCourse={crs}/>
                 </div>
             {/each}
         </div>
