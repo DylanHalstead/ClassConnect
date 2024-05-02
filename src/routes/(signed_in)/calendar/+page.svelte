@@ -87,7 +87,7 @@
 			body: JSON.stringify(
 				AppointmentBlockBooking.encode({
 					appointmentBlockId: bookingModalData.appointmentBlock.id,
-					appointmentDate: bookingModalData.appointmentDate,
+					appointmentDate: bookingModalData.appointmentDate
 				})
 			),
 

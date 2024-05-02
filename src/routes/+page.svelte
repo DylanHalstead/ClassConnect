@@ -18,7 +18,7 @@
 	import { page } from "$app/stores";
 	import type { PageData } from "./$types.js";
 
-	const requiredScopes = ['openid', 'profile', 'email', 'https://www.googleapis.com/auth/calendar'];
+	const requiredScopes = ["openid", "profile", "email", "https://www.googleapis.com/auth/calendar"];
 
 	export let data: PageData;
 	initialize(data, invalidateAll);

@@ -7,10 +7,10 @@ import { createOfficeHourAppointment } from "$lib/google";
 import { AppointmentBlockBooking } from "$lib/types";
 import { userName, sectionName } from "$lib/utils";
 import type { RequestHandler } from "@sveltejs/kit";
-import { getOAuth2Client } from 'svelte-google-auth';
 import { fold } from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/function";
 import { PathReporter } from "io-ts/lib/PathReporter";
+import { getOAuth2Client } from "svelte-google-auth";
 
 export const POST: RequestHandler = async ({ cookies, locals, request }) => {
 	const userID = verifyAuthentication(locals, cookies);
@@ -50,7 +50,7 @@ export const POST: RequestHandler = async ({ cookies, locals, request }) => {
 					});
 				}
 
-				const user = await getUser(userID)
+				const user = await getUser(userID);
 				if (user == undefined) {
 					return new Response("User not found.", {
 						status: 404
@@ -64,9 +64,16 @@ export const POST: RequestHandler = async ({ cookies, locals, request }) => {
 				const start = new Date(body.appointmentDate.getTime());
 				start.setHours(extendedAppointmentBlock.start_time.getHours());
 				start.setMinutes(extendedAppointmentBlock.start_time.getMinutes());
-				const end = new Date(start.getTime() + extendedAppointmentBlock.duration)
-				
-				const appointmentLink = await createOfficeHourAppointment(client, title, description, start, end, recepients);
+				const end = new Date(start.getTime() + extendedAppointmentBlock.duration);
+
+				const appointmentLink = await createOfficeHourAppointment(
+					client,
+					title,
+					description,
+					start,
+					end,
+					recepients
+				);
 				if (appointmentLink instanceof Error) {
 					return new Response(appointmentLink.message, {
 						status: 500
