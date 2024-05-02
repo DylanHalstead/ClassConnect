@@ -6,9 +6,6 @@
 		Calendar,
 		ArrowLeftEndOnRectangle,
 		Squares2x2 as DashboardIcon,
-
-		User
-
 	} from "svelte-hero-icons";
 	import type { User } from "$lib/types";
 
