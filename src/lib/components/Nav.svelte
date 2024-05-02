@@ -51,7 +51,7 @@
 						<!-- If not user show CC 'logo' -->
 						{#if !data.auth.user}
 							<a class="text-2xl font-bold" href="/">CC</a>
-							<!-- Else show CC user pfp -->
+							<!-- Else show user pfp -->
 						{:else}
 							<img
 								class="object-cover h-full w-full"
