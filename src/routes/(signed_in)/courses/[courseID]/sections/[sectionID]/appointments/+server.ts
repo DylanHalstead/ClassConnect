@@ -66,9 +66,9 @@ export const POST: RequestHandler = async ({ cookies, locals, request }) => {
 				start.setMinutes(extendedAppointmentBlock.start_time.getMinutes());
 				const end = new Date(start.getTime() + extendedAppointmentBlock.duration)
 				
-				const meetingLink = await createOfficeHourAppointment(client, title, description, start, end, recepients);
-				if (meetingLink instanceof Error) {
-					return new Response(meetingLink.message, {
+				const appointmentLink = await createOfficeHourAppointment(client, title, description, start, end, recepients);
+				if (appointmentLink instanceof Error) {
+					return new Response(appointmentLink.message, {
 						status: 500
 					});
 				}
@@ -78,7 +78,7 @@ export const POST: RequestHandler = async ({ cookies, locals, request }) => {
 					appointment_block: body.appointmentBlockId,
 					student_id: sectionMembers[0].id,
 					cancelled: false,
-					link: meetingLink
+					link: appointmentLink
 				});
 
 				return new Response();
