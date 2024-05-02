@@ -77,7 +77,7 @@
 	on:close={async booked => {
 		bookingModalOpen = false;
 
-		if (!booked || bookingModalData == undefined) {
+		if (!booked.detail || bookingModalData == undefined) {
 			return;
 		}
 
@@ -87,7 +87,7 @@
 			body: JSON.stringify(
 				AppointmentBlockBooking.encode({
 					appointmentBlockId: bookingModalData.appointmentBlock.id,
-					appointmentDate: bookingModalData.appointmentDate
+					appointmentDate: bookingModalData.appointmentDate,
 				})
 			),
 
