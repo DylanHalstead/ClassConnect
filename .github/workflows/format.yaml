@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  prettier:
+  format:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

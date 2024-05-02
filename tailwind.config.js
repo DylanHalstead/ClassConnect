@@ -1,4 +1,6 @@
+import aspectRatio from "@tailwindcss/aspect-ratio";
 import daisyui from "daisyui";
+import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 
 export default {
 	content: ["src/**/*.{html,svelte,ts}"],
@@ -11,15 +13,15 @@ export default {
 					"accent": "#28546c",
 					"neutral": "#bfbfbf",
 					"base-100": "#f4f8fb",
-					"info": "#9ac3db",
-					"success": "#33c95d",
+					"info": "#0d9488",
+					"success": "#129637",
 					"error": "#c02626"
 				}
 			}
 		]
 	},
 
-	plugins: [daisyui],
+	plugins: [daisyui, aspectRatio, addVariablesForColors],
 	theme: {
 		extend: {
 			colors: {
@@ -34,3 +36,14 @@ export default {
 		}
 	}
 };
+
+function addVariablesForColors({ addBase, theme }) {
+	let allColors = flattenColorPalette(theme("colors"));
+	let newVars = Object.fromEntries(
+		Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+	);
+
+	addBase({
+		":root": newVars
+	});
+}

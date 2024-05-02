@@ -1,22 +1,20 @@
 <script lang="ts">
-	import { getFlash } from "sveltekit-flash-message";
-	import { page } from "$app/stores";
 	import "../app.css";
+	import { invalidateAll } from "$app/navigation";
+	import { initialize } from "svelte-google-auth/client";
+	import type { LayoutData } from "./$types.js";
+	import { title } from "$lib/stores";
+	import Notification from "$lib/components/Notification.svelte";
 
-	const flash = getFlash(page, {
-		clearAfterMs: 5000
-	});
+	title.clear();
+
+	export let data: LayoutData;
+	initialize(data, invalidateAll);
 </script>
 
-<nav>
-	<a href="/">Dashboard</a>
-	<a href="/profile/[id]">Profile</a>
-	<a href="/calendar">Calendar</a>
-	<a href="/courses/[id]/sections/[id]/members/[id]/appointments/book">Book</a>
-</nav>
+<svelte:head>
+	<title>{$title}</title>
+</svelte:head>
 
-{#if $flash}
-	<p>{$flash.message}</p>
-{/if}
-
+<Notification />
 <slot />

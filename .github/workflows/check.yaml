@@ -1,0 +1,22 @@
+name: Type check
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Install dependencies
+        uses: actions/setup-node@v4
+
+      - run: npm install
+      - run: cp sample.env .env
+      - run: npm run check
