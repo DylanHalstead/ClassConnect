@@ -57,6 +57,12 @@ export const POST: RequestHandler = async ({ cookies, locals, request }) => {
 					});
 				}
 
+				if (sectionMembers[0].is_restricted) {
+					return new Response("You are restricted from booking appointments.", {
+						status: 403
+					});
+				}
+
 				const client = getOAuth2Client(locals);
 				const title = `${sectionName(extendedAppointmentBlock.instructional_member.section)} appointment with ${userName(extendedAppointmentBlock.instructional_member.user)}`;
 				const description = `This is an appointment between ${userName(user)} and ${userName(extendedAppointmentBlock.instructional_member.user)} for ${extendedAppointmentBlock.instructional_member.section.course.course_name} (${sectionName(extendedAppointmentBlock.instructional_member.section)}).`;

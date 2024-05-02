@@ -19,7 +19,7 @@ function createTitle() {
 			set(`${value}`);
 		},
 		clear: () => {
-			set("Home");
+			set("Class Connect");
 		}
 	};
 }
