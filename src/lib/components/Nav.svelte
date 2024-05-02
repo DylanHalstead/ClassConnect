@@ -4,9 +4,11 @@
 		Icon,
 		User as UserIcon,
 		Calendar,
-		BookOpen,
 		ArrowLeftEndOnRectangle,
-		Squares2x2 as DashboardIcon
+		Squares2x2 as DashboardIcon,
+
+		User
+
 	} from "svelte-hero-icons";
 	import type { User } from "$lib/types";
 
@@ -60,15 +62,13 @@
 					<div>
 						<a href="/dashboard"><Icon src={DashboardIcon} size="32" class="text-white" /></a>
 					</div>
+					{#if data.db}
 					<div>
-						<a href="/profile/[profileID]"><Icon src={UserIcon} size="32" class="text-white" /></a>
+						<a href={`/profile/${data.db.user.id}`}><Icon src={UserIcon} size="32" class="text-white" /></a>
 					</div>
+					{/if}
 					<div>
 						<a href="/calendar"><Icon src={Calendar} size="32" class="text-white" /></a>
-					</div>
-					<div>
-						<a href="/courses/[courseID]/sections/[sectionID]/members/[memberID]/appointments/book"
-							><Icon src={BookOpen} size="32" class="text-white" /></a>
 					</div>
 				</div>
 			</nav>
