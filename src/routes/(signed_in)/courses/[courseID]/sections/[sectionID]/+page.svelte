@@ -8,9 +8,11 @@
 	import { SectionMemberType, type ExtendedSectionMember } from "$lib/types";
 	import { userName, sectionName } from "$lib/utils";
 	import { error } from "@sveltejs/kit";
+	import { title } from "$lib/stores";
 
 	export let data: PageData;
 	initialize(data, invalidateAll);
+	title.set(`${data.section.course.course_name}`);
 
 	if (!data.sectionMembers[0]) {
 		error(400, "Must have section members to view this page.");
@@ -24,6 +26,13 @@
 	function openMemberModal(member: ExtendedSectionMember) {
 		modalMember = member;
 		isMemberModalOpen = true;
+	}
+
+	function confirmDeletion(e: Event) {
+		const isConfirmed = confirm("Are you sure you want to delete this section?");
+		if (!isConfirmed) {
+			e.preventDefault();
+		}
 	}
 </script>
 
@@ -45,14 +54,17 @@
 			<h2 class="font-bold text-xl mb-1">Settings</h2>
 			<h3 class="text-sm text-gray-600">ID: {data.section.id}</h3>
 		</div>
-		<form method="POST">
+		<form method="POST" action="?/updateSection" id="setting-form">
 			<div class="flow-root my-5">
 				<dl class="-my-3 divide-y divide-gray-400 text-sm">
 					<div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 items-center">
-						<dt class="font-medium text-gray-900">Maximum Daily Bookable Hours</dt>
+						<label for="max_daily_bookable_hours" class="font-medium text-gray-900"
+							>Maximum Daily Bookable Hours</label>
 						<dd class="text-gray-700 sm:col-span-2">
 							<input
 								type="number"
+								id="max_daily_bookable_hours"
+								name="max_daily_bookable_hours"
 								min="0"
 								step=".25"
 								value={data.section.max_daily_bookable_hours}
@@ -60,10 +72,12 @@
 						</dd>
 					</div>
 					<div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 items-center">
-						<dt class="font-medium text-gray-900">Section Number</dt>
+						<label for="section_number" class="font-medium text-gray-900">Section Number</label>
 						<dd class="text-gray-700 sm:col-span-2">
 							<input
 								type="number"
+								id="section_number"
+								name="section_number"
 								min="0"
 								value={data.section.section_number}
 								class="input input-bordered input-primary w-full max-w-xs" />
@@ -71,11 +85,14 @@
 					</div>
 				</dl>
 			</div>
-			<div class="flex justify-between">
-				<button type="button" class="btn btn-error">Delete</button>
-				<button type="submit" class="btn btn-primary text-white">Save Changes</button>
-			</div>
 		</form>
+		<div class="flex justify-between">
+			<form action="?/deleteSection" method="POST" on:submit={confirmDeletion}>
+				<button type="submit" class="btn btn-error">Delete</button>
+			</form>
+			<button type="submit" class="btn btn-primary text-white" form="setting-form"
+				>Save Changes</button>
+		</div>
 	</Modal>
 
 	<MemberModal

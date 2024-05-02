@@ -1,8 +1,10 @@
 <script lang="ts">
 	import {
 		type CalendarConfiguration,
+		type CalendarEvent,
 		calendarRowCount,
-		calendarStartAndEndTimes
+		calendarStartAndEndTimes,
+		weeklyCalendarEvents
 	} from "$lib/components/calendar";
 
 	import CalendarCardCarousel from "$lib/components/calendar/CalendarCardCarousel.svelte";
@@ -13,19 +15,25 @@
 		normalizeDateByWeek
 	} from "$lib/dateManipulation";
 
-	import type { ExtendedAppointment } from "$lib/types";
+	import type { ExtendedAppointmentBlock } from "$lib/types";
+	import { createEventDispatcher } from "svelte";
 
 	export let configuration: CalendarConfiguration;
 
 	$: weekNormalized = normalizeDateByWeek(configuration.currentDate);
-
-	const [startTime, endTime] = calendarStartAndEndTimes(
+	$: events = weeklyCalendarEvents(
 		configuration.appointments,
+		configuration.appointmentBlocks,
+		weekNormalized
+	);
+
+	$: [startTime, endTime] = calendarStartAndEndTimes(
+		events,
 		configuration.maximumStartTime,
 		configuration.minimumEndTime
 	);
 
-	const rowCount = calendarRowCount(startTime, endTime, configuration.timeIncrement);
+	$: rowCount = calendarRowCount(startTime, endTime, configuration.timeIncrement);
 	const today = normalizeDateByDay(new Date());
 	const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -42,34 +50,32 @@
 		}
 	}
 
-	let cellAppointments: ExtendedAppointment[][][];
+	let cellEvents: CalendarEvent[][][];
 
 	$: {
-		cellAppointments = [];
+		cellEvents = [];
 
 		for (let i = 0; i < rowCount; i++) {
-			const row: ExtendedAppointment[][] = [];
+			const row: CalendarEvent[][] = [];
 
-			cellAppointments.push(row);
+			cellEvents.push(row);
 
 			for (let j = 0; j < 7; j++) {
 				row.push([]);
 			}
 		}
 
-		configuration.appointments.forEach(appointment => {
+		events.forEach(event => {
 			const i =
-				Math.floor(
-					normalizeDateByTimeWithinDay(appointment.appointment_block.start_time).getTime() -
-						startTime.getTime()
-				) / configuration.timeIncrement;
+				Math.floor(normalizeDateByTimeWithinDay(event.startTime).getTime() - startTime.getTime()) /
+				configuration.timeIncrement;
 
 			if (i < 0 || i >= rowCount) {
 				return;
 			}
 
 			const j = Math.floor(
-				(normalizeDateByDay(appointment.appointment_day).getTime() - weekNormalized.getTime()) /
+				(normalizeDateByDay(event.date).getTime() - weekNormalized.getTime()) /
 					(24 * 60 * 60 * 1000)
 			);
 
@@ -77,9 +83,16 @@
 				return;
 			}
 
-			getAppointments(i, j).push(appointment);
+			getEvents(i, j).push(event);
 		});
 	}
+
+	const dispatch = createEventDispatcher<{
+		click: {
+			appointmentBlock: ExtendedAppointmentBlock;
+			appointmentDate: Date;
+		};
+	}>();
 
 	const gutterTopMargin = "6rem";
 
@@ -90,8 +103,8 @@
 		});
 	}
 
-	function getAppointments(row: number, column: number): ExtendedAppointment[] {
-		return (cellAppointments[row] ?? [])[column] ?? [];
+	function getEvents(row: number, column: number): CalendarEvent[] {
+		return (cellEvents[row] ?? [])[column] ?? [];
 	}
 </script>
 
@@ -135,7 +148,14 @@
 							class:border-b={i < rowCount - 1}
 							class:border-e={j == 6}>
 							<div class="overflow-y-scroll p-2" style:height={configuration.gutterCellHeight}>
-								<CalendarCardCarousel appointments={getAppointments(i, j)} />
+								{#key configuration}
+									<CalendarCardCarousel
+										events={getEvents(i, j)}
+										userID={configuration.userID}
+										on:click={event => {
+											dispatch("click", event.detail);
+										}} />
+								{/key}
 							</div>
 						</td>
 					{/each}

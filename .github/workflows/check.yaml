@@ -1,4 +1,4 @@
-name: Format
+name: Type check
 on:
   pull_request:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  format:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -18,8 +18,5 @@ jobs:
         uses: actions/setup-node@v4
 
       - run: npm install
-      - run: npm run format
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: fixup! Formatted code
+      - run: cp sample.env .env
+      - run: npm run check

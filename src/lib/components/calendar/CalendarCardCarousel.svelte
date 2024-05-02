@@ -1,12 +1,30 @@
 <script lang="ts">
-	import type { ExtendedAppointment } from "$lib/types";
+	import type { CalendarEvent } from "$lib/components/calendar";
+	import type { ExtendedAppointmentBlock } from "$lib/types";
+	import { createEventDispatcher } from "svelte";
 	import CalendarCard from "./CalendarCard.svelte";
 
-	export let appointments: ExtendedAppointment[];
+	export let events: CalendarEvent[];
+	export let userID: string;
+
+	const dispatch = createEventDispatcher<{
+		click: {
+			appointmentBlock: ExtendedAppointmentBlock;
+			appointmentDate: Date;
+		};
+	}>();
 </script>
 
 <div class="flex flex-col gap-2">
-	{#each appointments as appointment}
-		<CalendarCard {appointment} collapsed={appointments.length > 1} />
+	{#each events as calendarEvent}
+		<CalendarCard
+			event={calendarEvent}
+			{userID}
+			collapsed={events.length > 1}
+			on:click={event =>
+				dispatch("click", {
+					appointmentBlock: event.detail,
+					appointmentDate: calendarEvent.date
+				})} />
 	{/each}
 </div>

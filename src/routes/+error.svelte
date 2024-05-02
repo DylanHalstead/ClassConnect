@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { page } from "$app/stores";
+	import { title } from "$lib/stores";
+
+	title.set(`Error: ${$page.status}`);
 </script>
 
 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">

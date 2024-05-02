@@ -13,9 +13,11 @@
 	import type { User } from "$lib/types";
 
 	export let data: {
-		db?: {
-			user: User;
-		};
+		db:
+			| {
+					user: User;
+			  }
+			| undefined;
 		// type built from svelte-google-auth/server types; cannot import to client
 		auth: {
 			client_id: string;

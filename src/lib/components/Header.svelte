@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { WeekDay } from "$lib/types";
+	import { getNumSuffix } from "$lib/utils";
 
 	const currentDate = new Date();
 	const dayNumber = currentDate.getDay();
@@ -17,27 +18,6 @@
 	const year = currentDate.toLocaleString("en-US", {
 		year: "numeric"
 	});
-
-	function getNumSuffix(i: number): string {
-		let selected;
-
-		if ((i > 3 && i < 21) || i % 10 > 3) {
-			selected = 0;
-		} else {
-			selected = i % 10;
-		}
-
-		switch (selected) {
-			case 0:
-				return "th";
-			case 1:
-				return "st";
-			case 2:
-				return "nd";
-			default:
-				return "rd";
-		}
-	}
 
 	const dateSuffix = getNumSuffix(currentDate.getDate());
 

@@ -1280,6 +1280,11 @@ foreground-child@^3.1.0:
     cross-spawn "^7.0.0"
     signal-exit "^4.0.1"
 
+fp-ts@^2.0.0, fp-ts@^2.16.5, fp-ts@^2.5.0:
+  version "2.16.5"
+  resolved "https://registry.npmjs.org/fp-ts/-/fp-ts-2.16.5.tgz"
+  integrity sha512-N8T8PwMSeTKKtkm9lkj/zSTAnPC/aJIIrQhnHxxkL0KLsRCNUPANksJOlMXxcKKCo7H1ORP3No9EMD+fP0tsdA==
+
 fraction.js@^4.3.7:
   version "4.3.7"
   resolved "https://registry.npmjs.org/fraction.js/-/fraction.js-4.3.7.tgz"
@@ -1570,6 +1575,16 @@ inherits@2:
   version "2.0.4"
   resolved "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
+
+io-ts-types@^0.5.19:
+  version "0.5.19"
+  resolved "https://registry.npmjs.org/io-ts-types/-/io-ts-types-0.5.19.tgz"
+  integrity sha512-kQOYYDZG5vKre+INIDZbLeDJe+oM+4zLpUkjXyTMyUfoCpjJNyi29ZLkuEAwcPufaYo3yu/BsemZtbdD+NtRfQ==
+
+io-ts@^2.0.0, io-ts@^2.2.21:
+  version "2.2.21"
+  resolved "https://registry.npmjs.org/io-ts/-/io-ts-2.2.21.tgz"
+  integrity sha512-zz2Z69v9ZIC3mMLYWIeoUcwWD6f+O7yP92FMVVaXEOSZH1jnVBmET/urd/uoarD1WGBY4rCj8TAyMPzsGNzMFQ==
 
 is-binary-path@~2.1.0:
   version "2.1.0"
@@ -1949,6 +1964,11 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.6"
 
+monocle-ts@^2.0.0, monocle-ts@^2.3.13:
+  version "2.3.13"
+  resolved "https://registry.npmjs.org/monocle-ts/-/monocle-ts-2.3.13.tgz"
+  integrity sha512-D5Ygd3oulEoAm3KuGO0eeJIrhFf1jlQIoEVV2DYsZUMz42j4tGxgct97Aq68+F8w4w4geEnwFa8HayTS/7lpKQ==
+
 mri@^1.1.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/mri/-/mri-1.2.0.tgz"
@@ -1982,6 +2002,11 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
+
+newtype-ts@^0.3.2, newtype-ts@^0.3.5:
+  version "0.3.5"
+  resolved "https://registry.npmjs.org/newtype-ts/-/newtype-ts-0.3.5.tgz"
+  integrity sha512-v83UEQMlVR75yf1OUdoSFssjitxzjZlqBAjiGQ4WJaML8Jdc68LJ+BaSAXUmKY4bNzp7hygkKLYTsDi14PxI2g==
 
 node-fetch@^2.6.9:
   version "2.7.0"
