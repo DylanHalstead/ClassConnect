@@ -77,7 +77,7 @@
 	on:close={async booked => {
 		bookingModalOpen = false;
 
-		if (!booked || bookingModalData == undefined) {
+		if (!booked.detail || bookingModalData == undefined) {
 			return;
 		}
 

@@ -24,6 +24,8 @@
 		"clsx": "^2.1.0",
 		"daisyui": "^4.6.2",
 		"fp-ts": "^2.16.5",
+		"google-auth-library": "^9.9.0",
+		"hey-listen": "^1.0.8",
 		"io-ts": "^2.2.21",
 		"io-ts-types": "^0.5.19",
 		"monocle-ts": "^2.3.13",

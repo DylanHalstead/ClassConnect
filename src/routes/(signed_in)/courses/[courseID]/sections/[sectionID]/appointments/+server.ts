@@ -2,11 +2,15 @@ import { verifyAuthentication } from "$lib/auth";
 import { extendAppointmentBlock, getAppointmentBlock } from "$lib/db/appointmentBlocks";
 import { createAppointment } from "$lib/db/appointments";
 import { getUsersSectionMembersInSection } from "$lib/db/sectionMembers";
+import { getUser } from "$lib/db/users";
+import { createOfficeHourAppointment } from "$lib/google";
 import { AppointmentBlockBooking } from "$lib/types";
+import { userName, sectionName } from "$lib/utils";
 import type { RequestHandler } from "@sveltejs/kit";
 import { fold } from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/function";
 import { PathReporter } from "io-ts/lib/PathReporter";
+import { getOAuth2Client } from "svelte-google-auth";
 
 export const POST: RequestHandler = async ({ cookies, locals, request }) => {
 	const userID = verifyAuthentication(locals, cookies);
@@ -46,12 +50,42 @@ export const POST: RequestHandler = async ({ cookies, locals, request }) => {
 					});
 				}
 
+				const user = await getUser(userID);
+				if (user == undefined) {
+					return new Response("User not found.", {
+						status: 404
+					});
+				}
+
+				const client = getOAuth2Client(locals);
+				const title = `${sectionName(extendedAppointmentBlock.instructional_member.section)} appointment with ${userName(extendedAppointmentBlock.instructional_member.user)}`;
+				const description = `This is an appointment between ${userName(user)} and ${userName(extendedAppointmentBlock.instructional_member.user)} for ${extendedAppointmentBlock.instructional_member.section.course.course_name} (${sectionName(extendedAppointmentBlock.instructional_member.section)}).`;
+				const recepients = [extendedAppointmentBlock.instructional_member.user, user];
+				const start = new Date(body.appointmentDate.getTime());
+				start.setHours(extendedAppointmentBlock.start_time.getHours());
+				start.setMinutes(extendedAppointmentBlock.start_time.getMinutes());
+				const end = new Date(start.getTime() + extendedAppointmentBlock.duration);
+
+				const appointmentLink = await createOfficeHourAppointment(
+					client,
+					title,
+					description,
+					start,
+					end,
+					recepients
+				);
+				if (appointmentLink instanceof Error) {
+					return new Response(appointmentLink.message, {
+						status: 500
+					});
+				}
+
 				await createAppointment({
 					appointment_day: body.appointmentDate,
 					appointment_block: body.appointmentBlockId,
 					student_id: sectionMembers[0].id,
 					cancelled: false,
-					link: ""
+					link: appointmentLink
 				});
 
 				return new Response();

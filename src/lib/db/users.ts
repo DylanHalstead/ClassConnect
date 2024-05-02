@@ -92,3 +92,13 @@ export async function getUsers(userIDS: string[]): Promise<User[] | undefined> {
 		})
 	);
 }
+
+export async function getUser(userID: string): Promise<User | undefined> {
+	const users = await getUsers([userID]);
+
+	if (users == undefined) {
+		return;
+	}
+
+	return users[0];
+}
