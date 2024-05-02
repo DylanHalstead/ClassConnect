@@ -18,6 +18,8 @@
 	import { page } from "$app/stores";
 	import type { PageData } from "./$types.js";
 
+	const requiredScopes = ["openid", "profile", "email", "https://www.googleapis.com/auth/calendar"];
+
 	export let data: PageData;
 	initialize(data, invalidateAll);
 
@@ -128,7 +130,7 @@
 		<button
 			class="btn btn-outline btn-primary text-white relative mb-5 px-8 py-4 hover:bg-primary"
 			on:click={async () => {
-				await signIn();
+				await signIn(requiredScopes);
 				invalidateAll();
 				updateFlash(page);
 			}}>
@@ -137,7 +139,7 @@
 		<button
 			class="btn btn-primary relative mb-5 mx-8 px-6 py-4 hover:bg-primar-200"
 			on:click={async () => {
-				await signIn();
+				await signIn(requiredScopes);
 				invalidateAll();
 				updateFlash(page);
 			}}>

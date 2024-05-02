@@ -4,6 +4,9 @@
     import InstructorClass from "$lib/components/profile/Class.svelte";
     import type { ExtendedAppointment } from "$lib/types";
     import type { PartialCourse } from "$lib/types";
+	import { title } from "$lib/stores";
+    
+	title.set("Profile");
 
     import { type ExtendedSectionMember, SectionMemberType } from "$lib/types";
 

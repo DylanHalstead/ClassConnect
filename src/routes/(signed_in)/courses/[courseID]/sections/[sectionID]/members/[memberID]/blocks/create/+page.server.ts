@@ -1,18 +1,43 @@
 import {
+	getUserID,
 	verifyAuthentication,
-	verifyUserIsInSection,
 	verifyUserIsApartOfInstructionalTeam,
+	verifyUserIsInSection,
 	verifyUserIsMember
 } from "$lib/auth";
 import {
-	getMembersAppointmentBlocks,
 	createAppointmentBlock,
-	deleteAppointmentBlocks
+	deleteAppointmentBlocks,
+	getSectionMembersAppointmentBlocks
 } from "$lib/db/appointmentBlocks";
+import { extendSection, getSection } from "$lib/db/sections";
 import { type AppointmentBlock, WeekDay } from "$lib/types";
 import { formTimeToDate, getEnumValue } from "$lib/utils";
-import type { Actions } from "./$types";
-import { redirect, error } from "@sveltejs/kit";
+import type { PageServerLoad, Actions } from "./$types";
+import { error, redirect } from "@sveltejs/kit";
+
+export const load: PageServerLoad = async ({ cookies, params }) => {
+	const userID = getUserID(cookies);
+	const { sectionID } = params;
+
+	await verifyUserIsApartOfInstructionalTeam(cookies, userID, sectionID);
+
+	const section = await getSection(sectionID);
+
+	if (section == undefined) {
+		error(404, "Section not found.");
+	}
+
+	const extendedSection = await extendSection(section);
+
+	if (extendedSection instanceof Error) {
+		throw extendedSection;
+	}
+
+	return {
+		section: extendedSection
+	};
+};
 
 export const actions: Actions = {
 	default: async ({ locals, request, params, cookies }) => {
@@ -52,9 +77,9 @@ export const actions: Actions = {
 
 		let duration = end.getTime() - start.getTime();
 		// Validate that the start-time and end-time aren't conflicting with existing appointment blocks
-		const membersBlocks = await getMembersAppointmentBlocks(params.memberID);
-		if (!membersBlocks) {
-			error(500, "Internal server error: Failed to get appointment blocks");
+		const membersBlocks = await getSectionMembersAppointmentBlocks([params.memberID]);
+		if (membersBlocks instanceof Error) {
+			throw membersBlocks;
 		}
 		const possiblyConflictingBlocks = membersBlocks.filter(block => block.week_day === dayOfWeek);
 		const mergeableBlocks: AppointmentBlock[] = [];

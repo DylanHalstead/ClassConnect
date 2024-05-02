@@ -1,5 +1,5 @@
 <script lang="ts">
-	// TS warning are not correct because of the "isSVG=true" prop motion will not have any issues. Can't use ts-ignore in template https://svelte.dev/docs/typescript#limitations
+	import type { Action } from "svelte/action";
 	import { cn } from "$lib/utils";
 	import { Motion } from "svelte-motion";
 	export let className = void 0;
@@ -55,6 +55,10 @@
 		"M-44 -573C-44 -573 24 -168 488 -41C952 86 1020 491 1020 491",
 		"M-37 -581C-37 -581 31 -176 495 -49C959 78 1027 483 1027 483"
 	];
+
+	function coerceMotionAction(motion: Action): Action<Element> {
+		return motion;
+	}
 </script>
 
 <div
@@ -77,8 +81,10 @@
 
 		{#each paths as path, index (index)}
 			<Motion isSVG={true} let:motion>
+				{@const coercedMotion = coerceMotionAction(motion)}
+
 				<path
-					use:motion
+					use:coercedMotion
 					d={path}
 					stroke={`url(#linearGradient-${index})`}
 					stroke-opacity="0.4"
@@ -102,8 +108,10 @@
 						repeat: Infinity,
 						delay: Math.random() * 10
 					}}>
+					{@const coercedMotion = coerceMotionAction(motion)}
+
 					<linearGradient
-						use:motion
+						use:coercedMotion
 						id={`linearGradient-${index}`}
 						x1="100%"
 						x2="100%"

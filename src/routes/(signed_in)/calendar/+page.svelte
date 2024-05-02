@@ -1,16 +1,14 @@
 <script lang="ts">
 	import { CalendarMode } from "$lib/components/calendar";
+	import CalendarBookingModal from "$lib/components/calendar/CalendarBookingModal.svelte";
 	import CalendarControls from "$lib/components/calendar/CalendarControls.svelte";
 	import CalendarDaily from "$lib/components/calendar/CalendarDaily.svelte";
-	import CalendarHeading from "$lib/components/calendar/CalendarHeading.svelte";
+	import Header from "$lib/components/Header.svelte";
 	import CalendarWeekly from "$lib/components/calendar/CalendarWeekly.svelte";
-	import {
-		SectionMemberType,
-		WeekDay,
-		type InstructionalMember,
-		type Student,
-		type ExtendedAppointment
-	} from "$lib/types";
+	import { AppointmentBlockBooking, type ExtendedAppointmentBlock } from "$lib/types";
+	import type { PageData } from "./$types";
+
+	export let data: PageData;
 
 	const calendarStartTime = new Date();
 
@@ -23,103 +21,82 @@
 	let calendarDate = new Date();
 	let calendarMode = CalendarMode.Weekly;
 
-	// TODO: Replace with real data
-	const course = {
-		id: "1",
-		department_code: "ITSC",
-		course_code: "3155",
-		course_name: "Software Engineering"
-	};
-
-	const user = {
-		id: "1",
-		email: "jadenpeterson150@gmail.com",
-		first_name: "Jaden",
-		last_name: "Peterson"
-	};
-
-	const section = {
-		id: "1",
-		course: course,
-		section_number: 3155,
-		max_daily_bookable_hours: Infinity
-	};
-
-	const instructionalMember: InstructionalMember = {
-		id: "1",
-		section: section,
-		user: user,
-		member_type: SectionMemberType.TA,
-		is_restricted: false
-	};
-
-	const student: Student = {
-		...instructionalMember,
-
-		member_type: SectionMemberType.Student
-	};
-
-	const appointmentBlock = {
-		id: "1",
-		instructional_member: instructionalMember,
-		week_day: WeekDay.Monday,
-		start_time: calendarStartTime,
-		duration: 1000 * 60 * 30
-	};
-
-	const partialAppointment = {
-		appointment_day: calendarStartTime,
-		appointment_block: appointmentBlock,
-		student: student,
-		cancelled: false,
-		link: ""
-	};
-
-	const appointments: ExtendedAppointment[] = [
-		{
-			...partialAppointment,
-
-			id: "1"
-		},
-
-		{
-			...partialAppointment,
-
-			id: "2"
-		}
-	];
-
 	$: calendarConfiguration = {
+		appointments: data.appointments,
+		appointmentBlocks: data.appointmentBlocks,
 		currentDate: calendarDate,
+		gutterCellHeight: "8rem",
 		maximumStartTime: calendarStartTime,
 		minimumEndTime: calendarEndTime,
 		timeIncrement: 30 * 60 * 1000,
-		appointments: appointments,
-		gutterCellHeight: "8rem"
+		userID: data.userID
 	};
+
+	let bookingModalData:
+		| {
+				appointmentBlock: ExtendedAppointmentBlock;
+				appointmentDate: Date;
+		  }
+		| undefined;
+
+	let bookingModalOpen = false;
+
+	function handleAppointmentClick(
+		event: CustomEvent<{ appointmentBlock: ExtendedAppointmentBlock; appointmentDate: Date }>
+	) {
+		bookingModalData = event.detail;
+		bookingModalOpen = true;
+	}
 </script>
 
 <div class="flex flex-col h-screen">
-	<div class="px-6 py-2">
-		<div class="flex justify-between items-end">
-			<div>
-				<CalendarHeading date={calendarDate} mode={calendarMode} />
-			</div>
-
-			<CalendarControls
-				currentDate={calendarDate}
-				mode={calendarMode}
-				on:changeWeek={event => (calendarDate = event.detail)}
-				on:changeMode={event => (calendarMode = event.detail)} />
-		</div>
-		<div class="divider divider-neutral my-2"></div>
-	</div>
+	<Header layout="calendar">
+		<CalendarControls
+			currentDate={calendarDate}
+			mode={calendarMode}
+			on:changeWeek={event => (calendarDate = event.detail)}
+			on:changeMode={event => (calendarMode = event.detail)} />
+	</Header>
 
 	<div class="grow min-h-0 p-4">
 		{#if calendarMode == CalendarMode.Daily}
-			<CalendarDaily configuration={calendarConfiguration} />
+			<CalendarDaily
+				configuration={calendarConfiguration}
+				on:click={event => handleAppointmentClick(event)} />
 		{:else}
-			<CalendarWeekly configuration={calendarConfiguration} />
+			<CalendarWeekly
+				configuration={calendarConfiguration}
+				on:click={event => handleAppointmentClick(event)} />
 		{/if}
 	</div>
 </div>
+
+<CalendarBookingModal
+	data={bookingModalData}
+	isOpen={bookingModalOpen}
+	on:close={async booked => {
+		bookingModalOpen = false;
+
+		if (!booked.detail || bookingModalData == undefined) {
+			return;
+		}
+
+		const section = bookingModalData.appointmentBlock.instructional_member.section;
+
+		await fetch(`/courses/${section.course.id}/sections/${section.id}/appointments`, {
+			body: JSON.stringify(
+				AppointmentBlockBooking.encode({
+					appointmentBlockId: bookingModalData.appointmentBlock.id,
+					appointmentDate: bookingModalData.appointmentDate
+				})
+			),
+
+			headers: {
+				"Content-Type": "application/json"
+			},
+
+			method: "POST"
+		});
+
+		window.location.reload();
+	}} />
